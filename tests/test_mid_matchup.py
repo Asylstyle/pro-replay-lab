@@ -65,7 +65,22 @@ class MidMatchupTests(unittest.TestCase):
         html = render_mid_matchup(review)
         self.assertIn("На 7-м доступен ранг 4", html)
         self.assertIn("12 ур. — ранг 1 в журнале", html)
-        self.assertNotIn("Divided We Stand", html)
+        standard, marker, spellbooks = html.partition('<details class="hero-spellbook">')
+        self.assertTrue(marker)
+        self.assertIn("Dream Coil", standard)
+        self.assertNotIn("Divided We Stand", standard)
+        self.assertIn("Divided We Stand", spellbooks)
+        self.assertIn("для первого клона указан уровень 3", spellbooks)
+
+    def test_opening_priority_and_curated_tiebreak(self):
+        raw = sample()
+        player = raw["players"][0]
+        player["ability_upgrades_arr"] = [5071, 5069]
+        self.assertEqual(mid_matchup_review(raw, 0)["self"]["spell"]["name"], "Illusory Orb")
+        player.pop("ability_upgrades_arr")
+        player["ability_upgrades"] = [{"ability": a, "level": level}
+                                      for a, level in ((5071, 1), (5069, 2), (5071, 3))]
+        self.assertEqual(mid_matchup_review(raw, 0)["self"]["spell"]["name"], "Waning Rift")
 
     def test_xp_intervals_respect_incomplete_or_overlapping_samples(self):
         raw = sample()

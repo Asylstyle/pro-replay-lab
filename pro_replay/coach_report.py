@@ -21,6 +21,9 @@ a,summary{color:var(--accent);text-underline-offset:.21em}a:focus-visible,button
 .episode h3{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap}.exercise{background:#1b2d2d;border-left:4px solid var(--aqua)}
 .resource{padding:10px 0;border-top:1px solid var(--line)}.resource small{display:block;margin-top:.15em}
 .resources{margin-top:12px}.resources summary{cursor:pointer}.resources[open] summary{margin-bottom:8px}
+#mid-windows h3{margin-top:1em}#mid-windows article{border-left:2px solid var(--line);padding:3px 0 3px 14px;margin:12px 0}
+#mid-windows article h4{margin:0 0 .3em;color:var(--aqua)}#mid-windows article p{margin:0}
+.hero-spellbook{margin:10px 0}.hero-spellbook details{margin:8px 0 8px 14px}.hero-spellbook summary{cursor:pointer}
 .battle{border-bottom:1px solid var(--line);padding:11px 0}.battle>summary{cursor:pointer;font-weight:650}
 .battle ul{padding-left:1.35em}.item-option{padding:12px 0;border-top:1px solid var(--line)}
 .item-option p{margin:.2em 0}.item-option small{display:block}.battle-body{padding:12px 0}
@@ -332,6 +335,7 @@ def render_session(session, *, home_url=None, detail_url=None):
     from .accept_review import render_review
     from .macro_review import render_macro, render_power_items
     from .mid_matchup import render_mid_matchup
+    from .mid_windows import render_mid_windows
     from .support_waves import render_support_waves
     row, cards = session["row"], session["cards"]
     hero = row.get("hero_name") or f'Герой #{row["hero_id"]}'
@@ -345,6 +349,8 @@ def render_session(session, *, home_url=None, detail_url=None):
               f'K/D/A {number(row["kills"])} / {number(row["deaths"])} / {number(row["assists"])}</p></header>')
     parts = [header]
     sections = [(key, label) for key, label, present in (
+        ("mid-windows", "Размены и дальние крипы", session.get("mid_windows")),
+        ("mid-levels", "Преимущество по уровню", session.get("mid_levels")),
         ("accept-review", "Разбор решения", session.get("accept_moments")),
         ("macro", "Объекты и смоки", session.get("macro")),
         ("power-items", "Предметные тайминги", (session.get("macro") or {}).get("power_items")),
@@ -352,6 +358,7 @@ def render_session(session, *, home_url=None, detail_url=None):
         ("support-waves", "Отводы и перетяжки", session.get("support_waves"))) if present]
     if sections:
         parts.append('<nav aria-label="Разделы матча">' + " · ".join(f'<a href="#{key}">{label}</a>' for key,label in sections) + '</nav>')
+    parts.append(render_mid_windows(session.get("mid_windows")))
     auto = session["focus"] == "auto" and session["at"] is None
     has_ranked_fights = auto and bool(session.get("mistakes"))
     if auto:
@@ -408,7 +415,7 @@ def render_session(session, *, home_url=None, detail_url=None):
         parts.append('<section class="panel"><h2>Нужен разобранный повтор</h2><p>Карточка матча получена, но в ней пока нет '
                      'событий или снимков, на которых можно построить упражнение. После разбора повтора в OpenDota обнови карточку.</p></section>')
     parts.append(battle_timeline(session))
-    parts.extend((render_review(session.get("accept_moments")), render_mid_matchup(session.get("mid_matchup")),
+    parts.extend((render_review(session.get("accept_moments")), render_mid_matchup(session.get("mid_matchup"), session.get("mid_levels")),
                   render_support_waves(session.get("support_waves")), render_power_items(session.get("macro")),
                   render_macro(session.get("macro"))))
     if "patch_reference" in session:

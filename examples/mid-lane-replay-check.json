@@ -1,0 +1,325 @@
+{
+  "schema": 1,
+  "patch": "7.41f",
+  "reader_sha256": "a98b9b89bf49bdc57e2d6721072bf5c1ccd5bb733f5d2f3e116f50b107fa17a6",
+  "sources": {
+    "metadata": "https://api.opendota.com/api/matches/{match_id}",
+    "events_and_frames": "Valve Source 2 .dem referenced by OpenDota",
+    "abilities": "https://www.dota2.com/datafeed/herodata?language=russian&hero_id={id}"
+  },
+  "sample": {
+    "matches": 6,
+    "player_views": 12,
+    "game_clock_seconds_inclusive": [0, 600],
+    "one_second_samples_per_view": 601,
+    "selection": "Six available real replays with a single identified mid player on each team. These counts do not measure coaching accuracy or match win probability."
+  },
+  "interpretation": {
+    "counts": "Counts describe cards returned per player view. Up to 3 spell trades and 3 ranged-spell finishes (at least 35 s apart per kind), up to 2 basic-attack windows, and up to 3 observed spell hits on the lane opponent. Ranged finishes with the opponent in the same fixed area are a subset of the estimated ranged finishes. Credited ranged spell kills include every qualifying death event.",
+    "observed": "Spell hits give the combat-log time and damage. Credited kills name the hero, enemy ordinary ranged creep type and catalogued ability in the death event; that event has no entity handle or lane. Level leads use consecutive one-second server observations while both heroes are alive.",
+    "estimated": "At the sampled instant the hero could use the learned ability and the target was visible, in range and within the mid corridor. Damage estimates concern one modeled effect against base defenses. Later movement, shields, allied attacks and enemy responses can change the outcome. A surviving creep after nominal arrival establishes only its observed longevity.",
+    "examples": "One example per nonempty category per player. Times are seconds from the horn; event and frame game times are rounded to milliseconds. Opponent is the other mid player in the same match."
+  },
+  "totals": {
+    "spell_trades": 13,
+    "ranged_spell_finishes": 17,
+    "ranged_finishes_with_opponent_in_area": 3,
+    "basic_attack_windows": 4,
+    "observed_opponent_hit_examples": 36,
+    "credited_ranged_spell_kills": 66
+  },
+  "spot_checks": [
+    {
+      "match_id": 9094400691,
+      "hero": "Shadow Fiend",
+      "target": "Outworld Destroyer",
+      "observed_frame": {"time_s": 37.033, "tick": 8148, "facing_degrees": 158.90625},
+      "projected_area": {"offset": 450, "radius": 250, "target_distance_from_center": 27.7},
+      "observed_hit": {"time_s": 37.467, "tick": 8162, "ability": "nevermore_shadowraze2", "damage": 64}
+    },
+    {
+      "match_id": 9094508560,
+      "hero": "Tinker",
+      "target": "enemy ordinary ranged creep",
+      "observed_frame": {"time_s": 48.033, "tick": 8502, "creep_handle": 3932873, "hp": 50, "distance": 527},
+      "observed_hit": {"time_s": 48.533, "tick": 8518, "ability": "tinker_laser", "damage": 51, "hp_after": 0},
+      "credited_kill_tick": 8518,
+      "identity_limit": "The death log identifies the creep type and team; it does not distinguish this particular handle."
+    }
+  ],
+  "matches": [
+    {
+      "match_id": 9088199723,
+      "played_on_utc": "2026-11-13",
+      "mid_players": [
+        {
+          "slot": 1,
+          "hero": "Rubick",
+          "hero_id": 86,
+          "counts": {"spell_trades": 3, "ranged_spell_finishes": 3, "ranged_finishes_with_opponent_in_area": 0, "basic_attack_windows": 2, "observed_opponent_hit_examples": 3, "credited_ranged_spell_kills": 6},
+          "observed_examples": {
+            "hit_on_mid_opponent": {"time_s": 33.533, "tick": 7130, "ability": "rubick_fade_bolt", "damage": 55},
+            "ranged_last_hit": {"time_s": 236.1, "tick": 13206, "ability": "rubick_fade_bolt"},
+            "first_level_lead": {"from_s": 42, "through_s": 75, "hero_level": 2, "opponent_level": 1, "opponent_visible_samples": 28}
+          },
+          "estimated_examples": {
+            "basic_attack": {"frame_s": 52.033, "hero_level": 2, "opponent_level": 1, "distance": 537, "attack_range": 550},
+            "spell_trade": {
+              "frame_s": 49.033,
+              "ability": "rubick_fade_bolt",
+              "rank": 1,
+              "hero_level": 2,
+              "target_hp": 450,
+              "distance": 493,
+              "estimated_damage": 63,
+              "opponent_level": 1,
+              "health_pct_hero_opponent": [61, 63]
+            },
+            "ranged_last_hit": {"frame_s": 192.033, "ability": "rubick_fade_bolt", "rank": 2, "hero_level": 4, "target_hp": 155, "distance": 625, "estimated_damage": 165, "opponent_in_same_cast_area": false, "nominal_impact_delay_s": 0.1, "same_creep_seen_alive_after_delay": true}
+          }
+        },
+        {
+          "slot": 130,
+          "hero": "Sand King",
+          "hero_id": 16,
+          "counts": {"spell_trades": 1, "ranged_spell_finishes": 1, "ranged_finishes_with_opponent_in_area": 0, "basic_attack_windows": 0, "observed_opponent_hit_examples": 3, "credited_ranged_spell_kills": 5},
+          "observed_examples": {
+            "hit_on_mid_opponent": {"time_s": 40.733, "tick": 7346, "ability": "sandking_caustic_finale", "damage": 25},
+            "ranged_last_hit": {"time_s": 132.4, "tick": 10096, "ability": "sandking_sand_storm"},
+            "first_level_lead": {"from_s": 92, "through_s": 104, "hero_level": 3, "opponent_level": 2, "opponent_visible_samples": 13}
+          },
+          "estimated_examples": {
+            "spell_trade": {
+              "frame_s": 216.033,
+              "ability": "sandking_burrowstrike",
+              "rank": 1,
+              "hero_level": 4,
+              "target_hp": 364,
+              "distance": 445,
+              "estimated_damage": 60,
+              "opponent_level": 4,
+              "health_pct_hero_opponent": [100, 45]
+            },
+            "ranged_last_hit": {"frame_s": 567.033, "ability": "sandking_burrowstrike", "rank": 1, "hero_level": 6, "target_hp": 64, "distance": 181, "estimated_damage": 80, "opponent_in_same_cast_area": false, "nominal_impact_delay_s": 0.091, "same_creep_seen_alive_after_delay": false}
+          }
+        }
+      ]
+    },
+    {
+      "match_id": 9093297478,
+      "played_on_utc": "2026-11-16",
+      "mid_players": [
+        {
+          "slot": 0,
+          "hero": "Queen of Pain",
+          "hero_id": 39,
+          "counts": {"spell_trades": 1, "ranged_spell_finishes": 3, "ranged_finishes_with_opponent_in_area": 3, "basic_attack_windows": 0, "observed_opponent_hit_examples": 3, "credited_ranged_spell_kills": 7},
+          "observed_examples": {
+            "hit_on_mid_opponent": {"time_s": 39.167, "tick": 7434, "ability": "queenofpain_scream_of_pain", "damage": 66},
+            "ranged_last_hit": {"time_s": 119.333, "tick": 9840, "ability": "queenofpain_scream_of_pain"}
+          },
+          "estimated_examples": {
+            "spell_trade": {
+              "frame_s": 140.033,
+              "ability": "queenofpain_scream_of_pain",
+              "rank": 2,
+              "hero_level": 3,
+              "target_hp": 549,
+              "distance": 561,
+              "estimated_damage": 131,
+              "opponent_level": 3,
+              "health_pct_hero_opponent": [100, 70]
+            },
+            "ranged_last_hit": {"frame_s": 187.033, "ability": "queenofpain_scream_of_pain", "rank": 2, "hero_level": 4, "target_hp": 135, "distance": 577, "estimated_damage": 175, "opponent_in_same_cast_area": true, "nominal_impact_delay_s": 0.641, "same_creep_seen_alive_after_delay": true}
+          }
+        },
+        {
+          "slot": 131,
+          "hero": "Ember Spirit",
+          "hero_id": 106,
+          "counts": {"spell_trades": 0, "ranged_spell_finishes": 0, "ranged_finishes_with_opponent_in_area": 0, "basic_attack_windows": 0, "observed_opponent_hit_examples": 3, "credited_ranged_spell_kills": 7},
+          "observed_examples": {
+            "hit_on_mid_opponent": {"time_s": 31.867, "tick": 7216, "ability": "ember_spirit_immolation", "damage": 2},
+            "ranged_last_hit": {"time_s": 97.133, "tick": 9174, "ability": "ember_spirit_flame_guard"},
+            "first_level_lead": {"from_s": 51, "through_s": 59, "hero_level": 2, "opponent_level": 1, "opponent_visible_samples": 9}
+          },
+          "estimated_examples": {}
+        }
+      ]
+    },
+    {
+      "match_id": 9094400691,
+      "played_on_utc": "2026-11-17",
+      "mid_players": [
+        {
+          "slot": 4,
+          "hero": "Outworld Destroyer",
+          "hero_id": 76,
+          "counts": {"spell_trades": 0, "ranged_spell_finishes": 3, "ranged_finishes_with_opponent_in_area": 0, "basic_attack_windows": 0, "observed_opponent_hit_examples": 3, "credited_ranged_spell_kills": 3},
+          "observed_examples": {
+            "hit_on_mid_opponent": {"time_s": 26.2, "tick": 7824, "ability": "obsidian_destroyer_astral_imprisonment", "damage": 66},
+            "ranged_last_hit": {"time_s": 121.4, "tick": 10680, "ability": "obsidian_destroyer_arcane_orb"},
+            "first_level_lead": {"from_s": 51, "through_s": 69, "hero_level": 2, "opponent_level": 1, "opponent_visible_samples": 16}
+          },
+          "estimated_examples": {
+            "ranged_last_hit": {"frame_s": 118.033, "ability": "obsidian_destroyer_astral_imprisonment", "rank": 2, "hero_level": 3, "target_hp": 160, "distance": 369, "estimated_damage": 180, "opponent_in_same_cast_area": false, "nominal_impact_delay_s": 2.8, "same_creep_seen_alive_after_delay": true}
+          }
+        },
+        {
+          "slot": 128,
+          "hero": "Shadow Fiend",
+          "hero_id": 11,
+          "counts": {"spell_trades": 1, "ranged_spell_finishes": 3, "ranged_finishes_with_opponent_in_area": 0, "basic_attack_windows": 0, "observed_opponent_hit_examples": 3, "credited_ranged_spell_kills": 1},
+          "observed_examples": {
+            "hit_on_mid_opponent": {"time_s": 37.467, "tick": 8162, "ability": "nevermore_shadowraze2", "damage": 64},
+            "ranged_last_hit": {"time_s": 454.833, "tick": 22102, "ability": "nevermore_shadowraze3"}
+          },
+          "estimated_examples": {
+            "spell_trade": {
+              "frame_s": 99.033,
+              "ability": "nevermore_shadowraze3",
+              "rank": 1,
+              "hero_level": 2,
+              "target_hp": 419,
+              "distance": 758,
+              "estimated_damage": 63,
+              "opponent_level": 2,
+              "health_pct_hero_opponent": [79, 59]
+            },
+            "ranged_last_hit": {"frame_s": 75.033, "ability": "nevermore_shadowraze3", "rank": 1, "hero_level": 2, "target_hp": 84, "distance": 688, "estimated_damage": 85, "opponent_in_same_cast_area": false, "nominal_impact_delay_s": 0.55, "same_creep_seen_alive_after_delay": false}
+          }
+        }
+      ]
+    },
+    {
+      "match_id": 9094426614,
+      "played_on_utc": "2026-11-17",
+      "mid_players": [
+        {
+          "slot": 2,
+          "hero": "Huskar",
+          "hero_id": 59,
+          "counts": {"spell_trades": 0, "ranged_spell_finishes": 0, "ranged_finishes_with_opponent_in_area": 0, "basic_attack_windows": 1, "observed_opponent_hit_examples": 3, "credited_ranged_spell_kills": 3},
+          "observed_examples": {
+            "hit_on_mid_opponent": {"time_s": 29.1, "tick": 7300, "ability": "huskar_burning_spear", "damage": 6},
+            "ranged_last_hit": {"time_s": 301.7, "tick": 15478, "ability": "huskar_burning_spear"},
+            "first_level_lead": {"from_s": 56, "through_s": 57, "hero_level": 2, "opponent_level": 1, "opponent_visible_samples": 2}
+          },
+          "estimated_examples": {
+            "basic_attack": {"frame_s": 198.0, "hero_level": 4, "opponent_level": 3, "distance": 318, "attack_range": 400}
+          }
+        },
+        {
+          "slot": 128,
+          "hero": "Necrophos",
+          "hero_id": 36,
+          "counts": {"spell_trades": 3, "ranged_spell_finishes": 1, "ranged_finishes_with_opponent_in_area": 0, "basic_attack_windows": 0, "observed_opponent_hit_examples": 3, "credited_ranged_spell_kills": 7},
+          "observed_examples": {
+            "hit_on_mid_opponent": {"time_s": 46.233, "tick": 7814, "ability": "necrolyte_death_pulse", "damage": 74},
+            "ranged_last_hit": {"time_s": 45.033, "tick": 7778, "ability": "necrolyte_death_pulse"}
+          },
+          "estimated_examples": {
+            "spell_trade": {
+              "frame_s": 54.0,
+              "ability": "necrolyte_death_pulse",
+              "rank": 1,
+              "hero_level": 1,
+              "target_hp": 251,
+              "distance": 311,
+              "estimated_damage": 75,
+              "opponent_level": 1,
+              "health_pct_hero_opponent": [59, 33]
+            },
+            "ranged_last_hit": {"frame_s": 591.0, "ability": "necrolyte_death_pulse", "rank": 4, "hero_level": 7, "target_hp": 234, "distance": 449, "estimated_damage": 280, "opponent_in_same_cast_area": false, "nominal_impact_delay_s": 1.122, "same_creep_seen_alive_after_delay": false}
+          }
+        }
+      ]
+    },
+    {
+      "match_id": 9094508560,
+      "played_on_utc": "2026-11-17",
+      "mid_players": [
+        {
+          "slot": 0,
+          "hero": "Tinker",
+          "hero_id": 34,
+          "counts": {"spell_trades": 1, "ranged_spell_finishes": 1, "ranged_finishes_with_opponent_in_area": 0, "basic_attack_windows": 0, "observed_opponent_hit_examples": 3, "credited_ranged_spell_kills": 6},
+          "observed_examples": {
+            "hit_on_mid_opponent": {"time_s": 57.933, "tick": 8800, "ability": "tinker_march_of_the_machines", "damage": 10},
+            "ranged_last_hit": {"time_s": 48.533, "tick": 8518, "ability": "tinker_laser"},
+            "first_level_lead": {"from_s": 50, "through_s": 51, "hero_level": 2, "opponent_level": 1, "opponent_visible_samples": 2}
+          },
+          "estimated_examples": {
+            "spell_trade": {
+              "frame_s": 144.033,
+              "ability": "tinker_laser",
+              "rank": 1,
+              "hero_level": 3,
+              "target_hp": 635,
+              "distance": 324,
+              "estimated_damage": 75,
+              "opponent_level": 3,
+              "health_pct_hero_opponent": [100, 84]
+            },
+            "ranged_last_hit": {"frame_s": 48.033, "ability": "tinker_laser", "rank": 1, "hero_level": 1, "target_hp": 50, "distance": 527, "estimated_damage": 75, "opponent_in_same_cast_area": false, "nominal_impact_delay_s": 0.4, "same_creep_seen_alive_after_delay": false}
+          }
+        },
+        {
+          "slot": 130,
+          "hero": "Pangolier",
+          "hero_id": 120,
+          "counts": {"spell_trades": 0, "ranged_spell_finishes": 0, "ranged_finishes_with_opponent_in_area": 0, "basic_attack_windows": 0, "observed_opponent_hit_examples": 3, "credited_ranged_spell_kills": 13},
+          "observed_examples": {
+            "hit_on_mid_opponent": {"time_s": 26.433, "tick": 7854, "ability": "pangolier_shield_crash", "damage": 46},
+            "ranged_last_hit": {"time_s": 63.467, "tick": 8966, "ability": "pangolier_swashbuckle"},
+            "first_level_lead": {"from_s": 104, "through_s": 109, "hero_level": 3, "opponent_level": 2, "opponent_visible_samples": 6}
+          },
+          "estimated_examples": {}
+        }
+      ]
+    },
+    {
+      "match_id": 9094532191,
+      "played_on_utc": "2026-11-17",
+      "mid_players": [
+        {
+          "slot": 0,
+          "hero": "Invoker",
+          "hero_id": 74,
+          "counts": {"spell_trades": 0, "ranged_spell_finishes": 0, "ranged_finishes_with_opponent_in_area": 0, "basic_attack_windows": 0, "observed_opponent_hit_examples": 3, "credited_ranged_spell_kills": 0},
+          "observed_examples": {
+            "hit_on_mid_opponent": {"time_s": 65.6, "tick": 8182, "ability": "invoker_cold_snap", "damage": 21},
+            "first_level_lead": {"from_s": 41, "through_s": 51, "hero_level": 2, "opponent_level": 1, "opponent_visible_samples": 10}
+          },
+          "estimated_examples": {}
+        },
+        {
+          "slot": 130,
+          "hero": "Puck",
+          "hero_id": 13,
+          "counts": {"spell_trades": 3, "ranged_spell_finishes": 2, "ranged_finishes_with_opponent_in_area": 0, "basic_attack_windows": 1, "observed_opponent_hit_examples": 3, "credited_ranged_spell_kills": 8},
+          "observed_examples": {
+            "hit_on_mid_opponent": {"time_s": 94.533, "tick": 9050, "ability": "puck_illusory_orb", "damage": 50},
+            "ranged_last_hit": {"time_s": 31.7, "tick": 7164, "ability": "puck_illusory_orb"},
+            "first_level_lead": {"from_s": 250, "through_s": 274, "hero_level": 5, "opponent_level": 4, "opponent_visible_samples": 25}
+          },
+          "estimated_examples": {
+            "basic_attack": {"frame_s": 255.033, "hero_level": 5, "opponent_level": 4, "distance": 533, "attack_range": 550},
+            "spell_trade": {
+              "frame_s": 59.033,
+              "ability": "puck_illusory_orb",
+              "rank": 1,
+              "hero_level": 2,
+              "target_hp": 464,
+              "distance": 668,
+              "estimated_damage": 52,
+              "opponent_level": 2,
+              "health_pct_hero_opponent": [81, 65]
+            },
+            "ranged_last_hit": {"frame_s": 129.033, "ability": "puck_illusory_orb", "rank": 2, "hero_level": 3, "target_hp": 102, "distance": 61, "estimated_damage": 140, "opponent_in_same_cast_area": false, "nominal_impact_delay_s": 0.182, "same_creep_seen_alive_after_delay": false}
+          }
+        }
+      ]
+    }
+  ]
+}

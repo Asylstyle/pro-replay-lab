@@ -1,12 +1,14 @@
 package pro.replay;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import skadistats.clarity.Clarity;
 import skadistats.clarity.event.Insert;
 import skadistats.clarity.model.CombatLogEntry;
 import skadistats.clarity.model.Entity;
 import skadistats.clarity.model.StringTable;
+import skadistats.clarity.model.Vector;
 import skadistats.clarity.processor.entities.Entities;
 import skadistats.clarity.processor.entities.OnEntityCreated;
 import skadistats.clarity.processor.entities.UsesEntities;
@@ -96,8 +98,12 @@ public final class Decoder {
     }
 
     private String name(Entity entity) {
-        Number id = number(entity, "m_pEntity.m_nameStringTableIndex");
-        StringTable names = tables.forName("EntityNames");
+        return tableName(entity, "m_pEntity.m_nameStringTableIndex", "EntityNames");
+    }
+
+    private String tableName(Entity entity, String field, String table) {
+        Number id = number(entity, field);
+        StringTable names = tables.forName(table);
         if (id == null || names == null || id.intValue() < 0 || id.intValue() >= names.getEntryCount()) return null;
         return names.getNameByIndex(id.intValue());
     }
@@ -126,6 +132,54 @@ public final class Decoder {
         Object bits = value(team, "m_bNPCVisibleState." + INDEX[word]);
         // Each Source 2 visibility word is a uint64, including bits 32..63.
         if (bits instanceof Long mask) result.addProperty(key, (mask & (1L << (index & 63))) != 0);
+    }
+
+    private void defenses(Entity unit, JsonObject result) {
+        copyNumber(unit, "m_iHealth", result, "hp");
+        copyNumber(unit, "m_iMaxHealth", result, "max_hp");
+        copyNumber(unit, "m_flPhysicalArmorValue", result, "armor");
+        copyNumber(unit, "m_flMagicalResistanceValue", result, "magic_resist_pct");
+        copyBool(unit, "m_bTakesDamage", result, "takes_damage");
+        Number flags = number(unit, "m_nUnitState64");
+        if (flags != null) result.addProperty("unit_state", new BigInteger(Long.toUnsignedString(flags.longValue())));
+        JsonObject sight = new JsonObject();
+        visibility(radiant, unit, "2", sight);
+        visibility(dire, unit, "3", sight);
+        result.add("visible_to", sight);
+    }
+
+    private static boolean ordinaryRanged(String unit) {
+        return "npc_dota_creep_goodguys_ranged".equals(unit) || "npc_dota_creep_badguys_ranged".equals(unit);
+    }
+
+    @UsesStringTable("UnitNames")
+    private void midTargets(JsonObject frame) {
+        JsonArray creeps = new JsonArray(), towers = new JsonArray();
+        var active = entities.stream().filter(Entity::isActive).iterator();
+        while (active.hasNext()) {
+            Entity unit = active.next();
+            String cls = unit.getDtClass().getDtName();
+            boolean creep = cls.equals("CDOTA_BaseNPC_Creep_Lane");
+            if (!creep && !cls.equals("CDOTA_BaseNPC_Tower")) continue;
+            // EntityNames identifies the generic lane-creep class. Only UnitNames
+            // distinguishes an ordinary ranged creep from melee, flag or super.
+            String target = creep ? tableName(unit, "m_iUnitNameStringTableIndex", "UnitNames") : name(unit);
+            if (creep ? !ordinaryRanged(target) :
+                    !("dota_goodguys_tower1_mid".equals(target) || "dota_badguys_tower1_mid".equals(target))) continue;
+            Number team = number(unit, "m_iTeamNum"), life = number(unit, "m_lifeState"), hp = number(unit, "m_iHealth");
+            if (team == null || team.intValue() != (target.contains("_goodguys_") ? 2 : 3)
+                    || life == null || life.intValue() != 0 || hp == null || hp.intValue() <= 0) continue;
+            JsonObject row = new JsonObject();
+            row.addProperty("id", unit.getHandle());
+            row.addProperty("team", team.intValue());
+            row.addProperty("name", target);
+            coordinate(unit, "X", row, "x");
+            coordinate(unit, "Y", row, "y");
+            if (creep) defenses(unit, row);
+            (creep ? creeps : towers).add(row);
+        }
+        frame.add("ranged_creeps", creeps);
+        frame.add("mid_towers", towers);
     }
 
     private void button(Entity hero, boolean isItem, int index, double now, double horn,
@@ -202,15 +256,20 @@ public final class Decoder {
         result.addProperty("hero_id", heroID);
         coordinate(hero, "X", result, "x");
         coordinate(hero, "Y", result, "y");
+        Object rotation = value(hero, "CBodyComponent.m_angRotation");
+        if (rotation instanceof Vector angles && angles.getDimension() >= 2) {
+            double yaw = angles.getElement(1);
+            if (Double.isFinite(yaw)) result.addProperty("facing_yaw", (yaw % 360.0 + 360.0) % 360.0);
+        }
         Number life = number(hero, "m_lifeState"), hp = number(hero, "m_iHealth");
         if (life != null && hp != null) result.addProperty("alive", life.intValue() == 0 && hp.intValue() > 0);
         copyNumber(hero, "m_flMana", result, "mana");
-        Number flags = number(hero, "m_nUnitState64");
-        if (flags != null) result.addProperty("unit_state", new BigInteger(Long.toUnsignedString(flags.longValue())));
-        JsonObject sight = new JsonObject();
-        visibility(radiant, hero, "2", sight);
-        visibility(dire, hero, "3", sight);
-        result.add("visible_to", sight);
+        copyNumber(hero, "m_iCurrentLevel", result, "level");
+        copyNumber(hero, "m_iDamageMin", result, "attack_min");
+        copyNumber(hero, "m_iDamageMax", result, "attack_max");
+        copyNumber(hero, "m_iDamageBonus", result, "attack_bonus");
+        copyNumber(hero, "m_iAttackRange", result, "attack_range");
+        defenses(hero, result);
         JsonObject buttons = new JsonObject();
         Set<String> ambiguous = new HashSet<>();
         for (int i = 0; i < 32; i++) button(hero, false, i, now, horn, buttons, ambiguous);
@@ -258,6 +317,7 @@ public final class Decoder {
         frame.addProperty("tick", ctx.getTick());
         frame.add("heroes", heroes);
         if (second <= 480) frame.add("wave_units", WaveTracker.sample(entities, tables));
+        if (second <= 600) midTargets(frame);
         if (lastSecond >= 0) out.write(",\n");
         out.write(JSON.toJson(frame));
         lastSecond = second;
@@ -268,6 +328,7 @@ public final class Decoder {
         String kind = switch (log.getType()) {
             case DOTA_COMBATLOG_DEATH -> "death";
             case DOTA_COMBATLOG_ABILITY, DOTA_COMBATLOG_ITEM -> "cast";
+            case DOTA_COMBATLOG_DAMAGE -> "spell_damage";
             default -> null;
         };
         if (kind == null || !log.hasTimestamp() || !log.hasAttackerName() || log.isAttackerIllusion()) return;
@@ -278,9 +339,14 @@ public final class Decoder {
         if (actor == null || ambiguousNames.contains(source)) return;
         String victim = log.hasTargetName() ? log.getTargetName() : null;
         Integer target = !log.isTargetIllusion() && !ambiguousNames.contains(victim) ? slots.get(victim) : null;
-        if (kind.equals("death") && target == null) return;
         double when = log.getTimestamp() - horn.doubleValue();
         if (!Double.isFinite(when) || when < 0) return;
+        if (kind.equals("death") && target == null) {
+            if (when > 600 || log.isTargetIllusion() || !ordinaryRanged(victim)) return;
+            kind = "ranged_last_hit";
+        }
+        if (kind.equals("spell_damage") && (when > 600 || log.isTargetIllusion()
+                || target == null && !ordinaryRanged(victim) || !log.hasValue() || log.getValue() <= 0)) return;
         JsonObject e = new JsonObject();
         e.addProperty("kind", kind);
         e.addProperty("time", (int) Math.floor(when));
@@ -288,11 +354,23 @@ public final class Decoder {
         e.addProperty("tick", ctx.getTick());
         e.addProperty("actor_slot", actor);
         if (target != null) e.addProperty("target_slot", target);
-        if (kind.equals("cast")) {
+        if (kind.equals("cast") || kind.equals("spell_damage")) {
             if (!log.hasInflictorName()) return;
             String button = log.getInflictorName();
             if (button == null || button.isBlank() || button.equals("dota_unknown")) return;
             e.addProperty("button_key", button.startsWith("item_") ? button.substring(5) : button);
+        }
+        if (kind.equals("spell_damage")) {
+            e.addProperty("target_name", victim);
+            e.addProperty("damage", log.getValue());
+            if (log.hasHealth()) e.addProperty("hp_after", log.getHealth());
+            if (log.hasDamageType()) e.addProperty("damage_type", log.getDamageType());
+        }
+        if (kind.equals("ranged_last_hit")) {
+            e.addProperty("target_name", victim);
+            String inflictor = log.hasInflictorName() ? log.getInflictorName() : null;
+            if (inflictor != null && !inflictor.isBlank() && !inflictor.equals("dota_unknown"))
+                e.addProperty("button_key", inflictor.startsWith("item_") ? inflictor.substring(5) : inflictor);
         }
         events.add(e);
     }

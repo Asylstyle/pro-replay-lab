@@ -9,6 +9,8 @@ import time
 from .patch_reference import _verified_calendar
 from .reference_policy import resolve_patch
 from .source import SourceError, valve_patches
+from .mid_spells import hero_spells, render_spellbook, spell_catalog
+from .mid_levels import render_level_review
 
 
 LEVELS = (1, 2, 3, 4, 5, 6, 7)
@@ -22,7 +24,7 @@ def catalog():
     return json.loads(Path(__file__).with_name("mid_matchup_data.json").read_text(encoding="utf8"))
 
 
-def _mid(player):
+def is_mid_laner(player):
     lane, role = player.get("lane"), player.get("lane_role")
     return (lane == 2 or role == 2) and lane in (None, 0, 2) and role in (None, 0, 2)
 
@@ -92,10 +94,21 @@ def _level_windows(player):
 def _hero_window(player, hero):
     events = _learned(player)
     order = player.get("ability_upgrades_arr") or []
-    spells = hero["nukes"]
-    # Prefer a reviewed spell the player actually chose early if several exist.
-    opening = order[:6] if isinstance(order, list) else []
-    spell = next((s for aid in opening for s in spells if aid == s["id"]), spells[0] if spells else None)
+    spells = list(hero["nukes"])
+    known = {s["id"] for s in spells}
+    damage_types = {"physical": 1, "magical": 2, "pure": 4}
+    for s in hero_spells(player["hero_id"]):
+        proof = s["proof"]
+        if (s["id"] in known or not proof or s["innate"] or s["ultimate"] or s["max_rank"] != 4
+                or len(proof["damage"]) != 4):
+            continue
+        spells.append({"id": s["id"], "name": s["name"], "damage": proof["damage"],
+                       "damage_type": damage_types[proof["damage_type"]], "note": s.get("note") or "",
+                       "mana": s["mana"], "cooldown": s["cooldown"]})
+    # One point in a utility nuke can precede three points in the main lane nuke.
+    # On equal counts retain the curated order of the original comparison table.
+    opening = order[:6] if isinstance(order, list) and order else [e["ability"] for e in (events or [])[:6]]
+    spell = max(spells, key=lambda s: opening.count(s["id"]), default=None)
     levels = []
     for level in LEVELS:
         row = {"level": level, "attack": _hit(hero, level)}
@@ -117,7 +130,7 @@ def _hero_window(player, hero):
                 rank = sum(e["ability"] == ultimate["id"] and e["level"] <= level for e in events)
                 if rank <= cap:
                     ult_ranks[level] = rank
-    return {"id": player["hero_id"], "name": hero["name_loc"], "range": hero["attack_range"],
+    return {"id": player["hero_id"], "slot": player["player_slot"], "name": hero["name_loc"], "range": hero["attack_range"],
             "bat": hero["attack_rate"], "spell": spell, "levels": levels, "ultimate": ultimate,
             "ult_ranks": ult_ranks, "opening_pick": bool(spell and spell["id"] in opening),
             "level_windows": _level_windows(player)}
@@ -130,7 +143,7 @@ def mid_matchup_review(raw, slot, position=None, *, patch=None):
     if len(selected) != 1:
         return None
     player = selected[0]
-    if position not in (None, 2) or (position is None and (not _mid(player) or player.get("is_roaming"))):
+    if position not in (None, 2) or (position is None and (not is_mid_laner(player) or player.get("is_roaming"))):
         return None
     if raw.get("game_mode") not in (None, 1, 2, 3, 4, 22):
         return {"status": "unavailable", "reason": "Сравнение учитывает стандартные способности и темп набора опыта героя. Режим этой карты имеет другие правила."}
@@ -139,13 +152,15 @@ def mid_matchup_review(raw, slot, position=None, *, patch=None):
             or player.get("is_roaming") or len({p["player_slot"] for p in players}) != len(players)):
         return uncertain
     enemies = [p for p in players if (p["player_slot"] < 128) != (slot < 128)]
-    rivals = [p for p in enemies if _mid(p) and not p.get("is_roaming")]
+    rivals = [p for p in enemies if is_mid_laner(p) and not p.get("is_roaming")]
     if len(enemies) != 5 or len(rivals) != 1 or any(
-            _mid(p) and not p.get("is_roaming") for p in players if p not in enemies and p is not player):
+            is_mid_laner(p) and not p.get("is_roaming") for p in players if p not in enemies and p is not player):
         return uncertain
     data = catalog()
     if not _current_patch(raw, patch, data):
         return {"status": "unavailable", "reason": f"Числа сверены с Valve на {data['patch']}. Для патча этой игры подтверждения нет."}
+    if spell_catalog()["patch"] != data["patch"]:
+        return {"status": "unavailable", "reason": "Параметры линии и способностей относятся к разным патчам. Обнови оба справочника."}
     pair = [data["heroes"].get(str(p.get("hero_id"))) for p in (player, rivals[0])]
     if not all(pair):
         return {"status": "unavailable", "reason": "Для одного из двух героев нет подтверждённых данных Valve."}
@@ -231,7 +246,7 @@ def _power_spikes(ours, enemy):
     return ''.join(out)
 
 
-def render_mid_matchup(review):
+def render_mid_matchup(review, level_evidence=None):
     if not review:
         return ""
     out = ['<section id="mid-matchup"><h2>Мид по уровням</h2>']
@@ -265,9 +280,10 @@ def render_mid_matchup(review):
             if h["opening_pick"]:
                 note += ' Игрок вложил в этот навык одно из первых шести потраченных очков.'
         else:
-            note += ' Для этого героя точный урон отдельного нюка пока не разобран.'
+            note += ' Для этой строки нет простой шкалы урона обычного нюка. Ниже доступны параметры его способностей.'
         url = f'https://www.dota2.com/datafeed/herodata?language=english&amp;hero_id={h["id"]}'
         out.append(f'<p><b>{name}.</b> {note} <a rel="noopener" href="{url}">Данные Valve</a></p>')
+    out.append(render_level_review(level_evidence, review))
     out.append(_power_spikes(ours, enemy))
     out.append(_level_timing(ours, enemy))
     cue = ''
@@ -277,5 +293,6 @@ def render_mid_matchup(review):
                 f'Проверь, мог ли {escape(shorter["name"])} добить спорного крипа, оставаясь за своей волной.')
     out.append(f'<p>{cue} На спорном дальнем крипе сравни оставшееся здоровье с уроном после брони. Учти летящие атаки, '
                'дальность и момент замаха. Если автоатака опоздает, проверь, хватало ли маны на нюк и мог ли он заодно задеть мидера. '
-               'При размене учитывай защиту цели, позицию саппортов и возможный ответ после траты кнопки.</p></section>')
+               'При размене учитывай защиту цели, позицию саппортов и возможный ответ после траты кнопки.</p>')
+    out.extend((render_spellbook(ours["id"]), render_spellbook(enemy["id"]), '</section>'))
     return "".join(out)

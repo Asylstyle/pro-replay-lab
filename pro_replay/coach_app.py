@@ -52,9 +52,11 @@ def _home():
        placeholder="9086497898" required>
 <button type="submit">Открыть состав</button></div></form>
 <p><a href="/example-decisions">Пример автоматического разбора</a></p>
-<nav><a href="/example-macro#macro">Смоки и объекты Pudge</a> · <a href="/example-mid#mid-matchup">Huskar против Necrophos</a> · <a href="/example-waves#support-waves">Отвод Snapfire</a></nav>
+<nav><a href="/example-mid-nukes#mid-windows">Размен и дальний крип на Rubick</a> · <a href="/example-shadowraze#mid-windows">Койлы Shadow Fiend</a> · <a href="/example-macro#macro">Смоки и объекты Pudge</a> · <a href="/example-waves#support-waves">Отвод Snapfire</a></nav>
 <details class="resources"><summary>Другие примеры</summary><nav><a href="/example-replay-support">Проверенные сейвы Snapfire</a><a href="/example-fight">Драка Mars</a>
 <a href="/example-economy">Фарм Anti-Mage на фоне игроков 7 300+ и про-сцены</a>
+<a href="/example-mid#mid-matchup">Huskar против Necrophos по уровням</a>
+<a href="/example-mid-qop#mid-windows">Queen of Pain против Ember Spirit</a>
 <a href="/example-support">Выбор предмета на Rubick</a><a href="/example">Посмотреть готовый разбор Kez</a></nav></details></div>
 <img src="/kez.png" alt="Kez из Dota 2"></div>""")
 
@@ -168,7 +170,8 @@ class CoachHandler(BaseHTTPRequestHandler):
         if path == "/example-economy":
             return self._send(200, (EXAMPLES / "patch-reference-example.html").read_bytes())
         samples = {"/example-macro": "coach-macro-smoke.html", "/example-mid": "coach-mid-matchup.html",
-                   "/example-waves": "coach-support-waves.html"}
+                   "/example-waves": "coach-support-waves.html", "/example-mid-nukes": "coach-mid-nukes.html",
+                   "/example-shadowraze": "coach-mid-shadow-fiend.html", "/example-mid-qop": "coach-mid-qop.html"}
         if path in samples:
             return self._send(200, (EXAMPLES / samples[path]).read_bytes())
         if path == "/example-replay-support":

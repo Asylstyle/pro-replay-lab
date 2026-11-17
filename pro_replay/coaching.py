@@ -9,7 +9,9 @@ from urllib.parse import urlsplit
 from .analysis import select_player
 from .accept_review import review_moments
 from .macro_review import macro_review
-from .mid_matchup import mid_matchup_review
+from .mid_matchup import is_mid_laner, mid_matchup_review
+from .mid_levels import level_review
+from .mid_windows import mid_decision_windows
 from .support_waves import support_wave_review
 from .archive import normalize
 from .coach_lessons import retrieve_lessons
@@ -325,10 +327,12 @@ def make_session(archive, raw, slot, model, lesson_model, focus="auto", *, at=No
     for card in ordered:
         hits = retrieve_lessons(lesson_model, card["query"], position=position, limit=2, topic=card["topic"])
         card["lessons"] = [h for h in hits if urlsplit(h["url"]).scheme == "https"]
+    matchup = mid_matchup_review(raw, slot, role_override, patch=row.get("patch_version"))
     return {"row": row, "assessment": assessment, "patch_reference": reference, "cards": ordered, "focus": focus, "mistakes": mistakes,
             "accept_moments": review_moments(raw, slot, mistakes, at=at, position=position),
             "macro": macro_review(raw, slot, heroes, timeline),
-            "mid_matchup": mid_matchup_review(raw, slot, position, patch=row.get("patch_version")),
+            "mid_matchup": matchup, "mid_levels": level_review(raw, matchup, timeline),
+            "mid_windows": mid_decision_windows(raw, slot, matchup, timeline),
             "support_waves": support_wave_review(raw, slot, position, timeline),
             "replay_checked": timeline is not None, "replay_message": replay_message, "excluded": excluded,
             "fights": fights, "selected_fight": selected, "at": at, "position": position, "role_override": role_override,
@@ -338,7 +342,9 @@ def make_session(archive, raw, slot, model, lesson_model, focus="auto", *, at=No
 
 def coach_by_id(archive, raw, slot, model, lessons, focus, *, cache, at=None, position=None, purchase_index=None, reference_path=None):
     options = dict(at=at, position=position, purchase_index=purchase_index, reference_path=reference_path)
-    if focus != "auto" or at is not None:
+    player = select_player(raw, None, slot) or {}
+    requested_mid_lane = focus == "lane" and (position == 2 or (position is None and is_mid_laner(player)))
+    if (focus != "auto" and not requested_mid_lane) or at is not None:
         return make_session(archive, raw, slot, model, lessons, focus, **options)
     from .replay_files import replay_evidence
     with replay_evidence(raw, cache) as (timeline, message):
