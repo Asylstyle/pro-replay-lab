@@ -1,0 +1,37 @@
+{
+  "reader_sha256": "f7af6f604b9602bab9e0dcc702e0c05a639a66c3e90a39ce41fcfcfcd226bac7",
+  "libraries": [
+    {
+      "path": "com/skadistats/clarity/5.0.1/clarity-5.0.1.jar",
+      "sha256": "8d42d78f383b25bd23ed2d1f61d6efe06866b14f98e0a4852163022b44320bd9"
+    },
+    {
+      "path": "org/xerial/snappy/snappy-java/1.1.10.7/snappy-java-1.1.10.7.jar",
+      "sha256": "4c766cb3f855415ee734b2392949a0b6f12a60879334a74518deaf6270d32e36"
+    },
+    {
+      "path": "org/slf4j/slf4j-api/2.0.17/slf4j-api-2.0.17.jar",
+      "sha256": "7b751d952061954d5abfed7181c1f645d336091b679891591d63329c622eb832"
+    },
+    {
+      "path": "com/skadistats/clarity-protobuf/7.1/clarity-protobuf-7.1.jar",
+      "sha256": "7a17d3d97189482319a65337bf7e65ad3c2d8c6162d2c26115acb8419c497c8d"
+    },
+    {
+      "path": "it/unimi/dsi/fastutil-core/8.5.12/fastutil-core-8.5.12.jar",
+      "sha256": "f31c20f5b06312f3d5e06e6160a32e274d819aa6cebf27528b26b6b5c0c1df19"
+    },
+    {
+      "path": "com/google/code/gson/gson/2.13.2/gson-2.13.2.jar",
+      "sha256": "dd0ce1b55a3ed2080cb70f9c655850cda86c206862310009dcb5e5c95265a5e0"
+    },
+    {
+      "path": "com/google/errorprone/error_prone_annotations/2.41.0/error_prone_annotations-2.41.0.jar",
+      "sha256": "a56e782b5b50811ac204073a355a21d915a2107fce13ec711331ad036f660fcc"
+    },
+    {
+      "path": "org/slf4j/slf4j-nop/2.0.17/slf4j-nop-2.0.17.jar",
+      "sha256": "3716f83649ec66161a2edefd4f49df34d1dd1c51cdcf941996c6987260f0a829"
+    }
+  ]
+}

@@ -107,7 +107,7 @@ def _distinct_decisions(candidates):
     return []
 
 
-def top_decisions(raw, slot, heroes, fights, detailed_intervals):
+def top_decisions(raw, slot, heroes, fights, detailed_intervals, *, reviewer=None, extra=(), excluded=None):
     contexts = {(c["start"], c["end"]): c for c in detailed_intervals}
     side = "radiant" if slot < 128 else "dire"
     candidates = []
@@ -151,4 +151,24 @@ def top_decisions(raw, slot, heroes, fights, detailed_intervals):
             priority = (option["strength"], int(anchor is not None) + stakes[0],
                         int(anchor is not None), death_seconds, -start)
             candidates.append((priority, decision))
-    return _distinct_decisions(candidates)
+    if reviewer is None:
+        return _distinct_decisions(candidates)
+    verified, rejected = [], []
+    for priority, decision in [*candidates, *extra]:
+        result = reviewer.verify(slot, decision)
+        decision["verification"] = result
+        if result["status"] == "verified":
+            decision["review_from"] = max(0, result["time"] - 2)
+            verified.append((priority, decision))
+        else:
+            rejected.append((priority, decision))
+    chosen = _distinct_decisions(verified)
+    if excluded is not None:
+        # Show why another tempting play did not qualify, without repeating a
+        # button/target pair that was feasible elsewhere in the same fight.
+        def identity(d):
+            return d["start"], d["end"], d["button"], d["target"], d.get("enemy_focus")
+        accepted = {identity(d) for _, d in verified}
+        remaining = [(p, d) for p, d in rejected if identity(d) not in accepted]
+        excluded.extend(_distinct_decisions(remaining))
+    return chosen

@@ -1,5 +1,6 @@
 import unittest
 from unittest.mock import call, patch
+from types import SimpleNamespace
 
 from pro_replay.match_decisions import _distinct_decisions, _stakes, _timing, top_decisions
 from pro_replay.source import OpenDota, SourceError
@@ -10,6 +11,22 @@ def decision(start, end, button, target="Lion"):
 
 
 class DecisionRankingTests(unittest.TestCase):
+    def test_replay_checks_all_candidates_before_ranking_and_keeps_rejected_facts(self):
+        outcomes = {"Hex": "blocked", "Earth Spike": "unknown", "Dismember": "verified"}
+        candidates = []
+        for i, (button, status) in enumerate(outcomes.items()):
+            d = decision(100 * i, 100 * i + 40, button)
+            candidates.append(((3 - i,), d))
+        reviewer = SimpleNamespace(verify=lambda slot, d: {
+            "status": outcomes[d["button"]], "time": d["start"] + 10,
+            "checks": [], "reason": "sample"})
+        rejected = []
+        result = top_decisions({}, 0, {}, [], [], reviewer=reviewer, extra=candidates, excluded=rejected)
+        self.assertEqual([d["button"] for d in result], ["Dismember"])
+        self.assertEqual(result[0]["review_from"], 208)
+        self.assertEqual({d["button"] for d in rejected}, {"Hex", "Earth Spike"})
+        self.assertEqual(top_decisions({}, 0, {}, [], [], extra=candidates), [])
+
     def test_channel_search_starts_at_fight_start_when_cast_second_is_unknown(self):
         event = {"time": 973, "kind": "death", "target": "Sand King"}
         cue, start = _timing({"kind": "interrupt", "enemy_focus": "Rubick"}, event, 936)

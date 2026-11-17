@@ -21,7 +21,7 @@ from .impact import SLOTS
 from .source import OpenDota, SourceError, valve_patches
 from .coach_lessons import train_lessons
 from .coach_model import evaluate_ranked, load_coach_model, save_coach_model, train_coach_model
-from .coaching import EXAMPLES, FOCUSES, json_file, make_session, parse_clock, replay
+from .coaching import EXAMPLES, FOCUSES, coach_by_id, json_file, make_session, parse_clock, replay
 from .coach_report import render_session
 from .fight_coach import CANDIDATES
 from .pro_purchases import PurchaseIndex, fit_purchase_reference, write_reference
@@ -96,6 +96,7 @@ def parser():
     coach.add_argument("player", help="Слот, например slot:128, ник про-игрока или account ID")
     coach.add_argument("match_id", type=positive)
     coach.add_argument("--from-json", type=Path, help="Локальная карточка OpenDota в JSON или JSON.GZ")
+    coach.add_argument("--journal-only", action="store_true", help="Разобрать только журнал OpenDota без загрузки повтора Valve")
     coach.add_argument("--focus", choices=FOCUSES, default="auto")
     coach.add_argument("--at", metavar="MM:SS", help="Разобрать драку в указанное игровое время")
     coach.add_argument("--position", type=int, choices=range(1, 6), help="Игровая позиция, если нужна ручная поправка")
@@ -292,9 +293,11 @@ def main(argv=None):
                 if not player:
                     raise ValueError("В этом матче не найден указанный игрок.")
                 slot = int(player["player_slot"])
-                session = make_session(archive, raw, slot, load_coach_model(args.model),
-                                       json_file(args.lessons or EXAMPLES / "coach-lessons-model.json"), args.focus,
-                                       at=at, position=args.position, purchase_index=PurchaseIndex.load(args.fight_model))
+                build = make_session if args.journal_only else coach_by_id
+                options = {} if args.journal_only else {"cache": Path(args.db).parent / "replay-evidence"}
+                session = build(archive, raw, slot, load_coach_model(args.model),
+                                json_file(args.lessons or EXAMPLES / "coach-lessons-model.json"), args.focus,
+                                at=at, position=args.position, purchase_index=PurchaseIndex.load(args.fight_model), **options)
                 path = args.out or Path(f"data/coach-{args.match_id}-{slot}.html")
                 save_text(path, render_session(session))
                 print(f"Тренировка сохранена в {path.resolve()}")

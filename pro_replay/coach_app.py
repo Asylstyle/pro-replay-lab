@@ -11,7 +11,7 @@ import webbrowser
 from .archive import Archive, normalize
 from .coach_model import load_coach_model
 from .coach_report import page, render_session
-from .coaching import EXAMPLES, FOCUSES, directory, json_file, make_session, parse_clock, replay, save_exercise
+from .coaching import EXAMPLES, FOCUSES, coach_by_id, directory, json_file, parse_clock, replay, save_exercise
 from .pro_purchases import PurchaseIndex
 from .impact import SLOTS
 from .match_report import render_match
@@ -46,13 +46,13 @@ padding:.65rem .8rem;text-align:left;background:transparent;color:var(--ink);bor
 def _home():
     return page("Тренер по Dota 2", ENTRY_STYLE + """
 <div class="coach-entry"><div><h1>Разбери свою игру</h1>
-<p>Введи номер матча и выбери своего героя. Тренер найдёт до трёх главных решений в драках и покажет, кого стоило взять в фокус и какую кнопку можно было нажать.</p>
+<p>Введи номер матча и выбери героя. Тренер откроет повтор Valve и покажет до трёх моментов, когда кнопка была готова, команда видела врага и цель была в радиусе действия.</p>
 <form action="/match" method="get"><label for="match-id">Номер матча</label><div class="match-field">
 <input id="match-id" type="text" name="match" inputmode="numeric" pattern="[0-9]+" maxlength="19"
        placeholder="9086497898" required>
 <button type="submit">Открыть состав</button></div></form>
 <p><a href="/example-decisions">Пример автоматического разбора</a></p>
-<details class="resources"><summary>Другие примеры</summary><nav><a href="/example-fight">Драка Mars</a>
+<details class="resources"><summary>Другие примеры</summary><nav><a href="/example-replay-support">Проверенные сейвы Snapfire</a><a href="/example-fight">Драка Mars</a>
 <a href="/example-support">Выбор предмета на Rubick</a><a href="/example">Посмотреть готовый разбор Kez</a></nav></details></div>
 <img src="/kez.png" alt="Kez из Dota 2"></div>""")
 
@@ -102,7 +102,12 @@ def _match_form(raw, heroes):
                 '<label for="fight-time">Время драки <small>По желанию, мин:сек</small>'
                 '<input id="fight-time" list="intervals" name="at" type="text" placeholder="21:12" maxlength="7" '
                 f'pattern="[0-9]{{1,4}}:[0-5][0-9]"></label><datalist id="intervals">{timings}</datalist></div>'
-                f'</details><div class="coach-sides">{"".join(sides)}</div></form></div>')
+                f'</details><div class="coach-sides">{"".join(sides)}</div>'
+                '<p id="replay-progress" role="status" hidden>Загружаю повтор Valve и проверяю действия героя. '
+                'Первый разбор может занять несколько минут.</p></form></div>'
+                '<script>document.querySelector(".coach-picker form").addEventListener("submit",()=>{'
+                'if(document.querySelector("#focus").value==="auto"&&!document.querySelector("#fight-time").value)'
+                'document.querySelector("#replay-progress").hidden=false;});</script>')
 
 
 def _number(params, name):
@@ -158,6 +163,8 @@ class CoachHandler(BaseHTTPRequestHandler):
             return self._send(200, (EXAMPLES / "coach-kez.html").read_bytes())
         if path == "/example-decisions":
             return self._send(200, (EXAMPLES / "coach-decisions.html").read_bytes())
+        if path == "/example-replay-support":
+            return self._send(200, (EXAMPLES / "coach-replay-support.html").read_bytes())
         if path == "/example-fight":
             return self._send(200, (EXAMPLES / "coach-fight.html").read_bytes())
         if path == "/example-support":
@@ -191,8 +198,9 @@ class CoachHandler(BaseHTTPRequestHandler):
                 return self._send(200, render_match(row, archive.personal_history(row), archive.references()))
             model = load_coach_model(self.server.model_path)
             lessons = json_file(self.server.lessons_path)
-            session = make_session(archive, raw, slot, model, lessons, focus=focus[0], at=at,
-                                   position=role, purchase_index=PurchaseIndex.load(self.server.fight_model_path))
+            session = coach_by_id(archive, raw, slot, model, lessons, focus[0], at=at,
+                                  cache=Path(self.server.db_path).parent / "replay-evidence",
+                                  position=role, purchase_index=PurchaseIndex.load(self.server.fight_model_path))
             if path == "/practice":
                 if not session["requested_available"]:
                     raise ValueError("Для выбранного упражнения недостаточно данных.")

@@ -256,7 +256,8 @@ def tactical_card(fight, row):
                      f"командная драка {topic} {row.get('hero_name', '')} {spells} {gear}")
 
 
-def make_session(archive, raw, slot, model, lesson_model, focus="auto", *, at=None, position=None, purchase_index=None):
+def make_session(archive, raw, slot, model, lesson_model, focus="auto", *, at=None, position=None, purchase_index=None,
+                 timeline=None, replay_message=None):
     if focus not in FOCUSES or not select_player(raw, None, slot):
         raise ValueError("Проверь выбранную тему и слот игрока.")
     if at is not None and (type(at) is not int or at < 0 or (raw.get("duration") is not None and at > raw["duration"])):
@@ -275,20 +276,33 @@ def make_session(archive, raw, slot, model, lesson_model, focus="auto", *, at=No
         add_purchase_evidence(fight, row, position, purchase_index)
         query = tactical_card(fight, row)["query"]
         fight["lessons"] = retrieve_lessons(lesson_model, query, position=position, limit=1, topic="fights")
-    mistakes = []
+    mistakes, excluded = [], []
     if focus == "auto" and at is None:
-        mistakes = top_decisions(raw, slot, heroes, fights, row["detail"]["fight_review"]["intervals"])
+        reviewer, extra = None, []
+        if timeline is not None:
+            from .replay_choices import replay_choices
+            from .replay_verification import ReplayVerifier
+            reviewer = ReplayVerifier(timeline, match_id=raw["match_id"], start_time=raw.get("start_time"),
+                                      hero_ids=[p.get("hero_id") for p in raw.get("players", []) if isinstance(p, dict)],
+                                      game_mode=raw.get("game_mode"), patch_version=timeline.get("patch_version"))
+            extra_fights, extra = replay_choices(timeline, raw, slot, heroes, fights, position)
+            fights = sorted([*fights, *extra_fights], key=lambda f: (f["start"], f["end"]))
+        mistakes = top_decisions(raw, slot, heroes, fights, row["detail"]["fight_review"]["intervals"],
+                                 reviewer=reviewer, extra=extra, excluded=excluded)
     selected = selected_fight(fights, at)
     decision = tactical_card(selected, row) if selected else (fight_card(row) if at is None else None)
     if mistakes:
         first = mistakes[0]
         selected = next(f for f in fights if (f["start"], f["end"]) == (first["start"], first["end"]))
-        stamp = _clock(first["time"]) if first["time"] is not None else f'{_clock(first["start"])}–{_clock(first["end"])}'
+        stamp_time = first.get("verification", {}).get("time", first["time"])
+        stamp = _clock(stamp_time) if stamp_time is not None else f'{_clock(first["start"])}–{_clock(first["end"])}'
         decision = make_card("fights", first["button"] + " · " + first["target"], stamp, first["evidence"],
                              first["why"], first["action"], first["check"],
                              f'командная драка {first["button"]} {first["target"]} {first["why"]}')
     if at is not None:
         focus = "fights"
+    if timeline is not None and not mistakes and focus == "auto" and at is None:
+        decision = None
     candidates = [lane_card(row, assessment, position), decision, build_card(row), vision_card(row)]
     cards = {c["topic"]: c for c in candidates if c}
     # A descriptive forecast gap is a replay prompt only when larger than the
@@ -306,6 +320,16 @@ def make_session(archive, raw, slot, model, lesson_model, focus="auto", *, at=No
         hits = retrieve_lessons(lesson_model, card["query"], position=position, limit=2, topic=card["topic"])
         card["lessons"] = [h for h in hits if urlsplit(h["url"]).scheme == "https"]
     return {"row": row, "assessment": assessment, "cards": ordered, "focus": focus, "mistakes": mistakes,
+            "replay_checked": timeline is not None, "replay_message": replay_message, "excluded": excluded,
             "fights": fights, "selected_fight": selected, "at": at, "position": position, "role_override": role_override,
             "requested_available": focus == "auto" or focus in cards,
             "history": sessions(archive, row, position)}
+
+
+def coach_by_id(archive, raw, slot, model, lessons, focus, *, cache, at=None, position=None, purchase_index=None):
+    options = dict(at=at, position=position, purchase_index=purchase_index)
+    if focus != "auto" or at is not None:
+        return make_session(archive, raw, slot, model, lessons, focus, **options)
+    from .replay_files import replay_evidence
+    with replay_evidence(raw, cache) as (timeline, message):
+        return make_session(archive, raw, slot, model, lessons, focus, timeline=timeline, replay_message=message, **options)

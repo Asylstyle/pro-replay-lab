@@ -105,10 +105,11 @@ def _targets(actor, key):
     return _counts(targets.get(key)) if isinstance(targets, dict) else None
 
 
-def _option(kind, event, target, enemy, button, action, why, evidence, check, strength, me):
+def _option(kind, event, target, enemy, button, action, why, evidence, check, strength, me, button_key, threat_key):
     slot = target["slot"]
     return {"kind": kind, "target": target["hero"], "target_slot": slot, "enemy_focus": enemy["hero"],
-            "focus_slot": enemy["slot"], "button": button, "action": action, "why": why,
+            "focus_slot": enemy["slot"], "button": button, "button_key": button_key, "threat_key": threat_key,
+            "action": action, "why": why,
             "evidence": evidence, "check": check, "strength": strength,
             "recipient_side": "self" if slot == me else ("ally" if slot // 128 == me // 128 else "enemy"),
             "event_time": event["time"], "event_kind": event["kind"], "event_actor_slot": event.get("actor_slot"),
@@ -242,7 +243,7 @@ def _skill_options(event, victim, enemy, threat, linked, evidence, ctx):
         if not gap or key in OFFENSE and key not in CONTROL:
             strength = min(strength, 1 if not gap else 2)
         options.append(_option(kind, event, target, enemy, button, action, why, evidence + " " + use,
-                               check, strength, slot))
+                               check, strength, slot, key, key_threat))
     return options
 
 
@@ -300,7 +301,7 @@ def _item_options(event, victim, enemy, threat, linked, evidence, fight, ctx):
         inventory = inventory_evidence(ctx["raw"], me["slot"], key, event["time"])
         facts = evidence + " " + item["evidence"] + (" " + inventory if inventory else "")
         result.append(_option(kind, event, target, enemy, name, action, why,
-                              facts, check, strength, me["slot"]))
+                              facts, check, strength, me["slot"], "item_" + key, threat["key"]))
     return result
 
 

@@ -80,6 +80,44 @@ class CoachAppTests(unittest.TestCase):
             self.assertEqual(self.request("GET", "/example"), (200, b"<h1>Kez</h1>"))
             self.assertEqual(self.request("GET", "/kez.png"), (200, b"image"))
 
+    def test_browser_hero_click_loads_full_replay_and_renders_check_results(self):
+        from contextlib import contextmanager
+        from copy import deepcopy
+        from pro_replay.coaching import make_session
+        from test_match_decisions import decision
+
+        captured = []
+        @contextmanager
+        def evidence(raw, cache):
+            captured.append(raw["match_id"])
+            yield {"match_id": raw["match_id"]}, ""
+
+        native_make = make_session
+        def session_with_checked_decision(*args, **kwargs):
+            self.assertIsNotNone(kwargs.pop("timeline"))
+            session = native_make(*args, **kwargs)
+            sample = decision(590, 640, "Hex")
+            sample.update(kind="focus", time=610, event="Observed death", review_from=598, evidence="Observed",
+                          why="Interrupt", action="Use Hex", check="",
+                          verification={"status":"verified", "time":600, "tick":18000, "reason":"Same frame.",
+                                        "checks":[{"key":"vision", "label":"Обзор команды","state":"yes",
+                                                   "detail":"Враг виден команде."}]})
+            session.update(replay_checked=True, mistakes=[sample])
+            failed = deepcopy(sample)
+            failed["verification"].update(status="blocked", reason="Outside reach")
+            session["excluded"] = [failed]
+            return session
+        with (patch("pro_replay.coach_app.OpenDota.match", return_value=scorecard()),
+              patch("pro_replay.replay_files.replay_evidence", side_effect=evidence),
+              patch("pro_replay.coaching.make_session", side_effect=session_with_checked_decision)):
+            status, html = self.request("POST", "/coach", form={"match":999, "slot":132})
+            self.assertEqual(status, 200)
+            body = html.decode()
+            self.assertIn("Можно было нажать на 10:00", body)
+            self.assertIn("Обзор команды · Да", body)
+            self.assertIn("Outside reach", body)
+            self.assertEqual(captured, [999])
+
     def test_hero_button_submits_an_auto_report_without_manual_fields(self):
         with patch("pro_replay.coach_app.OpenDota.match", return_value=scorecard()) as fetch:
             status, roster = self.request("GET", "/match?match=999")

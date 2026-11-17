@@ -160,42 +160,74 @@ def peer_action(fight):
             f'Пример на {_clock(pro["example_start"])}</a>.</p>')
 
 
-def decisions_section(decisions):
+def replay_checks(result):
+    labels = {"yes": "Да", "no": "Нет", "unknown": "Мало данных"}
+    rows = []
+    for check in result.get("checks", []):
+        value = labels.get(check["state"], "Мало данных")
+        rows.append(f'<li><strong>{h(check["label"])} · {value}</strong> — {h(check["detail"])}</li>')
+    return '<ul class="replay-checks">' + "".join(rows) + '</ul>' if rows else ''
+
+
+def excluded_section(choices):
+    if not choices:
+        return ''
+    parts = ['<section><h2>Какие варианты отпали при проверке</h2>']
+    for d in choices:
+        v = d["verification"]
+        stamp = _clock(v["time"]) if v.get("time") is not None else f'{_clock(d["start"])}–{_clock(d["end"])}'
+        parts.append(f'<details class="battle"><summary>{h(stamp)} · {h(d["button"])} → {h(d["target"])}</summary>'
+                     f'<p>{h(v["reason"])}</p>{replay_checks(v)}</details>')
+    return ''.join([*parts, '</section>'])
+
+
+def decisions_section(decisions, *, checked=False):
     headings = ("Решения в драках", "Один момент для пересмотра", "Два главных момента", "Три главных момента")
     parts = [f'<section id="decisions" aria-labelledby="decisions-title"><h2 id="decisions-title">{headings[len(decisions)]}</h2>']
     if not decisions:
+        if checked:
+            return parts[0] + '<p>Повтор проверен. Для этого героя не нашлось эпизода, в котором все условия для совета подтверждены в одну секунду.</p></section>'
         return (parts[0] + '<p>В журнале не нашлось эпизода, где можно связать действие конкретного героя '
                 'с подходящей целью и кнопкой. Если OpenDota ещё обрабатывает повтор, обнови состав матча позже.</p></section>')
     ordering = "Сначала — самый важный эпизод. " if len(decisions) > 1 else ""
-    parts.append(f'<p class="meta">{ordering}Время события взято из журнала. Проверь в повторе, '
-                 'была ли видна цель и готова ли кнопка перед этим моментом.</p><ol class="decision-list">')
+    intro = ("Секунда нажатия взята из кадра повтора Valve. Видимость означает обзор твоей команды. "
+             "Положение камеры игрока отдельно не оценивалось." if checked else
+             "Время события взято из журнала. Проверь в повторе, была ли видна цель и готова ли кнопка перед этим моментом.")
+    parts.append(f'<p class="meta">{ordering}{intro}</p><ol class="decision-list">')
     for rank, d in enumerate(decisions, start=1):
         start, end = d["start"], d["end"]
         interval = f'{_clock(start)}–{_clock(end)}'
         event_time = d["time"]
         timing = f'Событие на {_clock(event_time)}' if event_time is not None else f'Интервал {interval}'
+        v = d.get("verification")
         side = d.get("recipient_side")
         action_target = {"self": "Применить на себя", "ally": "Кого прикрыть", "enemy": "Кого фокусить"}.get(side, "Цель действия")
         title = d.get("title") or {"interrupt": "Прервать каст", "focus": "Сфокусировать соперника",
                                    "protect": "Прикрыть союзника", "self_defense": "Защитить себя"}.get(d["kind"], "Выбор в драке")
+        heading = f'{_clock(v["time"])} · {title}' if v else title
         parts.append(f'<li class="decision-card"><div class="decision-title"><span class="rank" aria-hidden="true">{rank}.</span>'
-                     f'<h3>{h(title)}</h3></div><p><span class="stamp">{h(timing)}</span> · {h(d["event"])}</p>'
+                     f'<h3>{h(heading)}</h3></div><p><span class="stamp">{h(timing)}</span> · {h(d["event"])}</p>'
                      f'<dl class="decision-tools"><div><dt>{action_target}</dt><dd>{h(d["target"])}</dd></div>'
                      f'<div><dt>Что нажать</dt><dd>{h(d["button"])}</dd></div>')
         enemy = d.get("enemy_focus")
         if enemy and enemy != d["target"]:
             parts.append(f'<div><dt>Источник угрозы</dt><dd>{h(enemy)}</dd></div>')
         parts.append('</dl>')
-        if d.get("timing"):
+        if v:
+            parts.append(f'<p><b>Можно было нажать на {_clock(v["time"])}.</b> {h(v["reason"])}</p>{replay_checks(v)}')
+        elif d.get("timing"):
             parts.append(f'<p><b>Когда нажать.</b> {h(d["timing"])}</p>')
-        parts.append(f'<p>{h(d["action"])}</p><p><b>Почему.</b> {h(d["why"])}</p>')
-        if d.get("strength") == 1:
+        if not v:
+            parts.append(f'<p>{h(d["action"])}</p>')
+        parts.append(f'<p><b>Почему.</b> {h(d["why"])}</p>')
+        if not v and d.get("strength") == 1:
             parts.append('<p class="meta">У этой версии мало подтверждений. Сначала проверь цель и порядок действий в повторе.</p>')
         parts.append('<details class="decision-review"><summary>Что видно в журнале и что проверить</summary>'
                      f'<p>{h(d["evidence"])}</p>')
         if d.get("importance"):
             parts.append(f'<p>{h(d["importance"])}</p>')
-        parts.append(f'<p>{h(d["check"])}</p>')
+        if not v:
+            parts.append(f'<p>{h(d["check"])}</p>')
         if d.get("pro_note"):
             parts.append(f'<p>{h(d["pro_note"])}')
             if d.get("pro_url") and urlsplit(d["pro_url"]).scheme == "https":
@@ -214,9 +246,11 @@ def battle_timeline(session):
     if not fights:
         return ''
     selected = session["selected_fight"]
-    parts = ['<section id="fight-timeline"><h2>Драки по времени</h2>',
-             '<p class="meta">Открой интервал, чтобы посмотреть решение и предметы. Время убийства или смерти '
-             'берётся из журнала. Для большинства заклинаний OpenDota даёт число применений за весь интервал.</p>']
+    description = ("Доступность действия проверена по состоянию героев раз в игровую секунду. "
+                   "Вверху показаны варианты, прошедшие все проверки." if session.get("replay_checked") else
+                   "Открой интервал, чтобы посмотреть решение и предметы. Время убийства или смерти "
+                   "берётся из журнала. Для большинства заклинаний OpenDota даёт число применений за весь интервал.")
+    parts = ['<section id="fight-timeline"><h2>Драки по времени</h2>', f'<p class="meta">{description}</p>']
     for fight in fights:
         summary = f'{_clock(fight["start"])}–{_clock(fight["end"])}'
         named = fight["threats"][0] if fight["threats"] else None
@@ -227,10 +261,11 @@ def battle_timeline(session):
             continue
         facts = ''.join(f'<li>{h(f)}</li>' for f in fight["observations"])
         parts.append(f'<details class="battle"><summary>{h(summary)}</summary><div class="battle-body" id="fight-{int(fight["start"])}-{int(fight["end"])}">'
-                     f'<span class="stamp">{h(_clock(fight["anchor"]))}</span> · {h(fight["anchor_text"])}'
-                     f'<ul>{facts}</ul><p><b>Вариант действия.</b> {h(fight["action"])}</p>'
-                     f'<p>{h(fight["check"])}</p>{peer_action(fight)}{item_options(fight, session["position"])}'
-                     f'{lessons_view(fight["lessons"])}</div></details>')
+                     f'<span class="stamp">{h(_clock(fight["anchor"]))}</span> · {h(fight["anchor_text"])}<ul>{facts}</ul>')
+        if not session.get("replay_checked"):
+            parts.append(f'<p><b>Вариант действия.</b> {h(fight["action"])}</p><p>{h(fight["check"])}</p>'
+                         f'{peer_action(fight)}{item_options(fight, session["position"])}')
+        parts.append(f'{lessons_view(fight["lessons"])}</div></details>')
     parts.append('</section>')
     return ''.join(parts)
 
@@ -265,7 +300,11 @@ def render_session(session, *, home_url=None, detail_url=None):
     auto = session["focus"] == "auto" and session["at"] is None
     has_ranked_fights = auto and bool(session.get("mistakes"))
     if auto:
-        parts.append(decisions_section(session.get("mistakes", [])))
+        if session.get("replay_message"):
+            parts.append(f'<p role="note"><strong>Разбор по журналу OpenDota.</strong> {h(session["replay_message"])} '
+                         'Здесь показаны гипотезы. Проверка кнопки, командного обзора и дистанции по файлу недоступна.</p>')
+        parts.append(decisions_section(session.get("mistakes", []), checked=session.get("replay_checked", False)))
+        parts.append(excluded_section(session.get("excluded", [])))
     elif session["fights"]:
         parts.append(f'<nav><a href="#fight-timeline">Драки по времени ({len(session["fights"])})</a></nav>')
     if session["at"] is not None and session["selected_fight"] is None:
