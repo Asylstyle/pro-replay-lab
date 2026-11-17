@@ -31,9 +31,12 @@ ENTRY_STYLE = """<style>
 .coach-entry :focus-visible,.coach-picker :focus-visible{outline:3px solid #d4ec80;outline-offset:3px}
 .coach-sides{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin:22px 0}
 .coach-sides fieldset{margin:0;padding:8px;border:1px solid #41515a;min-width:0}
-.coach-sides legend{font-weight:700;padding:0 6px}.hero-pick{display:flex;align-items:center;gap:.7rem;padding:.65rem .55rem;border-bottom:1px solid #37464e;cursor:pointer}
-.hero-pick:last-child{border-bottom:0}.hero-pick input{accent-color:#cce880}.hero-pick small{display:block;overflow-wrap:anywhere}
-.coach-picker select{margin:0 10px 6px 0}.pick-actions{margin-top:8px}
+.coach-sides legend{font-weight:700;padding:0 6px}
+.coach-picker .hero-pick{display:flex;width:100%;align-items:center;justify-content:space-between;gap:.7rem;min-height:52px;
+padding:.65rem .8rem;text-align:left;background:transparent;color:var(--ink);border-radius:0;border-bottom:1px solid var(--line)}
+.hero-pick:last-child{border-bottom:0}.hero-pick small{display:block;font-weight:400;overflow-wrap:anywhere}
+.hero-pick::after{content:"→";color:var(--accent)}.coach-picker .hero-pick:hover,.coach-picker .hero-pick:focus-visible{background:var(--panel)}
+.coach-picker select{margin:0 10px 6px 0}.manual-options{margin-top:15px}.manual-options summary{cursor:pointer}
 .fight-inputs{display:flex;gap:.75rem 1.5rem;flex-wrap:wrap;margin:15px 0}
 .fight-inputs label,.fight-inputs small{display:block}.fight-inputs select,.fight-inputs input{margin-top:4px}
 @media(max-width:680px){.coach-entry{grid-template-columns:1fr}.coach-entry img{max-height:240px;order:-1}.coach-sides{grid-template-columns:1fr}}
@@ -43,13 +46,14 @@ ENTRY_STYLE = """<style>
 def _home():
     return page("Тренер по Dota 2", ENTRY_STYLE + """
 <div class="coach-entry"><div><h1>Разбери свою игру</h1>
-<p>Выбери героя и тему. Тренер найдёт эпизоды в матче, сравнит экономику с турнирными играми и даст упражнение на следующую карту.</p>
+<p>Введи номер матча и выбери своего героя. Тренер найдёт до трёх главных решений в драках и покажет, кого стоило взять в фокус и какую кнопку можно было нажать.</p>
 <form action="/match" method="get"><label for="match-id">Номер матча</label><div class="match-field">
 <input id="match-id" type="text" name="match" inputmode="numeric" pattern="[0-9]+" maxlength="19"
        placeholder="9086497898" required>
 <button type="submit">Открыть состав</button></div></form>
-<nav><a href="/example-fight">Драка Mars</a><a href="/example-support">Выбор предмета на Rubick</a>
-<a href="/example">Посмотреть готовый разбор Kez</a></nav></div>
+<p><a href="/example-decisions">Пример автоматического разбора</a></p>
+<details class="resources"><summary>Другие примеры</summary><nav><a href="/example-fight">Драка Mars</a>
+<a href="/example-support">Выбор предмета на Rubick</a><a href="/example">Посмотреть готовый разбор Kez</a></nav></details></div>
 <img src="/kez.png" alt="Kez из Dota 2"></div>""")
 
 
@@ -77,8 +81,8 @@ def _match_form(raw, heroes):
             hero = heroes.get(p.get("hero_id"), {}).get("localized_name") or f'Герой #{p.get("hero_id", "—")}'
             name = p.get("name") or p.get("personaname")
             caption = f'<small>{escape(str(name))}</small>' if name else ""
-            choices.append(f'<label class="hero-pick"><input type="radio" name="slot" value="{slot}" required>'
-                           f'<span><b>{escape(str(hero))}</b>{caption}</span></label>')
+            choices.append(f'<button class="hero-pick" type="submit" name="slot" value="{slot}">'
+                           f'<span><b>{escape(str(hero))}</b>{caption}</span></button>')
         sides.append(f'<fieldset><legend>{team}</legend>{"".join(choices) or "Состав недоступен"}</fieldset>')
     options = "".join(f'<option value="{key}">{escape(label)}</option>' for key, label in FOCUSES.items())
     roles = "".join(f'<option value="{i}">{i} · {label}</option>' for i, label in
@@ -90,15 +94,15 @@ def _match_form(raw, heroes):
     return page("Выбор игрока", ENTRY_STYLE + f'<div class="coach-picker"><a href="/">← Другой матч</a>'
                 f'<h1>Выбери своего героя</h1><p>Матч #{mid} · <a href="/match?match={mid}&amp;refresh=1">Обновить из OpenDota</a></p>'
                 '<form method="post" action="/coach">'
-                f'<input type="hidden" name="match" value="{mid}"><div class="coach-sides">{"".join(sides)}</div>'
+                f'<input type="hidden" name="match" value="{mid}">'
+                '<details class="manual-options"><summary>Настроить разбор вручную</summary>'
                 '<div class="fight-inputs"><label for="focus">Что разобрать'
                 f'<select id="focus" name="focus">{options}</select></label><label for="role">Твоя позиция'
                 f'<select id="role" name="role"><option value="">По данным матча</option>{roles}</select></label>'
                 '<label for="fight-time">Время драки <small>По желанию, мин:сек</small>'
                 '<input id="fight-time" list="intervals" name="at" type="text" placeholder="21:12" maxlength="7" '
                 f'pattern="[0-9]{{1,4}}:[0-5][0-9]"></label><datalist id="intervals">{timings}</datalist></div>'
-                '<div class="pick-actions"><button type="submit">Получить разбор</button>'
-                '</div></form></div>')
+                f'</details><div class="coach-sides">{"".join(sides)}</div></form></div>')
 
 
 def _number(params, name):
@@ -152,6 +156,8 @@ class CoachHandler(BaseHTTPRequestHandler):
             return self._send(200, _home())
         if path == "/example":
             return self._send(200, (EXAMPLES / "coach-kez.html").read_bytes())
+        if path == "/example-decisions":
+            return self._send(200, (EXAMPLES / "coach-decisions.html").read_bytes())
         if path == "/example-fight":
             return self._send(200, (EXAMPLES / "coach-fight.html").read_bytes())
         if path == "/example-support":
@@ -174,7 +180,7 @@ class CoachHandler(BaseHTTPRequestHandler):
         archive = Archive(self.server.db_path)
         with closing(archive.db):
             refresh = path == "/match" and params.get("refresh") == ["1"]
-            raw = replay(archive, OpenDota(), mid, refresh=refresh)
+            raw = replay(archive, OpenDota(match_metadata=True), mid, refresh=refresh)
             if path == "/match":
                 return self._send(200, _match_form(raw, directory(archive)))
             if path == "/detail":

@@ -59,9 +59,10 @@ def _retry_delay(value: str | None, attempt: int) -> float:
 
 class OpenDota:
     def __init__(self, base_url: str = "https://api.opendota.com/api",
-                 api_key: str | None = None):
+                 api_key: str | None = None, *, match_metadata: bool = False):
         self.base_url = base_url.rstrip("/")
         self.api_key = api_key or os.getenv("OPENDOTA_API_KEY")
+        self.match_metadata = match_metadata
         self._next_request = 0.0
 
     def _get(self, path: str, params: dict | None = None):
@@ -157,7 +158,13 @@ class OpenDota:
     def match(self, match_id: int) -> dict:
         if type(match_id) is not int or match_id < 1:
             raise ValueError("match_id must be a positive integer")
-        result = self._get(f"/matches/{match_id}")
+        path = f"/matches/{match_id}"
+        try:
+            result = self._get(path, {"meta": 1} if self.match_metadata else None)
+        except SourceError as exc:
+            if not self.match_metadata or exc.status not in (400, 403, 502, 504):
+                raise
+            result = self._get(path)
         if not isinstance(result, dict) or result.get("match_id") != match_id:
             raise SourceError(f"OpenDota /matches/{match_id}: expected matching match_id")
         return result

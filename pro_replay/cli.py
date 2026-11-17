@@ -285,7 +285,7 @@ def main(argv=None):
                 return 0
             if args.cmd == "coach":
                 at = parse_clock(args.at) if args.at is not None else None
-                api = OpenDota()
+                api = OpenDota(match_metadata=True)
                 account, slot = player_key(archive, args.player, api)
                 raw = replay(archive, api, args.match_id, local=args.from_json, refresh=args.refresh)
                 player = select_player(raw, account, slot)

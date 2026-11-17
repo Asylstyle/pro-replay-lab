@@ -114,7 +114,12 @@ def _after_fights(raw, intervals, directory, heroes):
         fight = next((f for f in intervals if f["start"] == start and f["end"] == end), None)
         label = _objective(event, directory, hero_by_slot)
         if fight is not None and label:
-            fight["objectives_after"].append({"time": second, "label": label})
+            lost_side = None
+            if event["type"] == "building_kill":
+                lost_side = "radiant" if event["key"].startswith("npc_dota_goodguys_") else "dire"
+            elif event["type"] == "CHAT_MESSAGE_ROSHAN_KILL":
+                lost_side = {2: "dire", 3: "radiant"}.get(event.get("team"))
+            fight["objectives_after"].append({"time": second, "label": label, "lost_side": lost_side})
     for fight in intervals:
         fight["objectives_after"].sort(key=lambda e: e["time"])
 

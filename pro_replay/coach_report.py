@@ -24,6 +24,14 @@ a,summary{color:var(--accent);text-underline-offset:.21em}a:focus-visible,button
 .battle{border-bottom:1px solid var(--line);padding:11px 0}.battle>summary{cursor:pointer;font-weight:650}
 .battle ul{padding-left:1.35em}.item-option{padding:12px 0;border-top:1px solid var(--line)}
 .item-option p{margin:.2em 0}.item-option small{display:block}.battle-body{padding:12px 0}
+.decision-list{display:grid;gap:18px;padding:0;list-style:none}.decision-card{padding:20px 22px;
+border:1px solid var(--line);border-radius:5px;background:var(--panel);overflow-wrap:anywhere}
+.decision-title{display:flex;align-items:baseline;gap:.75rem}.decision-title h3{margin-top:0}
+.rank{color:var(--accent);font:600 1.05em Consolas,monospace}.decision-tools{display:flex;flex-wrap:wrap;
+gap:10px 32px;border-top:1px solid var(--line);padding-top:12px;margin:14px 0 12px}
+.decision-tools dt{color:var(--soft);font-size:.86rem}.decision-tools dd{margin:0;font-weight:650}
+.decision-review{margin-top:12px}.decision-review summary{cursor:pointer}.decision-review p{margin:.55em 0}
+.decision-links{margin:.8em 0 0}.battle-body:target{outline:1px solid var(--aqua);outline-offset:5px}
 table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}td,th{padding:7px 10px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}td:first-child,th:first-child{text-align:left}th{color:var(--soft);font-size:.86rem}.scroll{overflow:auto}
 nav,footer,.actions{display:flex;gap:10px 22px;flex-wrap:wrap;align-items:center}footer{border-top:1px solid var(--line);padding-top:15px}
 button,.button{display:inline-block;padding:.65em 1em;background:var(--accent);color:#142118;border:1px solid var(--accent);border-radius:4px;font:600 1rem/1.4 inherit;cursor:pointer;text-decoration:none}
@@ -152,6 +160,55 @@ def peer_action(fight):
             f'Пример на {_clock(pro["example_start"])}</a>.</p>')
 
 
+def decisions_section(decisions):
+    headings = ("Решения в драках", "Один момент для пересмотра", "Два главных момента", "Три главных момента")
+    parts = [f'<section id="decisions" aria-labelledby="decisions-title"><h2 id="decisions-title">{headings[len(decisions)]}</h2>']
+    if not decisions:
+        return (parts[0] + '<p>В журнале не нашлось эпизода, где можно связать действие конкретного героя '
+                'с подходящей целью и кнопкой. Если OpenDota ещё обрабатывает повтор, обнови состав матча позже.</p></section>')
+    ordering = "Сначала — самый важный эпизод. " if len(decisions) > 1 else ""
+    parts.append(f'<p class="meta">{ordering}Время события взято из журнала. Проверь в повторе, '
+                 'была ли видна цель и готова ли кнопка перед этим моментом.</p><ol class="decision-list">')
+    for rank, d in enumerate(decisions, start=1):
+        start, end = d["start"], d["end"]
+        interval = f'{_clock(start)}–{_clock(end)}'
+        event_time = d["time"]
+        timing = f'Событие на {_clock(event_time)}' if event_time is not None else f'Интервал {interval}'
+        side = d.get("recipient_side")
+        action_target = {"self": "Применить на себя", "ally": "Кого прикрыть", "enemy": "Кого фокусить"}.get(side, "Цель действия")
+        title = d.get("title") or {"interrupt": "Прервать каст", "focus": "Сфокусировать соперника",
+                                   "protect": "Прикрыть союзника", "self_defense": "Защитить себя"}.get(d["kind"], "Выбор в драке")
+        parts.append(f'<li class="decision-card"><div class="decision-title"><span class="rank" aria-hidden="true">{rank}.</span>'
+                     f'<h3>{h(title)}</h3></div><p><span class="stamp">{h(timing)}</span> · {h(d["event"])}</p>'
+                     f'<dl class="decision-tools"><div><dt>{action_target}</dt><dd>{h(d["target"])}</dd></div>'
+                     f'<div><dt>Что нажать</dt><dd>{h(d["button"])}</dd></div>')
+        enemy = d.get("enemy_focus")
+        if enemy and enemy != d["target"]:
+            parts.append(f'<div><dt>Источник угрозы</dt><dd>{h(enemy)}</dd></div>')
+        parts.append('</dl>')
+        if d.get("timing"):
+            parts.append(f'<p><b>Когда нажать.</b> {h(d["timing"])}</p>')
+        parts.append(f'<p>{h(d["action"])}</p><p><b>Почему.</b> {h(d["why"])}</p>')
+        if d.get("strength") == 1:
+            parts.append('<p class="meta">У этой версии мало подтверждений. Сначала проверь цель и порядок действий в повторе.</p>')
+        parts.append('<details class="decision-review"><summary>Что видно в журнале и что проверить</summary>'
+                     f'<p>{h(d["evidence"])}</p>')
+        if d.get("importance"):
+            parts.append(f'<p>{h(d["importance"])}</p>')
+        parts.append(f'<p>{h(d["check"])}</p>')
+        if d.get("pro_note"):
+            parts.append(f'<p>{h(d["pro_note"])}')
+            if d.get("pro_url") and urlsplit(d["pro_url"]).scheme == "https":
+                parts.append(f' <a href="{h(d["pro_url"])}">Про-матч для сравнения</a>')
+            parts.append('</p>')
+        parts.append('</details><p class="decision-links">')
+        if d.get("review_from") is not None:
+            parts.append(f'<span>Начни просмотр с {_clock(d["review_from"])}. </span>')
+        parts.append(f'<a href="#fight-{int(start)}-{int(end)}">Разбор драки {h(interval)}</a></p></li>')
+    parts.append('</ol></section>')
+    return ''.join(parts)
+
+
 def battle_timeline(session):
     fights = session["fights"]
     if not fights:
@@ -165,11 +222,11 @@ def battle_timeline(session):
         named = fight["threats"][0] if fight["threats"] else None
         if named:
             summary += f' · {named["hero"]} — {named["ability"]}'
-        if fight is selected and session["cards"] and session["cards"][0]["topic"] == "fights":
+        if session["focus"] != "auto" and fight is selected and session["cards"] and session["cards"][0]["topic"] == "fights":
             parts.append(f'<p class="battle"><a href="#selected-fight">{h(summary)}</a> · выбранный эпизод</p>')
             continue
         facts = ''.join(f'<li>{h(f)}</li>' for f in fight["observations"])
-        parts.append(f'<details class="battle"><summary>{h(summary)}</summary><div class="battle-body">'
+        parts.append(f'<details class="battle"><summary>{h(summary)}</summary><div class="battle-body" id="fight-{int(fight["start"])}-{int(fight["end"])}">'
                      f'<span class="stamp">{h(_clock(fight["anchor"]))}</span> · {h(fight["anchor_text"])}'
                      f'<ul>{facts}</ul><p><b>Вариант действия.</b> {h(fight["action"])}</p>'
                      f'<p>{h(fight["check"])}</p>{peer_action(fight)}{item_options(fight, session["position"])}'
@@ -205,7 +262,11 @@ def render_session(session, *, home_url=None, detail_url=None):
               f'<h1>{h(hero)}</h1><p class="meta">{role}{result} · {h(_date(row.get("start_time")))} · '
               f'K/D/A {number(row["kills"])} / {number(row["deaths"])} / {number(row["assists"])}</p></header>')
     parts = [header]
-    if session["fights"]:
+    auto = session["focus"] == "auto" and session["at"] is None
+    has_ranked_fights = auto and bool(session.get("mistakes"))
+    if auto:
+        parts.append(decisions_section(session.get("mistakes", [])))
+    elif session["fights"]:
         parts.append(f'<nav><a href="#fight-timeline">Драки по времени ({len(session["fights"])})</a></nav>')
     if session["at"] is not None and session["selected_fight"] is None:
         parts.append(f'<section class="panel"><h2>На {_clock(session["at"])} нет размеченной драки для разбора</h2>'
@@ -216,13 +277,15 @@ def render_session(session, *, home_url=None, detail_url=None):
         lead = cards[0]
         battle = session["selected_fight"] if lead["topic"] == "fights" else None
         fight_body = ""
-        if battle:
+        if battle and not has_ranked_fights:
             requested = f'Выбранное время {_clock(session["at"])}. ' if session["at"] is not None else ""
             fight_body = (f'<p class="meta">{requested}Интервал драки {_clock(battle["start"])}–{_clock(battle["end"])}</p>'
                           + peer_action(battle) + item_options(battle, pos))
-        parts.append(f'<section class="focus" id="selected-fight"><p class="eyebrow">ФОКУС НА ЭТУ ТРЕНИРОВКУ</p>'
-                     f'<h2>{h(lead["title"])}</h2><p><span class="stamp">{h(lead["time"])}</span> · {h(lead["evidence"])}</p>'
-                     f'<p>{h(lead["review"])}</p>{fight_body}</section><section class="exercise"><h3>Задание на следующую игру</h3>'
+        if not has_ranked_fights:
+            parts.append(f'<section class="focus" id="selected-fight"><p class="eyebrow">ФОКУС НА ЭТУ ТРЕНИРОВКУ</p>'
+                         f'<h2>{h(lead["title"])}</h2><p><span class="stamp">{h(lead["time"])}</span> · {h(lead["evidence"])}</p>'
+                         f'<p>{h(lead["review"])}</p>{fight_body}</section>')
+        parts.append(f'<section class="exercise"><h3>Задание на следующую игру</h3>'
                      f'<p>{h(lead["drill"])}</p><p><b>Как проверить.</b> {h(lead["check"])}</p></section>')
         if home_url:
             if (session["history"].get("saved") == lead["topic"] and
@@ -230,24 +293,24 @@ def render_session(session, *, home_url=None, detail_url=None):
                 parts.append('<p role="status">Задание сохранено в твоём локальном плане.</p>')
             else:
                 carry = ""
-                if battle:
+                if battle and not auto:
                     chosen = session["at"] if session["at"] is not None else battle["anchor"]
                     carry += f'<input type="hidden" name="at" value="{h(_clock(chosen))}">'
                 if session["role_override"]:
                     carry += f'<input type="hidden" name="role" value="{int(pos)}">'
                 parts.append(f'<form method="post" action="/practice">{carry}<input type="hidden" name="match" value="{mid}">'
                              f'<input type="hidden" name="slot" value="{int(row["player_slot"])}">'
-                             f'<input type="hidden" name="focus" value="{h(lead["topic"])}">'
+                             f'<input type="hidden" name="focus" value="{h("auto" if auto else lead["topic"])}">'
                              '<button type="submit">Взять задание на следующую игру</button></form>')
         if lead.get("lessons"):
             parts.append(lessons_view(lead["lessons"]))
-        if len(cards)>1:
+        if not has_ranked_fights and len(cards)>1:
             parts.append('<section><h2>Ещё эпизоды для просмотра</h2>')
             for c in cards[1:]:
                 parts.append(f'<article class="episode"><h3><span class="stamp">{h(c["time"])}</span>{h(c["title"])}</h3>'
                              f'<p>{h(c["evidence"])}</p><p>{h(c["review"])}</p>{lessons_view(c.get("lessons", []))}</article>')
             parts.append('</section>')
-    elif session["at"] is None:
+    elif session["at"] is None and not auto:
         parts.append('<section class="panel"><h2>Нужен разобранный повтор</h2><p>Карточка матча получена, но в ней пока нет '
                      'событий или снимков, на которых можно построить упражнение. После разбора повтора в OpenDota обнови карточку.</p></section>')
     parts.append(battle_timeline(session))

@@ -8,6 +8,7 @@ from unittest.mock import patch
 from urllib.parse import urlencode
 
 from pro_replay.coach_app import make_server
+from pro_replay.coach_report import decisions_section
 from pro_replay.source import SourceError
 from test_match_analytics import scorecard
 
@@ -67,14 +68,48 @@ class CoachAppTests(unittest.TestCase):
     def test_offline_example_and_home(self):
         self.assertEqual(self.server.server_address[0], "127.0.0.1")
         (self.folder / "coach-kez.html").write_bytes(b"<h1>Kez</h1>")
+        (self.folder / "coach-decisions.html").write_bytes(b"<h1>3 decisions</h1>")
         (self.folder / "coach-kez.png").write_bytes(b"image")
         with patch("pro_replay.coach_app.EXAMPLES", self.folder):
             status, html = self.request("GET", "/")
             self.assertEqual(status, 200)
             self.assertIn(b'action="/match"', html)
             self.assertIn(b'href="/example"', html)
+            self.assertIn(b'href="/example-decisions"', html)
+            self.assertEqual(self.request("GET", "/example-decisions"), (200, b"<h1>3 decisions</h1>"))
             self.assertEqual(self.request("GET", "/example"), (200, b"<h1>Kez</h1>"))
             self.assertEqual(self.request("GET", "/kez.png"), (200, b"image"))
+
+    def test_hero_button_submits_an_auto_report_without_manual_fields(self):
+        with patch("pro_replay.coach_app.OpenDota.match", return_value=scorecard()) as fetch:
+            status, roster = self.request("GET", "/match?match=999")
+            self.assertEqual(status, 200)
+            self.assertEqual(roster.count(b'class="hero-pick" type="submit" name="slot"'), 5)
+            self.assertIn(b'<details class="manual-options">', roster)
+            self.assertNotIn(b'type="radio"', roster)
+            form = {"match": 999, "slot": 132}
+            status, html = self.request("POST", "/coach", form=form)
+            self.assertEqual(status, 200)
+            self.assertLess(html.index(b'id="decisions"'), html.index(b'id="fight-timeline"'))
+            self.assertIn(b'id="fight-590-640"', html)
+            self.assertIn(b'name="focus" value="auto"', html)
+            self.assertNotIn(b'name="at"', html)
+            status, saved = self.request("POST", "/practice", form={**form, "focus": "auto"})
+            self.assertEqual(status, 200)
+            self.assertIn("Задание сохранено", saved.decode())
+            fetch.assert_called_once_with(999)
+
+    def test_report_distinguishes_target_threat_event_time_and_interval(self):
+        entry = dict(time=600, start=590, end=640, event="Смерть героя", target="Mars", button="Black King Bar",
+                     action="Проверить окно защиты", why="У соперника контроль", evidence="Куплен ранее",
+                     check="Посмотри кулдаун", enemy_focus="Rubick", importance="Потерян союзник", recipient_side="self",
+                     kind="self_defense", strength=2, review_from=590, pro_url="javascript:bad", pro_note="Сравнение")
+        html = decisions_section([entry, dict(entry, time=None, enemy_focus="Mars", target="<Mars>", recipient_side="enemy")])
+        for caption in ("Два главных момента", "Применить на себя", "Источник угрозы", "Кого фокусить",
+                        "Событие на 10:00", "Интервал 9:50–10:40", "&lt;Mars&gt;", 'href="#fight-590-640"'):
+            self.assertIn(caption, html)
+        self.assertNotIn("javascript:", html)
+        self.assertNotIn("decision-card", decisions_section([]))
 
     def test_entered_time_and_corrected_role_survive_saving_a_tactical_exercise(self):
         with patch("pro_replay.coach_app.OpenDota.match", return_value=scorecard()):

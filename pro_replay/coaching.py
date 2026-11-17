@@ -11,6 +11,7 @@ from .archive import normalize
 from .coach_lessons import retrieve_lessons
 from .coach_model import assess_player
 from .fight_coach import analyze_fights
+from .match_decisions import top_decisions
 from .pro_purchases import PurchaseIndex, add_purchase_evidence
 from .report import _clock, _item
 
@@ -274,8 +275,18 @@ def make_session(archive, raw, slot, model, lesson_model, focus="auto", *, at=No
         add_purchase_evidence(fight, row, position, purchase_index)
         query = tactical_card(fight, row)["query"]
         fight["lessons"] = retrieve_lessons(lesson_model, query, position=position, limit=1, topic="fights")
+    mistakes = []
+    if focus == "auto" and at is None:
+        mistakes = top_decisions(raw, slot, heroes, fights, row["detail"]["fight_review"]["intervals"])
     selected = selected_fight(fights, at)
     decision = tactical_card(selected, row) if selected else (fight_card(row) if at is None else None)
+    if mistakes:
+        first = mistakes[0]
+        selected = next(f for f in fights if (f["start"], f["end"]) == (first["start"], first["end"]))
+        stamp = _clock(first["time"]) if first["time"] is not None else f'{_clock(first["start"])}–{_clock(first["end"])}'
+        decision = make_card("fights", first["button"] + " · " + first["target"], stamp, first["evidence"],
+                             first["why"], first["action"], first["check"],
+                             f'командная драка {first["button"]} {first["target"]} {first["why"]}')
     if at is not None:
         focus = "fights"
     candidates = [lane_card(row, assessment, position), decision, build_card(row), vision_card(row)]
@@ -286,7 +297,7 @@ def make_session(archive, raw, slot, model, lesson_model, focus="auto", *, at=No
     shortfall = any(m["key"] == metric and m.get("actual") is not None and m.get("expected") is not None
                     and m.get("mae") is not None and m["expected"] - m["actual"] > m["mae"]
                     for m in assessment.get("metrics", []))
-    preferred = ([focus] if focus != "auto" else []) + (["lane"] if shortfall else [])
+    preferred = (["fights"] if mistakes else []) + ([focus] if focus != "auto" else []) + (["lane"] if shortfall else [])
     preferred += ["fights", "vision" if position in (4,5) else "build", "lane", "build", "vision"]
     ordered = [cards[k] for k in dict.fromkeys(preferred) if k in cards][:3]
     if at is not None and not selected:
@@ -294,7 +305,7 @@ def make_session(archive, raw, slot, model, lesson_model, focus="auto", *, at=No
     for card in ordered:
         hits = retrieve_lessons(lesson_model, card["query"], position=position, limit=2, topic=card["topic"])
         card["lessons"] = [h for h in hits if urlsplit(h["url"]).scheme == "https"]
-    return {"row": row, "assessment": assessment, "cards": ordered, "focus": focus,
+    return {"row": row, "assessment": assessment, "cards": ordered, "focus": focus, "mistakes": mistakes,
             "fights": fights, "selected_fight": selected, "at": at, "position": position, "role_override": role_override,
             "requested_available": focus == "auto" or focus in cards,
             "history": sessions(archive, row, position)}
