@@ -8,6 +8,17 @@
     "distinct_modeled_buttons": 129,
     "heroes_with_modeled_buttons": 103
   },
+  "all_support_checks": {
+    "windows": 1088,
+    "states": {
+      "no_approach": 1073,
+      "approaching": 2,
+      "blocked": 2,
+      "unknown": 10,
+      "ready": 1
+    },
+    "coordinated": 0
+  },
   "reader_sha256": "4a30ae5234793bd9ca3f94d91f729c415f32a71ecee03b0561ab348930d3e50f",
   "scope": "Selected displayed cards from the first ten minutes. Decisions are estimates; observed_exchanges sums actual attributed damage over at most three seconds. Counts are not measures of accuracy.",
   "decision_counts": {
@@ -26,12 +37,24 @@
           "hero": "Rubick",
           "opponent": "Sand King",
           "seconds_sampled": 601,
+          "support_checks": {
+            "states": {
+              "no_approach": 88
+            },
+            "windows": 88,
+            "coordinated": 0
+          },
           "decisions": [
             {
               "second": 49,
               "choice": "trade",
               "our_level": 2,
               "enemy_level": 1,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "hero_option": {
                 "button": "rubick_fade_bolt",
                 "damage": [
@@ -52,6 +75,11 @@
               "choice": "uncertain",
               "our_level": 2,
               "enemy_level": 2,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "hero_option": {
                 "button": "rubick_fade_bolt",
                 "damage": [
@@ -74,6 +102,11 @@
               "choice": "creep",
               "our_level": 4,
               "enemy_level": 3,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "hero_option": {
                 "button": "rubick_fade_bolt",
                 "damage": [
@@ -120,6 +153,11 @@
               "choice": "creep",
               "our_level": 6,
               "enemy_level": 5,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "hero_option": {
                 "button": "rubick_fade_bolt",
                 "damage": [
@@ -151,6 +189,11 @@
               "choice": "creep",
               "our_level": 8,
               "enemy_level": 7,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "blocked_replies": [
                 {
                   "spell": "Stinger",
@@ -220,12 +263,24 @@
           "hero": "Sand King",
           "opponent": "Rubick",
           "seconds_sampled": 601,
+          "support_checks": {
+            "states": {
+              "no_approach": 9
+            },
+            "windows": 9,
+            "coordinated": 0
+          },
           "decisions": [
             {
               "second": 263,
               "choice": "uncertain",
               "our_level": 4,
               "enemy_level": 5,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "hero_option": {
                 "button": "sandking_burrowstrike",
                 "damage": [
@@ -308,12 +363,26 @@
           "hero": "Queen of Pain",
           "opponent": "Ember Spirit",
           "seconds_sampled": 601,
+          "support_checks": {
+            "states": {
+              "no_approach": 74,
+              "approaching": 1,
+              "blocked": 2
+            },
+            "windows": 77,
+            "coordinated": 0
+          },
           "decisions": [
             {
               "second": 100,
               "choice": "creep",
               "our_level": 2,
               "enemy_level": 3,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "hero_option": {
                 "button": "attack",
                 "damage": [
@@ -348,6 +417,11 @@
               "choice": "both",
               "our_level": 4,
               "enemy_level": 4,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "hero_option": {
                 "button": "queenofpain_scream_of_pain",
                 "damage": [
@@ -380,44 +454,15 @@
               }
             },
             {
-              "second": 209,
-              "choice": "uncertain",
-              "our_level": 4,
-              "enemy_level": 4,
-              "hero_option": {
-                "button": "queenofpain_scream_of_pain",
-                "damage": [
-                  125,
-                  125
-                ]
-              },
-              "enemy_option": {
-                "button": "attack",
-                "damage": [
-                  50,
-                  53
-                ]
-              },
-              "blocked_replies": [
-                {
-                  "spell": "Searing Chains",
-                  "cooldown": 12.7
-                },
-                {
-                  "spell": "Sleight of Fist",
-                  "mana_short": true
-                }
-              ],
-              "uncertainty": [
-                "Flame Guard — проверь уже начатое действие или действующий эффект"
-              ],
-              "health_margin_pp": 7.8
-            },
-            {
               "second": 441,
               "choice": "both",
               "our_level": 7,
               "enemy_level": 7,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "hero_option": {
                 "button": "queenofpain_scream_of_pain",
                 "damage": [
@@ -475,6 +520,11 @@
               "choice": "both",
               "our_level": 7,
               "enemy_level": 7,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "hero_option": {
                 "button": "queenofpain_scream_of_pain",
                 "damage": [
@@ -534,6 +584,84 @@
                 "hp": 300,
                 "same_area": true
               }
+            },
+            {
+              "second": 595,
+              "choice": "uncertain",
+              "our_level": 8,
+              "enemy_level": 9,
+              "support": {
+                "slot": 2,
+                "hero": "Rubick",
+                "role": 5,
+                "time": 595,
+                "distance": 614,
+                "movement": {
+                  "closing": true,
+                  "start": 592,
+                  "before": 1338
+                },
+                "target_disabled": false,
+                "state": "approaching",
+                "button": {
+                  "key": "rubick_telekinesis",
+                  "skill": "Telekinesis",
+                  "rank": 1,
+                  "mana": 454.00043,
+                  "cost": 110,
+                  "cooldown": 0.0,
+                  "reach": 610,
+                  "in_reach": false,
+                  "usable": true,
+                  "arrival": 0.1,
+                  "duration": 0.95,
+                  "reason": "Способность изучена и доступна."
+                },
+                "reason": "Способность изучена и доступна.",
+                "observed": {
+                  "time": 596,
+                  "tick": 24144,
+                  "game_time": 596.1333770751953
+                }
+              },
+              "coordinated": false,
+              "hero_option": {
+                "button": "attack",
+                "damage": [
+                  58,
+                  62
+                ]
+              },
+              "enemy_option": {
+                "button": "ember_spirit_sleight_of_fist",
+                "damage": [
+                  146,
+                  149
+                ]
+              },
+              "uncertainty": [
+                "часть урона или защиты для ответа не измерена",
+                "момент попадания ответного навыка выходит за пределы короткого размена или неизвестен",
+                "Searing Chains — ответ зависит от механики навыка",
+                "Activate Fire Remnant — ответ зависит от механики навыка",
+                "Fire Remnant — ответ зависит от механики навыка"
+              ],
+              "prior_hits": [
+                {
+                  "side": "enemy",
+                  "source_slot": 131,
+                  "target_slot": 0,
+                  "key": "ember_spirit_searing_chains",
+                  "spell": "Searing Chains",
+                  "rank": 1,
+                  "count": 12,
+                  "damage_min": 35,
+                  "damage_max": 36,
+                  "last_time": 477.03334045410156,
+                  "last_tick": 20570
+                }
+              ],
+              "health_margin_pp": -10.5
             }
           ],
           "observed_exchanges": [
@@ -585,12 +713,24 @@
           "hero": "Ember Spirit",
           "opponent": "Queen of Pain",
           "seconds_sampled": 601,
+          "support_checks": {
+            "states": {
+              "no_approach": 77
+            },
+            "windows": 77,
+            "coordinated": 0
+          },
           "decisions": [
             {
               "second": 39,
               "choice": "uncertain",
               "our_level": 1,
               "enemy_level": 1,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "hero_option": {
                 "button": "ember_spirit_sleight_of_fist",
                 "damage": [
@@ -621,6 +761,11 @@
               "choice": "creep",
               "our_level": 2,
               "enemy_level": 2,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "hero_option": {
                 "button": "ember_spirit_sleight_of_fist",
                 "damage": [
@@ -661,6 +806,11 @@
               "choice": "creep",
               "our_level": 3,
               "enemy_level": 3,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "hero_option": {
                 "button": "ember_spirit_sleight_of_fist",
                 "damage": [
@@ -695,6 +845,11 @@
               "choice": "creep",
               "our_level": 7,
               "enemy_level": 7,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "hero_option": {
                 "button": "ember_spirit_sleight_of_fist",
                 "damage": [
@@ -815,12 +970,24 @@
           "hero": "Outworld Destroyer",
           "opponent": "Shadow Fiend",
           "seconds_sampled": 601,
+          "support_checks": {
+            "states": {
+              "no_approach": 22
+            },
+            "windows": 22,
+            "coordinated": 0
+          },
           "decisions": [
             {
               "second": 43,
               "choice": "creep",
               "our_level": 1,
               "enemy_level": 1,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "hero_option": {
                 "button": "obsidian_destroyer_astral_imprisonment",
                 "damage": [
@@ -869,6 +1036,11 @@
               "choice": "uncertain",
               "our_level": 4,
               "enemy_level": 4,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "hero_option": {
                 "button": "obsidian_destroyer_astral_imprisonment",
                 "damage": [
@@ -923,6 +1095,11 @@
               "choice": "creep",
               "our_level": 5,
               "enemy_level": 5,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "hero_option": {
                 "button": "obsidian_destroyer_astral_imprisonment",
                 "damage": [
@@ -957,6 +1134,11 @@
               "choice": "creep",
               "our_level": 7,
               "enemy_level": 6,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "blocked_replies": [
                 {
                   "spell": "Shadowraze · дальний",
@@ -982,6 +1164,11 @@
               "choice": "creep",
               "our_level": 7,
               "enemy_level": 6,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "blocked_replies": [
                 {
                   "spell": "Shadowraze · дальний",
@@ -1067,12 +1254,24 @@
           "hero": "Shadow Fiend",
           "opponent": "Outworld Destroyer",
           "seconds_sampled": 601,
+          "support_checks": {
+            "states": {
+              "no_approach": 33
+            },
+            "windows": 33,
+            "coordinated": 0
+          },
           "decisions": [
             {
               "second": 36,
               "choice": "uncertain",
               "our_level": 1,
               "enemy_level": 1,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "hero_option": {
                 "button": "nevermore_shadowraze2",
                 "damage": [
@@ -1096,6 +1295,11 @@
               "choice": "creep",
               "our_level": 2,
               "enemy_level": 2,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "blocked_replies": [
                 {
                   "spell": "Astral Imprisonment",
@@ -1135,6 +1339,11 @@
               "choice": "creep",
               "our_level": 3,
               "enemy_level": 4,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "blocked_replies": [
                 {
                   "spell": "Astral Imprisonment",
@@ -1160,6 +1369,11 @@
               "choice": "creep",
               "our_level": 5,
               "enemy_level": 5,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "blocked_replies": [
                 {
                   "spell": "Astral Imprisonment",
@@ -1185,6 +1399,11 @@
               "choice": "creep",
               "our_level": 6,
               "enemy_level": 7,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "blocked_replies": [
                 {
                   "spell": "Objurgation",
@@ -1258,12 +1477,24 @@
           "hero": "Huskar",
           "opponent": "Necrophos",
           "seconds_sampled": 601,
+          "support_checks": {
+            "states": {
+              "no_approach": 12
+            },
+            "windows": 12,
+            "coordinated": 0
+          },
           "decisions": [
             {
               "second": 39,
               "choice": "uncertain",
               "our_level": 1,
               "enemy_level": 1,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "hero_option": {
                 "button": "attack",
                 "damage": [
@@ -1285,6 +1516,11 @@
               "choice": "creep",
               "our_level": 4,
               "enemy_level": 3,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "uncertainty": [
                 "игрок в 850 ед. от вражеской средней T1"
               ],
@@ -1345,12 +1581,24 @@
           "hero": "Necrophos",
           "opponent": "Huskar",
           "seconds_sampled": 601,
+          "support_checks": {
+            "states": {
+              "no_approach": 24
+            },
+            "windows": 24,
+            "coordinated": 0
+          },
           "decisions": [
             {
               "second": 39,
               "choice": "uncertain",
               "our_level": 1,
               "enemy_level": 1,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "hero_option": {
                 "button": "necrolyte_death_pulse",
                 "damage": [
@@ -1424,12 +1672,24 @@
           "hero": "Tinker",
           "opponent": "Pangolier",
           "seconds_sampled": 601,
+          "support_checks": {
+            "states": {
+              "no_approach": 67
+            },
+            "windows": 67,
+            "coordinated": 0
+          },
           "decisions": [
             {
               "second": 27,
               "choice": "trade",
               "our_level": 1,
               "enemy_level": 1,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "hero_option": {
                 "button": "tinker_laser",
                 "damage": [
@@ -1450,6 +1710,11 @@
               "choice": "creep",
               "our_level": 1,
               "enemy_level": 1,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "hero_option": {
                 "button": "tinker_laser",
                 "damage": [
@@ -1499,6 +1764,11 @@
               "choice": "uncertain",
               "our_level": 3,
               "enemy_level": 3,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "hero_option": {
                 "button": "tinker_laser",
                 "damage": [
@@ -1544,6 +1814,11 @@
               "choice": "trade",
               "our_level": 4,
               "enemy_level": 4,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "hero_option": {
                 "button": "tinker_laser",
                 "damage": [
@@ -1568,6 +1843,11 @@
               "choice": "trade",
               "our_level": 5,
               "enemy_level": 6,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "hero_option": {
                 "button": "tinker_laser",
                 "damage": [
@@ -1636,12 +1916,27 @@
           "hero": "Pangolier",
           "opponent": "Tinker",
           "seconds_sampled": 601,
+          "support_checks": {
+            "states": {
+              "no_approach": 36,
+              "approaching": 1,
+              "unknown": 1,
+              "ready": 1
+            },
+            "windows": 39,
+            "coordinated": 0
+          },
           "decisions": [
             {
               "second": 139,
               "choice": "creep",
               "our_level": 3,
               "enemy_level": 3,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "blocked_replies": [
                 {
                   "spell": "March of the Machines",
@@ -1681,6 +1976,11 @@
               "choice": "creep",
               "our_level": 4,
               "enemy_level": 4,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "hero_option": {
                 "button": "pangolier_shield_crash",
                 "damage": [
@@ -1741,6 +2041,11 @@
               "choice": "creep",
               "our_level": 4,
               "enemy_level": 4,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "hero_option": {
                 "button": "pangolier_shield_crash",
                 "damage": [
@@ -1787,28 +2092,55 @@
               }
             },
             {
-              "second": 334,
+              "second": 234,
               "choice": "uncertain",
-              "our_level": 6,
-              "enemy_level": 5,
+              "our_level": 4,
+              "enemy_level": 4,
+              "support": {
+                "slot": 131,
+                "hero": "Lion",
+                "role": 5,
+                "time": 234,
+                "distance": 444,
+                "movement": {
+                  "closing": true,
+                  "start": 231,
+                  "before": 1025
+                },
+                "target_disabled": true,
+                "state": "ready",
+                "button": {
+                  "key": "lion_voodoo",
+                  "skill": "Hex",
+                  "rank": 1,
+                  "mana": 274.00027,
+                  "cost": 110,
+                  "cooldown": 0.0,
+                  "reach": 575,
+                  "in_reach": true,
+                  "usable": true,
+                  "arrival": 0,
+                  "duration": 2,
+                  "reason": "Способность изучена и доступна."
+                },
+                "reason": "Способность изучена и доступна.",
+                "observed": {
+                  "time": 234,
+                  "tick": 14110,
+                  "game_time": 234.933349609375
+                }
+              },
+              "coordinated": false,
               "hero_option": {
                 "button": "pangolier_shield_crash",
                 "damage": [
-                  131,
-                  131
+                  88,
+                  88
                 ]
               },
-              "blocked_replies": [
-                {
-                  "spell": "March of the Machines",
-                  "cooldown": 21.1
-                },
-                {
-                  "spell": "Laser",
-                  "cooldown": 17.9
-                }
-              ],
               "uncertainty": [
+                "урон или условия обычной атаки не установлены",
+                "соперник под контролем или уже выполняет другое действие",
                 "после применения изменится позиция героя или неизвестна полная защита цели",
                 "оценён один компонент навыка. Длительность и итог действия требуют проверки"
               ],
@@ -1817,17 +2149,29 @@
                   "side": "self",
                   "source_slot": 130,
                   "target_slot": 0,
+                  "key": "pangolier_shield_crash",
+                  "spell": "Shield Crash",
+                  "rank": 2,
+                  "count": 5,
+                  "damage_min": 79,
+                  "damage_max": 98,
+                  "last_time": 213.63333129882812,
+                  "last_tick": 13470
+                },
+                {
+                  "side": "self",
+                  "source_slot": 130,
+                  "target_slot": 0,
                   "key": "pangolier_swashbuckle",
                   "spell": "Swashbuckle",
-                  "rank": 3,
-                  "count": 9,
-                  "damage_min": 67,
-                  "damage_max": 77,
-                  "last_time": 321.0333251953125,
-                  "last_tick": 16692
+                  "rank": 2,
+                  "count": 6,
+                  "damage_min": 43,
+                  "damage_max": 53,
+                  "last_time": 212.33334350585938,
+                  "last_tick": 13432
                 }
-              ],
-              "health_margin_pp": 16.8
+              ]
             }
           ],
           "observed_exchanges": [
@@ -1884,12 +2228,24 @@
           "hero": "Invoker",
           "opponent": "Puck",
           "seconds_sampled": 601,
+          "support_checks": {
+            "states": {
+              "no_approach": 146
+            },
+            "windows": 146,
+            "coordinated": 0
+          },
           "decisions": [
             {
               "second": 96,
               "choice": "creep",
               "our_level": 3,
               "enemy_level": 2,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "hero_option": {
                 "button": "invoker_cold_snap",
                 "damage": [
@@ -1923,6 +2279,11 @@
               "choice": "uncertain",
               "our_level": 3,
               "enemy_level": 3,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "hero_option": {
                 "button": "invoker_cold_snap",
                 "damage": [
@@ -1953,6 +2314,11 @@
               "choice": "creep",
               "our_level": 4,
               "enemy_level": 5,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "hero_option": {
                 "button": "invoker_cold_snap",
                 "damage": [
@@ -1994,6 +2360,11 @@
               "choice": "creep",
               "our_level": 5,
               "enemy_level": 5,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "hero_option": {
                 "button": "invoker_cold_snap",
                 "damage": [
@@ -2028,6 +2399,11 @@
               "choice": "creep",
               "our_level": 5,
               "enemy_level": 5,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "hero_option": {
                 "button": "invoker_cold_snap",
                 "damage": [
@@ -2111,41 +2487,25 @@
           "hero": "Puck",
           "opponent": "Invoker",
           "seconds_sampled": 601,
-          "decisions": [
-            {
-              "second": 148,
-              "choice": "creep",
-              "our_level": 3,
-              "enemy_level": 3,
-              "blocked_replies": [
-                {
-                  "spell": "Cold Snap",
-                  "cooldown": 12.1
-                },
-                {
-                  "spell": "Forge Spirit",
-                  "cooldown": 2.4
-                }
-              ],
-              "uncertainty": [
-                "Invoke — ответ зависит от механики навыка",
-                "игрок в 850 ед. от вражеской средней T1"
-              ],
-              "creep_option": {
-                "button": "attack",
-                "damage": [
-                  57,
-                  65
-                ],
-                "hp": 3,
-                "same_area": false
-              }
+          "support_checks": {
+            "states": {
+              "no_approach": 170,
+              "unknown": 1
             },
+            "windows": 171,
+            "coordinated": 0
+          },
+          "decisions": [
             {
               "second": 180,
               "choice": "trade",
               "our_level": 4,
               "enemy_level": 4,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "hero_option": {
                 "button": "puck_illusory_orb",
                 "damage": [
@@ -2174,6 +2534,11 @@
               "choice": "creep",
               "our_level": 5,
               "enemy_level": 4,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "hero_option": {
                 "button": "puck_illusory_orb",
                 "damage": [
@@ -2213,62 +2578,64 @@
               }
             },
             {
-              "second": 336,
-              "choice": "uncertain",
-              "our_level": 6,
+              "second": 327,
+              "choice": "creep",
+              "our_level": 5,
               "enemy_level": 5,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "hero_option": {
-                "button": "puck_illusory_orb",
+                "button": "attack",
                 "damage": [
-                  145,
-                  145
+                  60,
+                  67
                 ]
               },
               "enemy_option": {
-                "button": "invoker_cold_snap",
+                "button": "attack",
                 "damage": [
-                  25,
-                  25
+                  76,
+                  81
                 ]
               },
-              "enemy_control": [
-                "Cold Snap"
-              ],
               "blocked_replies": [
                 {
                   "spell": "Sun Strike",
-                  "cooldown": 10.2
+                  "cooldown": 19.2
                 },
                 {
                   "spell": "Invoke",
-                  "cooldown": 3.0
+                  "cooldown": 1.2
                 }
               ],
               "uncertainty": [
-                "часть урона или защиты для ответа не измерена"
+                "Invoke скоро восстановится",
+                "Ice Wall — ответ зависит от механики навыка"
               ],
-              "prior_hits": [
-                {
-                  "side": "enemy",
-                  "source_slot": 0,
-                  "target_slot": 130,
-                  "key": "invoker_cold_snap",
-                  "spell": "Cold Snap",
-                  "rank": 1,
-                  "count": 1,
-                  "damage_min": 26,
-                  "damage_max": 26,
-                  "last_time": 312.8333435058594,
-                  "last_tick": 15598
-                }
-              ],
-              "health_margin_pp": 12.1
+              "health_margin_pp": -4.4,
+              "creep_option": {
+                "button": "attack",
+                "damage": [
+                  75,
+                  83
+                ],
+                "hp": 10,
+                "same_area": false
+              }
             },
             {
               "second": 364,
               "choice": "trade",
               "our_level": 6,
               "enemy_level": 6,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "hero_option": {
                 "button": "puck_illusory_orb",
                 "damage": [
@@ -2291,6 +2658,44 @@
                 }
               ],
               "health_margin_pp": 14.4
+            },
+            {
+              "second": 424,
+              "choice": "uncertain",
+              "our_level": 6,
+              "enemy_level": 6,
+              "support": {
+                "slot": 131,
+                "hero": "Ringmaster",
+                "role": 5,
+                "time": 424,
+                "distance": 770,
+                "movement": {
+                  "closing": true,
+                  "start": 421,
+                  "before": 1070
+                },
+                "target_disabled": false,
+                "state": "unknown",
+                "button": {
+                  "usable": null,
+                  "reason": "Для навыков этого саппорта нет проверенного направленного контроля."
+                },
+                "reason": "Для навыков этого саппорта нет проверенного направленного контроля."
+              },
+              "coordinated": false,
+              "hero_option": {
+                "button": "puck_illusory_orb",
+                "damage": [
+                  144,
+                  144
+                ]
+              },
+              "uncertainty": [
+                "Invoke — ответ зависит от механики навыка",
+                "Sun Strike — ответ зависит от механики навыка",
+                "Ice Wall — ответ зависит от механики навыка"
+              ]
             }
           ],
           "observed_exchanges": [
@@ -2344,12 +2749,24 @@
           "hero": "Outworld Destroyer",
           "opponent": "Viper",
           "seconds_sampled": 601,
+          "support_checks": {
+            "states": {
+              "no_approach": 26
+            },
+            "windows": 26,
+            "coordinated": 0
+          },
           "decisions": [
             {
               "second": 65,
               "choice": "creep",
               "our_level": 1,
               "enemy_level": 2,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "hero_option": {
                 "button": "obsidian_destroyer_astral_imprisonment",
                 "damage": [
@@ -2392,6 +2809,11 @@
               "choice": "uncertain",
               "our_level": 3,
               "enemy_level": 3,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "hero_option": {
                 "button": "obsidian_destroyer_astral_imprisonment",
                 "damage": [
@@ -2433,6 +2855,11 @@
               "choice": "creep",
               "our_level": 4,
               "enemy_level": 5,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "hero_option": {
                 "button": "obsidian_destroyer_astral_imprisonment",
                 "damage": [
@@ -2476,6 +2903,11 @@
               "choice": "creep",
               "our_level": 5,
               "enemy_level": 5,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "hero_option": {
                 "button": "obsidian_destroyer_arcane_orb",
                 "damage": [
@@ -2509,6 +2941,11 @@
               "choice": "creep",
               "our_level": 8,
               "enemy_level": 8,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "enemy_option": {
                 "button": "viper_poison_attack",
                 "damage": [
@@ -2589,12 +3026,25 @@
           "hero": "Viper",
           "opponent": "Outworld Destroyer",
           "seconds_sampled": 601,
+          "support_checks": {
+            "states": {
+              "no_approach": 28,
+              "unknown": 3
+            },
+            "windows": 31,
+            "coordinated": 0
+          },
           "decisions": [
             {
               "second": 46,
               "choice": "creep",
               "our_level": 1,
               "enemy_level": 1,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "hero_option": {
                 "button": "viper_poison_attack",
                 "damage": [
@@ -2627,6 +3077,11 @@
               "choice": "creep",
               "our_level": 4,
               "enemy_level": 4,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "hero_option": {
                 "button": "viper_poison_attack",
                 "damage": [
@@ -2660,10 +3115,66 @@
               }
             },
             {
+              "second": 307,
+              "choice": "uncertain",
+              "our_level": 5,
+              "enemy_level": 5,
+              "support": {
+                "slot": 129,
+                "hero": "Windranger",
+                "role": 4,
+                "time": 307,
+                "distance": 1261,
+                "movement": {
+                  "closing": true,
+                  "start": 304,
+                  "before": 2222
+                },
+                "target_disabled": false,
+                "state": "unknown",
+                "button": {
+                  "usable": null,
+                  "reason": "Для навыков этого саппорта нет проверенного направленного контроля."
+                },
+                "reason": "Для навыков этого саппорта нет проверенного направленного контроля."
+              },
+              "coordinated": false,
+              "hero_option": {
+                "button": "viper_poison_attack",
+                "damage": [
+                  51,
+                  52
+                ]
+              },
+              "blocked_replies": [
+                {
+                  "spell": "Objurgation",
+                  "cooldown": 6.7
+                },
+                {
+                  "spell": "Arcane Orb",
+                  "cooldown": 4.3
+                },
+                {
+                  "spell": "Astral Imprisonment",
+                  "cooldown": 3.9
+                }
+              ],
+              "uncertainty": [
+                "оценён один компонент навыка. Длительность и итог действия требуют проверки"
+              ],
+              "health_margin_pp": 5.5
+            },
+            {
               "second": 394,
               "choice": "creep",
               "our_level": 6,
               "enemy_level": 6,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "uncertainty": [
                 "Arcane Orb — ответ зависит от механики навыка",
                 "Astral Imprisonment — попадание ответом не установлено",
@@ -2694,44 +3205,6 @@
                 "hp": 69,
                 "same_area": false
               }
-            },
-            {
-              "second": 558,
-              "choice": "uncertain",
-              "our_level": 8,
-              "enemy_level": 8,
-              "hero_option": {
-                "button": "viper_poison_attack",
-                "damage": [
-                  58,
-                  59
-                ]
-              },
-              "enemy_option": {
-                "button": "obsidian_destroyer_arcane_orb",
-                "damage": [
-                  157,
-                  163
-                ]
-              },
-              "blocked_replies": [
-                {
-                  "spell": "Objurgation",
-                  "cooldown": 32.6
-                },
-                {
-                  "spell": "Sanity's Eclipse",
-                  "cooldown": 13.9
-                },
-                {
-                  "spell": "Astral Imprisonment",
-                  "cooldown": 5.9
-                }
-              ],
-              "uncertainty": [
-                "оценён один компонент навыка. Длительность и итог действия требуют проверки"
-              ],
-              "health_margin_pp": -8.8
             }
           ],
           "observed_exchanges": [
@@ -2788,42 +3261,61 @@
           "hero": "Sniper",
           "opponent": "Invoker",
           "seconds_sampled": 601,
+          "support_checks": {
+            "states": {
+              "no_approach": 185,
+              "unknown": 4
+            },
+            "windows": 189,
+            "coordinated": 0
+          },
           "decisions": [
             {
-              "second": 262,
+              "second": 371,
               "choice": "uncertain",
-              "our_level": 5,
-              "enemy_level": 4,
-              "hero_option": {
-                "button": "sniper_shrapnel",
-                "damage": [
-                  41,
-                  41
-                ]
+              "our_level": 6,
+              "enemy_level": 5,
+              "support": {
+                "slot": 0,
+                "hero": "Pudge",
+                "role": 5,
+                "time": 371,
+                "distance": 831,
+                "movement": {
+                  "closing": true,
+                  "start": 368,
+                  "before": 1716
+                },
+                "target_disabled": false,
+                "state": "unknown",
+                "button": {
+                  "usable": null,
+                  "reason": "Для навыков этого саппорта нет проверенного направленного контроля."
+                },
+                "reason": "Для навыков этого саппорта нет проверенного направленного контроля."
               },
-              "enemy_option": {
-                "button": "attack",
+              "coordinated": false,
+              "hero_option": {
+                "button": "sniper_assassinate",
                 "damage": [
-                  52,
-                  56
+                  207,
+                  207
                 ]
               },
               "blocked_replies": [
                 {
-                  "spell": "Ice Wall",
-                  "cooldown": 22.4
+                  "spell": "Forge Spirit",
+                  "cooldown": 20.8
                 },
                 {
-                  "spell": "Cold Snap",
-                  "cooldown": 17.4
-                },
-                {
-                  "spell": "Invoke",
-                  "cooldown": 4.8
+                  "spell": "Sun Strike",
+                  "cooldown": 9.1
                 }
               ],
               "uncertainty": [
-                "оценён один компонент навыка. Длительность и итог действия требуют проверки"
+                "Invoke — ответ зависит от механики навыка",
+                "оценён один компонент навыка. Длительность и итог действия требуют проверки",
+                "попадание своего навыка требует дополнительного времени"
               ],
               "prior_hits": [
                 {
@@ -2839,8 +3331,7 @@
                   "last_time": 261.3333435058594,
                   "last_tick": 14970
                 }
-              ],
-              "health_margin_pp": -2.6
+              ]
             }
           ],
           "observed_exchanges": [
@@ -2889,32 +3380,51 @@
           "hero": "Invoker",
           "opponent": "Sniper",
           "seconds_sampled": 601,
+          "support_checks": {
+            "states": {
+              "no_approach": 31,
+              "unknown": 1
+            },
+            "windows": 32,
+            "coordinated": 0
+          },
           "decisions": [
             {
-              "second": 163,
+              "second": 384,
               "choice": "uncertain",
-              "our_level": 3,
-              "enemy_level": 3,
+              "our_level": 5,
+              "enemy_level": 6,
+              "support": {
+                "slot": 130,
+                "hero": "Bounty Hunter",
+                "role": 4,
+                "time": 384,
+                "distance": 187,
+                "movement": {
+                  "closing": true,
+                  "start": 381,
+                  "before": 496
+                },
+                "target_disabled": true,
+                "state": "unknown",
+                "button": {
+                  "usable": null,
+                  "reason": "Для навыков этого саппорта нет проверенного направленного контроля."
+                },
+                "reason": "Для навыков этого саппорта нет проверенного направленного контроля."
+              },
+              "coordinated": false,
               "hero_option": {
                 "button": "invoker_cold_snap",
                 "damage": [
-                  20,
-                  20
-                ]
-              },
-              "enemy_option": {
-                "button": "sniper_shrapnel",
-                "damage": [
-                  31,
-                  31
+                  25,
+                  25
                 ]
               },
               "uncertainty": [
-                "часть урона или защиты для ответа не измерена",
-                "Take Aim — ответ зависит от механики навыка",
+                "соперник под контролем или уже выполняет другое действие",
                 "оценён один компонент навыка. Длительность и итог действия требуют проверки"
-              ],
-              "health_margin_pp": -1.3
+              ]
             }
           ],
           "observed_exchanges": [
@@ -2969,12 +3479,24 @@
           "hero": "Tinker",
           "opponent": "Arc Warden",
           "seconds_sampled": 601,
+          "support_checks": {
+            "states": {
+              "no_approach": 14
+            },
+            "windows": 14,
+            "coordinated": 0
+          },
           "decisions": [
             {
               "second": 39,
               "choice": "creep",
               "our_level": 1,
               "enemy_level": 1,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "uncertainty": [
                 "Spark Wraith — ответ зависит от механики навыка"
               ],
@@ -2993,6 +3515,11 @@
               "choice": "uncertain",
               "our_level": 2,
               "enemy_level": 2,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "hero_option": {
                 "button": "tinker_laser",
                 "damage": [
@@ -3059,12 +3586,24 @@
           "hero": "Arc Warden",
           "opponent": "Tinker",
           "seconds_sampled": 601,
+          "support_checks": {
+            "states": {
+              "no_approach": 31
+            },
+            "windows": 31,
+            "coordinated": 0
+          },
           "decisions": [
             {
               "second": 49,
               "choice": "creep",
               "our_level": 1,
               "enemy_level": 2,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "hero_option": {
                 "button": "attack",
                 "damage": [
@@ -3105,6 +3644,11 @@
               "choice": "uncertain",
               "our_level": 2,
               "enemy_level": 2,
+              "support": {
+                "state": "no_approach",
+                "reason": "Подход живого саппорта к видимой цели по кадрам не подтверждён."
+              },
+              "coordinated": false,
               "hero_option": {
                 "button": "attack",
                 "damage": [

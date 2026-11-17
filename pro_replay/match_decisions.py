@@ -3,6 +3,7 @@
 from .decision_actions import decision_options
 from .decision_events import known_dead_at, observed_events
 from .report import _clock
+from .pro_purchases import peer_fights
 
 
 def _anchor(option, events, slot):
@@ -53,12 +54,12 @@ def _pro_comparison(option, fight):
     for item in fight["items"]:
         stat = item.get("fight_pro")
         if stat and item["name"] == option["button"] and enemy == stat["enemy"]:
-            return (f'В {stat["uses"]} из {stat["n"]} похожих про-драк игроки этой позиции применили '
+            return (f'В {stat["uses"]} из {stat["n"]} похожих {peer_fights(fight)} игроки этой позиции применили '
                     f'{item["name"]}, купленный до боя. У {enemy} в этих окнах отмечено {stat["threat"]}.', None)
     stat = fight.get("pro_action")
     if stat and stat["ability"] == option["button"] and stat["enemy"] == enemy:
         return (f'На том же герое и позиции {stat["ability"]} применяли в {stat["count"]} из {stat["n"]} '
-                f'похожих про-драк с {stat["threat"]} у {enemy}.',
+                f'похожих {peer_fights(fight)} с {stat["threat"]} у {enemy}.',
                 f'https://www.opendota.com/matches/{int(stat["example"])}/teamfights')
     return None, None
 

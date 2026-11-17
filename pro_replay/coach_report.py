@@ -5,6 +5,7 @@ from statistics import median
 from urllib.parse import urlsplit
 
 from .coaching import FOCUSES
+from .pro_purchases import peer_fights
 from .report import _clock, _date
 
 
@@ -100,29 +101,31 @@ def pro_section(data):
 def patch_benchmarks(data):
     if not data.get("metrics"):
         return '<p>' + h(data.get("reason", "Ориентир недоступен.")) + '</p>'
-    counts = data["counts"]
+    cohort = data["cohort"]
+    label = "Рейтинг 7 300+" if cohort == "ranked_7300" else "Про-матчи"
+    source = ("рейтингового All Pick со средним MMR лобби от 7 300 по OpenDota" if cohort == "ranked_7300"
+              else "профессиональных турниров")
     group = (f'позиции {data["position"]}' if data.get("position") in range(1, 6)
              else f'{data["rank"]}-му месту по золоту среди союзников на 10:00')
-    intro = (f'<p>Патч {h(data["patch"])}. В выборке {counts["professional"]} про-матчей и '
-             f'{counts["ranked_7300"]} рейтинговых игр со средним MMR от 7 300 по OpenDota. '
+    intro = (f'<p><strong>{label}</strong> · Патч {h(data["patch"])}. Матчей {source} в выборке — {int(data["reference_matches"])}. '
              f'В таблице показаны средние значения по {h(group)}.</p>')
     if data["in_reference"]:
         intro += '<p class="meta">Эта карта входит в итоговую выборку ориентиров.</p>'
-    rows = []
-    for name, label in (("ranked_7300", "Рейтинг 7 300+"), ("professional", "Про-матчи")):
-        entry = data["groups"][name]
-        rows.append((label, entry["players"] if entry else 0) + tuple(
-            number(entry[t][k]) if entry else "—" for t in ("at10", "at20") for k in ("lh","gold","xp")))
+    entry = data["groups"][cohort]
+    rows = [(label, entry["players"] if entry else 0) + tuple(
+        number(entry[t][k]) if entry else "—" for t in ("at10", "at20") for k in ("lh","gold","xp"))]
     rows.append(("Твой герой", 1) + tuple(number(data["at10"][m["key"]]) for m in data["metrics"]) +
                 tuple(number(m["actual"]) for m in data["metrics"]))
     summary = table(("Группа", "Выступления", "Крипы 10:00", "Золото 10:00", "Опыт 10:00",
                      "Крипы 20:00", "Золото 20:00", "Опыт 20:00"), rows)
     if data["metrics"][0]["expected"] is None:
-        return intro + summary + '<p>Для проверки ML по времени пока мало завершённых матчей этого патча.</p>'
+        reason = ("Для этой версии базы доступны только средние по выбранной группе. Обновить модели обеих групп можно из папки проекта командой <code>python scripts/refresh_patch_reference.py</code>."
+                  if data["model_status"] == "legacy_means_only" else "Для проверки прогноза пока мало завершённых матчей этой группы.")
+        return intro + summary + f'<p>{reason}</p>'
     forecast = table(("К 20:00", "Факт", "Ориентир ML", "Ошибка на проверке"), [
         (m["label"], number(m["actual"]), number(m["expected"]), number(m["mae"])) for m in data["metrics"]])
-    return intro + summary + ('<p>ML оценивает, сколько ресурсов такой герой обычно получает к 20:00 '
-                              'при твоих показателях на 10:00. Ошибка измерена на более поздних картах до итогового обучения.</p>') + forecast
+    return intro + summary + ('<p>Модель оценивает ресурсы к 20:00 по показателям на 10:00. '
+                              f'Для проверки ошибки в этой группе отложили более поздние матчи ({int(data["validation_matches"])}).</p>') + forecast
 
 
 def lessons_view(lessons):
@@ -173,7 +176,8 @@ def item_options(fight, position):
         stat = item.get("pro")
         if stat:
             scope = " на твоём герое" if stat["same_hero"] else ""
-            html += (f'<small>В более ранних про-играх этого патча до {_clock(fight["start"])} покупка записана '
+            pool = "пабах 7 300+" if fight.get("peer_cohort") == "ranked_7300" else "про-играх"
+            html += (f'<small>В более ранних {pool} этого патча до {_clock(fight["start"])} покупка записана '
                      f'в {stat["bought"]} из {stat["n"]} выступлений{scope} на позиции {int(position)} '
                      f'против {h(" / ".join(stat["opponents"]))}.')
             if stat["bought"] >= 3:
@@ -183,8 +187,9 @@ def item_options(fight, position):
             html += '</small>'
         activation = item.get("fight_pro")
         if activation:
+            pool = peer_fights(fight)
             html += (f'<small>Применение предмета отмечено в {activation["uses"]} из {activation["n"]} сопоставимых '
-                     f'про-драк на этой позиции, где его покупка уже была записана. У {h(activation["enemy"])} '
+                     f'{pool} на этой позиции, где его покупка уже была записана. У {h(activation["enemy"])} '
                      f'в этих окнах отмечено {h(activation["threat"])}. Допуск по началу боя — пять минут.</small>')
         return html + f'<small><a href="{h(item["source_url"])}">Описание предмета у Valve</a></small></div>'
     more = [i for i in ordered if i not in lead]
@@ -199,7 +204,7 @@ def peer_action(fight):
     pro = fight.get("pro_action")
     if not pro:
         return ""
-    return (f'<p class="meta">В {pro["count"]} из {pro["n"]} сопоставимых про-драк на этом герое и позиции '
+    return (f'<p class="meta">В {pro["count"]} из {pro["n"]} сопоставимых {peer_fights(fight)} на этом герое и позиции '
             f'записано применение {h(pro["ability"])}. В той же драке {h(pro["enemy"])} '
             f'применял {h(pro["threat"])}. Сравнение охватывает бои на том же патче с разницей '
             f'до пяти минут по времени начала. <a href="https://www.opendota.com/matches/{int(pro["example"])}/teamfights">'
@@ -277,7 +282,7 @@ def decisions_section(decisions, *, checked=False):
         if d.get("pro_note"):
             parts.append(f'<p>{h(d["pro_note"])}')
             if d.get("pro_url") and urlsplit(d["pro_url"]).scheme == "https":
-                parts.append(f' <a href="{h(d["pro_url"])}">Про-матч для сравнения</a>')
+                parts.append(f' <a href="{h(d["pro_url"])}">Матч для сравнения</a>')
             parts.append('</p>')
         parts.append('</details><p class="decision-links">')
         if d.get("review_from") is not None:
@@ -350,6 +355,7 @@ def render_session(session, *, home_url=None, detail_url=None):
     parts = [header]
     sections = [(key, label) for key, label, present in (
         ("mid-exchanges", "Размен или дальний крип", (session.get("mid_windows") or {}).get("exchange_decisions")),
+        ("economy", "Ориентир по экономике", (session.get("patch_reference") or {}).get("metrics")),
         ("mid-windows", "Размены и дальние крипы", session.get("mid_windows")),
         ("mid-levels", "Преимущество по уровню", session.get("mid_levels")),
         ("accept-review", "Разбор решения", session.get("accept_moments")),
@@ -420,8 +426,9 @@ def render_session(session, *, home_url=None, detail_url=None):
                   render_support_waves(session.get("support_waves")), render_power_items(session.get("macro")),
                   render_macro(session.get("macro"))))
     if "patch_reference" in session:
-        parts.append('<section><h2>Планки экономики на патче</h2>' + patch_benchmarks(session["patch_reference"]) + '</section>')
-    parts.append('<details><summary>Прогноз экономики для твоего матча</summary>' + pro_section(session["assessment"]) + '</details>')
+        parts.append('<section id="economy"><h2>Планки экономики на патче</h2>' + patch_benchmarks(session["patch_reference"]) + '</section>')
+    if session.get("assessment"):
+        parts.append('<details><summary>Дополнительный ориентир по турнирным матчам</summary>' + pro_section(session["assessment"]) + '</details>')
     previous = session["history"].get("previous")
     if previous:
         prior_id, drill, check = previous

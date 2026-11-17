@@ -56,7 +56,8 @@ class PracticeTests(unittest.TestCase):
         self.assertFalse(b["history"]["prior"])
         self.assertIsNone(b["history"]["previous"])
         self.assertIn("опыта", b["cards"][0]["evidence"])
-        self.assertIn("золоте всех пяти союзников", render_session(b))
+        self.assertIsNone(b["assessment"])
+        self.assertIn(b["patch_reference"]["reason"], render_session(b))
 
     def test_offline_cli_reads_gzip_and_repeats_from_cache(self):
         dest = self.folder / "review.html"

@@ -52,9 +52,9 @@ def _home():
        placeholder="9086497898" required>
 <button type="submit">Открыть состав</button></div></form>
 <p><a href="/example-decisions">Пример автоматического разбора</a></p>
-<nav><a href="/example-mid-invoker#mid-exchanges">Invoker против Puck · размен или крип</a> · <a href="/example-shadowraze#mid-windows">Койлы Shadow Fiend</a> · <a href="/example-macro#macro">Смоки и объекты Pudge</a> · <a href="/example-waves#support-waves">Отвод Snapfire</a></nav>
+<nav><a href="/example-mid-rotation#mid-exchanges">Pangolier и Lion против Tinker</a> · <a href="/example-mid-invoker#mid-exchanges">Invoker против Puck · размен или крип</a> · <a href="/example-shadowraze#mid-windows">Койлы Shadow Fiend</a> · <a href="/example-macro#macro">Смоки и объекты Pudge</a> · <a href="/example-waves#support-waves">Отвод Snapfire</a></nav>
 <details class="resources"><summary>Другие примеры</summary><nav><a href="/example-replay-support">Проверенные сейвы Snapfire</a><a href="/example-fight">Драка Mars</a>
-<a href="/example-economy">Фарм Anti-Mage на фоне игроков 7 300+ и про-сцены</a>
+<a href="/example-economy">Фарм Anti-Mage в сравнении с пабами 7 300+</a>
 <a href="/example-mid#mid-matchup">Huskar против Necrophos по уровням</a>
 <a href="/example-mid-tinker#mid-exchanges">Tinker против Pangolier · когда нажать Laser</a>
 <a href="/example-mid-nukes#mid-windows">Размен и дальний крип на Rubick</a>
@@ -174,7 +174,8 @@ class CoachHandler(BaseHTTPRequestHandler):
         samples = {"/example-macro": "coach-macro-smoke.html", "/example-mid": "coach-mid-matchup.html",
                    "/example-waves": "coach-support-waves.html", "/example-mid-nukes": "coach-mid-nukes.html",
                    "/example-shadowraze": "coach-mid-shadow-fiend.html", "/example-mid-qop": "coach-mid-qop.html",
-                   "/example-mid-invoker": "coach-mid-invoker.html", "/example-mid-tinker":"coach-mid-tinker.html"}
+                   "/example-mid-invoker": "coach-mid-invoker.html", "/example-mid-tinker":"coach-mid-tinker.html",
+                   "/example-mid-rotation": "coach-mid-rotation.html"}
         if path in samples:
             return self._send(200, (EXAMPLES / samples[path]).read_bytes())
         if path == "/example-replay-support":
@@ -209,12 +210,13 @@ class CoachHandler(BaseHTTPRequestHandler):
                 if not row:
                     raise ValueError("В матче нет выбранного героя.")
                 row = archive.with_patch_versions([row])[0]
-                return self._send(200, render_match(row, archive.personal_history(row), archive.references()))
+                return self._send(200, render_match(row, archive.personal_history(row), archive.references(),
+                                                     raw_match=raw, reference_path=self.server.reference_path))
             model = load_coach_model(self.server.model_path)
             lessons = json_file(self.server.lessons_path)
             session = coach_by_id(archive, raw, slot, model, lessons, focus[0], at=at,
                                   cache=Path(self.server.db_path).parent / "replay-evidence",
-                                  position=role, purchase_index=PurchaseIndex.load(self.server.fight_model_path),
+                                  position=role, purchase_index=PurchaseIndex.load(self.server.fight_model_path) if self.server.fight_model_path else None,
                                   reference_path=self.server.reference_path)
             if path == "/practice":
                 if not session["requested_available"]:

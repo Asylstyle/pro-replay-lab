@@ -3,9 +3,11 @@
 from html import escape
 from functools import lru_cache
 from bisect import bisect_right
+from collections import Counter
 from math import cos, floor, hypot, radians, sin
 
 from .mid_spells import impact_damage, rank_value, resolved_impact, spell_catalog, spell_specs
+from .mid_support import SupportTracker, annotate_support_casts
 from .mid_conditional import after_defense, attack_option
 from .mid_exchange import MOVES_CASTER, exchange_card, response_profile, select_decisions, render_exchange_decisions
 from .mid_observed import observed_exchanges, render_observed_exchanges
@@ -319,9 +321,11 @@ def mid_decision_windows(raw, slot, matchup, timeline, *, catalog=None):
     creep_frames, lane_samples = {}, {}
     kits = {slot:catalog, enemy:enemy_specs}
     attacks, exchanges = [], []
+    supports = SupportTracker(raw, slot, enemy, theirs["id"])
     for f in _frames(timeline, min(end, 600)):
         if type(f.get("tick")) is not int or type(f.get("time")) is not int:
             continue
+        supports.observe(f)
         axis = _lane_landmarks(f) or axis
         h = f.get("heroes")
         if not isinstance(h, dict) or not axis or not isinstance(f.get("ranged_creeps"), list):
@@ -358,6 +362,7 @@ def mid_decision_windows(raw, slot, matchup, timeline, *, catalog=None):
                 rows.append(dict(row, kind="trade"))
         pair = _exchange_frame(f, actor, rival, axis, own_rows, catalog, enemy_specs, team, clean_range, enemy_clean_range)
         if pair:
+            pair["support"] = supports.review(clean_range)
             prior = bisect_right(dot_ticks, f["tick"])
             if prior:
                 _, when, key = dot_events[prior-1]
@@ -399,10 +404,15 @@ def mid_decision_windows(raw, slot, matchup, timeline, *, catalog=None):
             hits.append({"time":e["time"], "spell":names[e["button_key"]], "damage":e["damage"]})
             if len(hits) == 3:
                 break
-    choices = select_decisions(c for pair in exchanges if (c := exchange_card(pair)) is not None)
+    candidates = [c for pair in exchanges if (c := exchange_card(pair)) is not None]
+    support_counts = Counter(c["support"]["state"] for c in candidates)
+    choices = select_decisions(candidates)
+    annotate_support_casts(choices, timeline.get("events") or (), enemy)
     annotate_prior_hits(choices, timeline.get("events") or (), lane_samples, slot, enemy, kits)
     return {"seconds":sampled, "enemy":theirs["name"], "trades":_shortlist(rows,"trade"), "hero_hits":hits, "attacks":attacks,
             "exchange_decisions":choices,
+            "support_checks": {"states": dict(support_counts), "windows": len(candidates),
+                               "coordinated": sum(c["coordinated"] for c in candidates)},
             "observed_exchanges":observed_exchanges(timeline.get("events") or (), slot, enemy, mid_frames, names),
             "creeps":sorted(_shortlist(creeps,"creep"), key=lambda r:r["time"]),
             "last_hits":last_hits, "reviewable_spells":sum(bool(s.get("proof")) for s in catalog.values())}

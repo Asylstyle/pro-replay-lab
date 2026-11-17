@@ -1,11 +1,19 @@
 """Compare actual output with earlier performances on the same hero and position."""
 
 from collections import Counter
+from functools import lru_cache
+import gzip
 from html import escape
+import json
+from pathlib import Path
 from statistics import median, quantiles
 
 from .analysis import _int
 from .impact import DIMENSIONS, SLOTS, _total, amount
+from .patch_reference import client_cohort, patch_mismatch
+
+
+COHORT_HISTORY = Path(__file__).resolve().parents[1] / "examples" / "patch-hero-reference.json.gz"
 
 
 def extract_hero_samples(raw):
@@ -39,8 +47,6 @@ def _population(row):
     league = _int(row.get("league_id"))
     lobby = _int(row.get("lobby_type"))
     mode = _int(row.get("game_mode"))
-    if mode is None:
-        return None
     if mode is None:
         return None
     if league is not None and league > 0:
@@ -174,7 +180,41 @@ def _overview(metrics):
     return ''.join(facts)
 
 
-def render_hero_review(row, archive_rows):
+@lru_cache(maxsize=4)
+def _saved_hero_rows(path, mtime, size):
+    with path.open("rb") as stream:
+        return json.loads(gzip.decompress(stream.read()))
+
+
+def render_coach_hero_review(row, raw, model, archive_rows, *, history_path=None):
+    """Use the active patch model's verified peer IDs for a match detail."""
+    if raw is None:
+        raw = {**row, "leagueid": row.get("league_id")}
+    cohort = client_cohort(raw, model)
+    if cohort is None:
+        return render_hero_review(row, [], reason="Для сравнения нужен рейтинговый All Pick или подтверждённая профессиональная карта.")
+    label = ("рейтинговые All Pick со средним MMR лобби 7300+"
+             if cohort == "ranked_7300" else "профессиональные матчи")
+    reason = patch_mismatch(model, raw)
+    if reason:
+        return render_hero_review(row, [], reason=reason)
+    patch = model["policy"]["patch"]
+    ids = set(model["cohort_ids"][cohort])
+    sources = []
+    for path in dict.fromkeys((history_path, COHORT_HISTORY)):
+        if path is not None and Path(path).is_file():
+            path = Path(path)
+            stat = path.stat()
+            sources.append(_saved_hero_rows(path, stat.st_mtime_ns, stat.st_size))
+    sources.append(archive_rows)
+    # IDs also identify the exact Valve release when an archived scorecard
+    # only has OpenDota's broader numeric patch. Keep any explicit conflict out.
+    rows = ({**p, "patch_version": patch} for source in sources for p in source
+            if p.get("match_id") in ids and p.get("patch_version") in (None, patch))
+    return render_hero_review({**row, "patch_version": patch}, rows, peer_label=label)
+
+
+def render_hero_review(row, archive_rows, *, peer_label=None, reason=None):
     result = hero_benchmark(row, archive_rows)
     if result is None:
         return "<p>В сохранённой карте нет показателей героя по слотам. Обнови карточку матча для сравнения.</p>"
@@ -191,10 +231,14 @@ def render_hero_review(row, archive_rows):
         label = "версия" if result["version_known"] else "ID патча OpenDota"
         intro.append(f' · {label} {escape(str(result["patch"]))}')
     intro.append(".</p>")
+    if peer_label:
+        intro.append(f"<p>Группа сравнения — {escape(peer_label)}.</p>")
     if result["same_n"] or result["other_n"]:
         intro.append(f'<p>В более ранних матчах архива найдено выступлений на этой позиции '
                      f'тем же героем — <b>{result["same_n"]}</b>, другими героями — <b>{result["other_n"]}</b>. '
                      'Учтены обе стороны карты и тот же режим игры.</p>')
+    elif reason:
+        intro.append(f"<p>{escape(reason)}</p>")
     elif role is not None:
         intro.append("<p>В архиве нет подходящих более ранних наблюдений с известными позицией, патчем и типом матча.</p>")
     intro.append(_overview(result["metrics"]))

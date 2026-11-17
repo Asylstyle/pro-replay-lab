@@ -83,7 +83,7 @@ def lane_card(row, assessment, position):
         return None
     text = f"За десять минут — {gain} {unit}. На 10:00 было {a[field]}, на 20:00 — {b[field]}."
     metric = next((m for m in assessment.get("metrics", []) if m["key"] == field), None)
-    if metric and metric["gap"] is not None:
+    if metric and metric["gap"] is not None and metric["mae"] is not None:
         size = abs(metric["gap"])
         if size <= metric["mae"]:
             text += (f" Разница с ориентиром патча ({size:.0f}) укладывается в среднюю ошибку "
@@ -273,13 +273,14 @@ def make_session(archive, raw, slot, model, lesson_model, focus="auto", *, at=No
         raise ValueError("Выбери игровую позицию от 1 до 5.")
     heroes = directory(archive)
     row = archive.with_patch_versions([normalize(raw, None, heroes, slot=slot)])[0]
-    assessment = assess_player(model, raw, slot)
     role_override = position
     position = position or row["detail"]["build"].get("position")
-    reference = reference_for_player(load_reference(reference_path), raw, slot, position)
+    bundle = load_reference(reference_path)
+    reference = reference_for_player(bundle, raw, slot, position)
+    assessment = assess_player(model, raw, slot) if reference.get("cohort") == "professional" else None
     fights = analyze_fights(raw, slot, heroes, position=position)
-    if purchase_index is None:
-        purchase_index = PurchaseIndex.load()
+    purchase_index = PurchaseIndex.for_session(reference, bundle, purchase_index)
+    row["reference_patch_start"] = bundle["policy"]["patch_start"]
     for fight in fights:
         add_purchase_evidence(fight, row, position, purchase_index)
         query = tactical_card(fight, row)["query"]

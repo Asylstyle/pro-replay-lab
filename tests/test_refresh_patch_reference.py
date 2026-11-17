@@ -74,3 +74,20 @@ class ReferenceRefreshTests(unittest.TestCase):
                     workflow.refresh(data, 0, 0)
                 self.assertEqual(train.call_count, 1)
                 self.assertEqual(active.read_bytes(), b"existing-model")
+
+    def test_fresh_ranked_capture_can_complete_pending_cache_without_losing_verified_games(self):
+        examples = Path(__file__).resolve().parents[1] / "examples"
+        fresh = examples / "fresh-ranked-2026-11-17"
+        cards, receipt = workflow.read_capture(fresh / "matches.json.gz", fresh / "manifest.json")
+        expected = {c["match_id"] for c in cards}
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp)
+            cache = path / "candidates.sqlite"
+            pending = dict(next(r for r in receipt["observations"] if r["status"] == "included"),
+                           status="awaiting_postgame")
+            write_corpus(path / "older", "ranked", [], {"observations": [pending]})
+            workflow._restore_ranked_cache(cache, [path / "older", fresh, examples])
+            workflow._restore_ranked_cache(cache, [examples, fresh])
+            with closing(sqlite3.connect(cache)) as db:
+                ids = {r[0] for r in db.execute("SELECT mid FROM candidates WHERE status='included' AND card IS NOT NULL")}
+            self.assertEqual(ids, expected)

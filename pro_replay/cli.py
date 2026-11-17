@@ -52,14 +52,15 @@ def mmss(value):
     return f"{'-' if value < 0 else ''}{minutes:02}:{seconds:02}"
 
 
-def report(player, rows, dest, case=False, *, detailed=False, archive_rows=None, references=None):
+def report(player, rows, dest, case=False, *, detailed=False, archive_rows=None, references=None, reference_path=None):
     if detailed:
         dest = Path(dest)
         folder = dest.parent / (dest.stem + "-matches")
         enriched = []
         for row in rows:
             name = f'{int(row["match_id"])}.html'
-            save_text(folder / name, render_match(row, archive_rows if archive_rows is not None else rows, references))
+            save_text(folder / name, render_match(row, archive_rows if archive_rows is not None else rows,
+                                                  references, reference_path=reference_path))
             enriched.append({**row, "_match_page": quote(folder.name) + "/" + name})
         rows = enriched
     stats = summarize(rows)
@@ -118,7 +119,7 @@ def parser():
         command.add_argument("--reference", type=Path, help="Модель планок экономики для патча")
         command.add_argument("--model", type=Path, help="Обученный ориентир по про-матчам")
         command.add_argument("--lessons", type=Path, help="Обученный индекс уроков")
-        command.add_argument("--fight-model", type=Path, help="База сравнения предметов и действий в про-драках")
+        command.add_argument("--fight-model", type=Path, help="База предметов и действий для выбранного типа матчей")
     fit = sub.add_parser("train-coach", help="Обучить ориентир на профессиональных картах")
     evaluation = sub.add_parser("evaluate-coach", help="Проверить готовую модель на обычных рейтинговых матчах")
     fight_fit = sub.add_parser("train-fight-items", help="Обучить сравнение действий и покупок в про-драках")
@@ -160,6 +161,8 @@ def parser():
     view.add_argument("player")
     view.add_argument("--out", default="report.html")
     view.add_argument("--details", action="store_true", help="Добавить отдельную страницу с аналитикой каждой карты")
+    for command in (match, view):
+        command.add_argument("--reference", type=Path, help="Модель патча с подтверждёнными группами сравнения")
     find = sub.add_parser("find", help="Найти наблюдаемую последовательность событий")
     find.add_argument("player", help="Ник, ID или demo для примера Yatoro")
     find.add_argument("before", type=action)
@@ -223,6 +226,7 @@ def review_one(archive, args):
     api = OpenDota()
     account, slot = player_key(archive, args.player, api)
     row = archive.cached_match(args.match_id, account, slot)
+    raw = None
     if not row or row.get("review_version") != 2:
         try:
             raw = api.match(args.match_id)
@@ -241,7 +245,8 @@ def review_one(archive, args):
             print("Источник недоступен. Показаны ранее сохранённые данные карты.")
     identifier = account if slot is None else f"slot-{slot}"
     path = args.out or Path(f"match-{args.match_id}-{identifier}.html")
-    save_text(path, render_match(row, archive.personal_history(row), archive.references()))
+    save_text(path, render_match(row, archive.personal_history(row), archive.references(),
+                                 raw_match=raw, reference_path=args.reference))
     print(f"Разбор карты: {path.resolve()}")
 
 
@@ -256,10 +261,11 @@ def main(argv=None):
             else:
                 policy = make_policy(valve_patches(), as_of=int(time.time()))
             cards = []
-            files = ("patch-reference-pro.json.gz", "patch-reference-ranked.json.gz")
             collected = Path("data/patch-references")
-            folder = collected if any((collected / n).exists() for n in files) else EXAMPLES
-            for path in args.replays or [folder / name for name in files]:
+            paths = args.replays or [collected / n for n in ("patch-reference-pro.json.gz", "patch-reference-ranked.json.gz")]
+            if not args.replays and not any(path.exists() for path in paths):
+                paths = [EXAMPLES / "patch-reference-pro.json.gz", EXAMPLES / "fresh-ranked-2026-11-17/matches.json.gz"]
+            for path in paths:
                 for file in (sorted((*path.glob("*.json"), *path.glob("*.json.gz"))) if path.is_dir() else [path]):
                     data = json_file(file)
                     if isinstance(data, dict) and "matches" in data:
@@ -268,7 +274,8 @@ def main(argv=None):
             model = train_reference(cards, policy)
             save_coach_model(model, args.out)
             print_json({"patch": policy["patch"], "counts": model["counts"], "excluded": model["excluded"],
-                        "winner": model["validation"]["winner"], "file": str(args.out)})
+                        "winners": {name: row["validation"]["winner"] for name, row in model["cohorts"].items()},
+                        "file": str(args.out)})
             return 0
         if args.cmd == "benchmark-coach":
             from .ml_benchmark import run_evaluation, run_selection, run_ranked_selection, run_ranked_evaluation
@@ -358,7 +365,7 @@ def main(argv=None):
                 options = {} if args.journal_only else {"cache": Path(args.db).parent / "replay-evidence"}
                 session = build(archive, raw, slot, load_coach_model(args.model),
                                 json_file(args.lessons or EXAMPLES / "coach-lessons-model.json"), args.focus,
-                                at=at, position=args.position, purchase_index=PurchaseIndex.load(args.fight_model),
+                                at=at, position=args.position, purchase_index=PurchaseIndex.load(args.fight_model) if args.fight_model else None,
                                 reference_path=args.reference, **options)
                 path = args.out or Path(f"data/coach-{args.match_id}-{slot}.html")
                 save_text(path, render_session(session))
@@ -423,7 +430,7 @@ def main(argv=None):
                 raise ValueError("Нет подходящих матчей. Загрузи матчи через sync/import или проверь фильтры.")
             if args.cmd == "report":
                 report(rows[0].get("player_name") or player, rows, args.out, detailed=args.details, archive_rows=all_rows,
-                       references=archive.references() if args.details else None)
+                       references=archive.references() if args.details else None, reference_path=args.reference)
             elif args.cmd == "find":
                 result = find_order(rows, args.before, args.after, args.within)
                 print(f'Найдено: {len(result["found"])} / {len(rows)}. Без совпадения при доступных журналах: '

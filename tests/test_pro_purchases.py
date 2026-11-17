@@ -1,8 +1,12 @@
+import gzip
+import json
 import unittest
+from pathlib import Path
 
 from pro_replay.fight_coach import CANDIDATES
 from pro_replay.impact import SLOTS
-from pro_replay.pro_purchases import PurchaseIndex, add_purchase_evidence, fit_purchase_reference
+from pro_replay.pro_purchases import (PurchaseIndex, RANKED_REFERENCE, add_purchase_evidence,
+                                      fit_purchase_reference, fit_ranked_purchase_reference, peer_fights)
 
 
 def game(mid):
@@ -57,3 +61,32 @@ class HistoricalPurchaseTests(unittest.TestCase):
         isolated = {"start": 1401, "items": [], "threats": [threat]}
         add_purchase_evidence(isolated, self.row, 1, self.index)
         self.assertNotIn("pro_action", isolated)
+
+    def test_ranked_coach_never_substitutes_professional_fights(self):
+        ranked = PurchaseIndex.load(RANKED_REFERENCE)
+        model = {"policy": ranked.policy}
+        pub = {"cohort": "ranked_7300", "patch": ranked.policy["patch"]}
+        self.assertIs(PurchaseIndex.for_session(pub, model), ranked)
+        self.assertIsNone(PurchaseIndex.for_session(pub, model, self.index))
+        self.assertIsNone(PurchaseIndex.for_session({"cohort": "professional", "patch": "7.41f"}, model, ranked))
+        self.assertIsNone(PurchaseIndex.for_session({}, model, ranked))
+        self.assertIsNone(PurchaseIndex.for_session(pub, {"policy": dict(ranked.policy, patch="7.41g")}, ranked))
+        evidence = {"items": [], "threats": []}
+        add_purchase_evidence(evidence, self.row, 1, ranked)
+        self.assertIn("7 300+", peer_fights(evidence))
+
+    def test_pub_reference_requires_verified_mmr_roster_and_logged_purchases(self):
+        snapshot = Path(RANKED_REFERENCE).parent / "fresh-ranked-2026-11-17"
+        policy = json.loads((snapshot / "manifest.json").read_bytes())["policy"]
+        cards = json.loads(gzip.decompress((snapshot / "matches.json.gz").read_bytes()))["matches"][:3]
+        for card in cards:
+            for p in card["players"]:
+                p["purchase_log"] = [{"time": 420, "key": "blink"}]
+        ids = [c["match_id"] for c in cards]
+        observations = {c["match_id"]: c["opendota_live"] for c in cards}
+        observations[ids[1]] = dict(observations[ids[1]], average_mmr=7299)
+        observations[ids[2]] = dict(observations[ids[2]], roster=[])
+        data = fit_ranked_purchase_reference([*cards, cards[0], game(7)], observations, policy, {"blink"})
+        self.assertEqual([g["id"] for g in data["games"]], ids[:1])
+        self.assertEqual(PurchaseIndex(data).cohort, "ranked_7300")
+        self.assertFalse(self.index.rates(dict(self.row, reference_patch_start=125000), 1, 1100, {22}, ["glimmer_cape"]))

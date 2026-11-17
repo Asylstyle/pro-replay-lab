@@ -1,10 +1,13 @@
 """One self-contained match review. Every number links back to a match or a definition."""
 
+from pathlib import Path
+
 from .analysis import CORE_ITEMS
 from .build_review import render_build
 from .fight_review import render_fights
-from .hero_review import render_hero_review
+from .hero_review import render_coach_hero_review
 from .impact import prior_maps, observations
+from .patch_reference import load_reference
 from .report import _clock, _date, _h, _item
 
 
@@ -140,7 +143,7 @@ def timeline_section(row):
             f'<ul class="events" id="events">{entries}</ul>')
 
 
-def render_match(row, archive, references=None):
+def render_match(row, archive, references=None, *, raw_match=None, reference_path=None):
     detail = row.get("detail") or {}
     hero = row.get("hero_name") or f'Герой #{row.get("hero_id")}'
     player = row.get("player_name") or ("Игрок " + str(row.get("side") or "").title()).strip()
@@ -168,7 +171,11 @@ def render_match(row, archive, references=None):
                      else "<p>Журнал командных драк отсутствует.</p>")
     if "fight_review" in detail:
         combat = render_fights(review)
-    blocks = [("hero", "Герой и позиция", render_hero_review(row, references if references is not None else archive)),
+    history_dir = Path(reference_path).parent if reference_path else Path("data")
+    hero_section = render_coach_hero_review(
+        row, raw_match, load_reference(reference_path), references if references is not None else archive,
+        history_path=history_dir / "patch-hero-reference.json.gz")
+    blocks = [("hero", "Герой и позиция", hero_section),
               ("fights", "Что сделал в драках", combat),
               ("build", "Предметы против драфта", render_build(detail.get("build"), patch_version=row.get("patch_version"))),
               ("standout", "Чем выделился игрок", standout_section(row, prior_maps(row, archive))),

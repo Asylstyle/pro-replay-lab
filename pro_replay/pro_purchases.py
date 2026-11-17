@@ -1,4 +1,4 @@
-"""Case-based model of recorded professional purchases before a fight."""
+"""Compare logged purchases and fight actions within the client's population."""
 
 import gzip
 import json
@@ -13,9 +13,15 @@ from .analysis import _purchases
 from .impact import SLOTS
 from .fight_coach import ITEM_THREATS, SPELL_LOOKUP
 from .fight_review import _counts, _spell_name
+from .reference_policy import reference_eligibility
 
 
 REFERENCE = Path(__file__).resolve().parent.parent / "examples" / "pro-fight-purchases.json.gz"
+RANKED_REFERENCE = REFERENCE.with_name("ranked-7300-fight-purchases.json.gz")
+
+
+def peer_fights(fight):
+    return "драк в пабах 7 300+" if fight.get("peer_cohort") == "ranked_7300" else "про-драк"
 
 
 def _fight_cases(raw):
@@ -96,6 +102,27 @@ def fit_purchase_reference(raw_matches, model, tracked):
             "tracked_items": sorted(tracked), "games": ordered}
 
 
+def fit_ranked_purchase_reference(raw_matches, observations, policy, tracked):
+    """Match full postgame logs to their audited OpenDota spectator observations."""
+    games = {}
+    for raw in raw_matches:
+        mid = raw.get("match_id")
+        if mid not in observations:
+            continue
+        cohort, _ = reference_eligibility(raw, policy, public_match=observations[mid])
+        if cohort != "ranked_7300" or type(raw.get("patch")) is not int:
+            continue
+        game = _training_game(raw, tracked)
+        if game and any(p["first"] is not None for side in game["teams"] for p in side):
+            if mid in games and games[mid] != game:
+                raise ValueError(f"Расходятся журналы покупок матча {mid}.")
+            games[mid] = game
+    if not games:
+        raise ValueError("Нет подтверждённых рейтинговых карт с журналами покупок.")
+    return {"format": "ranked-7300-fight-purchases-v1", "policy": policy,
+            "tracked_items": sorted(tracked), "games": sorted(games.values(), key=lambda g: (g["end"], g["id"]))}
+
+
 def write_reference(model, path):
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -111,8 +138,12 @@ def write_reference(model, path):
 
 class PurchaseIndex:
     def __init__(self, data):
-        if not isinstance(data, dict) or data.get("format") != "pro-fight-purchases-v1":
-            raise ValueError("Неизвестный формат базы про-покупок.")
+        formats = {"pro-fight-purchases-v1": "professional", "ranked-7300-fight-purchases-v1": "ranked_7300"}
+        if not isinstance(data, dict) or data.get("format") not in formats:
+            raise ValueError("Неизвестный формат базы покупок.")
+        self.cohort = formats[data["format"]]
+        self.policy = data.get("policy", {})
+        self.starts = {g["id"]: g["end"] - g["duration"] for g in data["games"]}
         self.by_role = defaultdict(list)
         self.encounters = defaultdict(list)
         for game in data["games"]:
@@ -147,6 +178,19 @@ class PurchaseIndex:
         stat = path.stat()
         return _load_index(path, stat.st_mtime_ns, stat.st_size)
 
+    @classmethod
+    def for_session(cls, reference, model, supplied=None):
+        cohort = reference.get("cohort")
+        if cohort not in ("professional", "ranked_7300") or not reference.get("patch"):
+            return None
+        index = supplied or cls.load(RANKED_REFERENCE if cohort == "ranked_7300" else REFERENCE)
+        if index.cohort != cohort:
+            return None
+        if cohort == "ranked_7300":
+            if any(index.policy.get(k) != model["policy"][k] for k in ("patch", "patch_start")):
+                return None
+        return index
+
     def rates(self, row, role, second, enemy_ids, item_keys):
         """First logged purchase strictly before the fight; one vote per player appearance."""
         started = row.get("start_time")
@@ -154,7 +198,8 @@ class PurchaseIndex:
             return {}
         usable = []
         for mid, end, duration, hero, opponents, first in self.by_role.get((row.get("patch"), role), ()):
-            if mid != row["match_id"] and end < started and duration >= second and opponents & enemy_ids:
+            if (mid != row["match_id"] and end < started and duration >= second and opponents & enemy_ids
+                    and self.starts[mid] >= row.get("reference_patch_start", 0)):
                 usable.append((mid, hero, first))
         hero_cases = [case for case in usable if case[1] == row["hero_id"]]
         same_hero = len(hero_cases) >= 8
@@ -172,6 +217,7 @@ class PurchaseIndex:
     def fight_actions(self, row, role, fight, threat, items):
         key = (row.get("patch"), role, threat["hero_id"], threat["key"])
         nearby = [r for r in self.encounters.get(key, ()) if r[0] != row["match_id"]
+                  and self.starts[r[0]] >= row.get("reference_patch_start", 0)
                   and r[1] < (row.get("start_time") or 0) and abs(r[2] - fight["start"]) <= 300]
         prefix = row["detail"]["fight_review"].get("hero_prefix") or ""
         peers = [r for r in nearby if r[3] == row["hero_id"] and r[5]["abilities"] is not None]
@@ -207,6 +253,7 @@ def _load_index(path, modified, size):
 def add_purchase_evidence(fight, row, position, index):
     if index is None:
         return
+    fight["peer_cohort"] = index.cohort
     groups = defaultdict(list)
     for item in fight["items"]:
         groups[item["category"]].append(item)

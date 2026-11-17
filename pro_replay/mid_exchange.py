@@ -4,6 +4,7 @@ from html import escape
 
 from .mid_spells import rank_value
 from .mid_prior_hits import render_prior_hits
+from .mid_support import STATE_PRIORITY, render_support
 from .replay_verification import _control, _distance, _num, _ready
 from .report import _clock
 
@@ -208,7 +209,14 @@ def exchange_card(frame):
         action, reason = "creep", "Урона на крипа хватает. Преимущество при обмене ударами не установлено."
     else:
         action, reason = "uncertain", "По этому кадру перевеса для короткого размена не установлено."
+    support = frame.get("support") or {}
+    coordinated = bool(support.get("state") == "ready" and support.get("target_disabled") is False
+                       and own and own["ready"] is True
+                       and action != "creep" and not dangerous and not caution
+                       and _num(own["arrival"]) and own["arrival"] < support["button"]["duration"]
+                       and support["button"]["arrival"] <= REPLY_HORIZON)
     return {"time":frame["time"], "tick":frame["tick"], "action":action, "reason":reason, "own":own,
+            "support":support, "coordinated":coordinated,
             "creep":creep, "reply":reply, "caution":caution, "margin_pp":round(margin,1) if margin is not None else None,
             "outgoing_pct":round(outgoing,1) if own else None,"incoming_pct":round(incoming,1) if incoming is not None else None}
 
@@ -230,7 +238,14 @@ def select_decisions(cards, limit=5):
         return next((c for c in candidates if all(abs(c["time"]-s["time"]) >= 15 and
                     (not c["creep"] or not s["creep"] or c["creep"]["id"] != s["creep"]["id"])
                     for s in chosen)), None)
-    for candidates in groups.values():
+    pairs = [c for candidates in groups.values() for c in candidates
+             if ((c.get("support") or {}).get("movement") or {}).get("closing")]
+    if pairs and limit > 0:
+        chosen.append(max(pairs, key=lambda c:(c.get("coordinated", False), STATE_PRIORITY[c["support"]["state"]],
+                                               priority(c))))
+    for action, candidates in groups.items():
+        if len(chosen) >= limit or any(c["action"] == action for c in chosen):
+            continue
         top = first_new(candidates)
         if top is not None:
             chosen.append(top)
@@ -256,7 +271,8 @@ def render_exchange_decisions(cards, enemy):
                  'Для перевеса требуется запас более двух процентных пунктов. Если та же кнопка забирает дальнего крипа, '
                  'для выбора нелетального размена требуется запас более четырёх пунктов. Готовность чужих кнопок взята из повтора. '
                  'У игрока в матче могли быть только подсказки по предыдущим кастам. '
-                 'Следующие удары, движение, предметы, союзники и урон волны могут изменить результат.</p>')
+                 'Подход союзной позиции 4/5 и её направленный контроль проверяются отдельно. '
+                 'Следующие удары, движение, предметы и урон волны могут изменить результат.</p>')
     labels = {"both":"Добить и задеть мидера", "trade":"Размен по первой кнопке в твою пользу",
               "creep":"Приоритет — дальний крип", "uncertain":"Перевес в размене неясен"}
     for c in cards:
@@ -306,6 +322,7 @@ def render_exchange_decisions(cards, enemy):
             parts.append('<p>В кадре повтора · ' + ', '.join(labels_cd) + '.</p>')
         if c["caution"]:
             parts.append('<p>Что проверить · ' + '. '.join(escape(x) for x in c["caution"][:4]) + '.</p>')
+        parts.append(render_support(c, enemy))
         parts.append(render_prior_hits(c.get("prior_hits"),enemy))
         parts.append('</article>')
     return "".join([*parts,'</div>'])

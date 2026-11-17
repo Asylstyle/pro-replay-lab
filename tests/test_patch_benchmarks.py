@@ -17,7 +17,7 @@ from pro_replay.cli import main
 from pro_replay.coach_model import load_coach_model
 from pro_replay.coach_report import render_session
 from pro_replay.coaching import make_session
-from pro_replay.patch_reference import load_reference, reference_for_player, train_reference
+from pro_replay.patch_reference import PACKAGED_MODEL, client_cohort, load_reference, reference_for_player, train_reference
 from pro_replay.reference_policy import compact_live_evidence, make_policy
 from pro_replay.source import SourceError
 from tests.test_coach_model import replay
@@ -53,7 +53,7 @@ class PatchBenchmarkTests(unittest.TestCase):
         cls.start = cls.games[0]["start_time"]
         cls.as_of = cls.games[-1]["start_time"] + 1900
         cls.policy = make_policy([(cls.start, "7.41f")], as_of=cls.as_of)
-        cls.games[31]["duration"] = 9000  # Ends during the first test game.
+        cls.games[31]["duration"] = 15000  # Ends after the first pro holdout match starts.
         for i, raw in enumerate(cls.games):
             for j, p in enumerate(raw["players"]):
                 p["position_est"] = j % 5 + 1  # Observed role is deliberately different from farm rank.
@@ -103,28 +103,80 @@ class PatchBenchmarkTests(unittest.TestCase):
 
     def test_new_patch_can_show_means_before_rolling_validation_is_possible(self):
         small = train_reference(self.games[:2], self.policy)
-        self.assertIsNone(small["fit"])
+        self.assertTrue(all(pop["fit"] is None for pop in small["cohorts"].values()))
         result = reference_for_player(small, self.games[1], 0, 1)
         self.assertEqual(result["groups"]["professional"]["players"], 2)
-        self.assertEqual(result["groups"]["ranked_7300"]["players"], 2)
+        self.assertNotIn("ranked_7300", result["groups"])
         self.assertTrue(all(m["expected"] is None for m in result["metrics"]))
+        self.assertEqual(result["validation_matches"], 0)
+        pub = reference_for_player(self.model, self.games[0], 0, 1)
+        self.assertEqual(set(pub["groups"]), {"ranked_7300"})
+        self.assertEqual(pub["model_status"], "insufficient_time_windows")
+        self.assertTrue(all(m["expected"] is None and m["mae"] is None for m in pub["metrics"]))
 
     def test_refit_has_all_rows_but_temporal_evaluation_excludes_overlapping_games(self):
-        validation = self.model["validation"]
+        population = self.model["cohorts"]["professional"]
+        validation = population["validation"]
         by_id = {g["match_id"]: g for g in self.games}
         earlier = set(validation["selection_train_ids"])
         later = set(validation["holdout_ids"])
         self.assertFalse(earlier & later)
-        self.assertEqual(later, {g["match_id"] for g in self.games[32:]})
+        self.assertEqual(later, set(self.model["cohort_ids"]["professional"][-6:]))
         self.assertNotIn(self.games[31]["match_id"], earlier)
         for fold in validation["folds"]:
             train = [by_id[k] for k in fold["train_ids"]]
             valid = [by_id[k] for k in fold["validation_ids"]]
             self.assertLessEqual(max(g["start_time"] + g["duration"] for g in train), min(g["start_time"] for g in valid))
             self.assertTrue(set(fold["validation_ids"]) <= earlier)
-        self.assertEqual(set(self.model["fit"]["train_match_ids"]), set(by_id))
+        self.assertEqual(set(population["fit"]["train_match_ids"]), set(self.model["cohort_ids"]["professional"]))
         winner = validation["winner"]
-        self.assertEqual(validation["holdout"]["ranked_7300"][winner]["lh"]["n"], 20)
+        self.assertEqual(validation["holdout"][winner]["lh"]["n"], 60)
+
+    def test_published_fits_and_evaluations_are_disjoint_and_route_pub_without_mmr(self):
+        model = load_reference(Path(__file__).resolve().parents[1] / "examples" / PACKAGED_MODEL)
+        known = model["cohort_ids"]
+        self.assertFalse(set(known["professional"]) & set(known["ranked_7300"]))
+        raw = dict(self.games[0], start_time=model["policy"]["patch_start"] + 10)
+        raw.pop("opendota_live")
+        for cohort, data in model["cohorts"].items():
+            valid = data["validation"]
+            ids = set(known[cohort])
+            self.assertEqual(set(data["fit"]["train_match_ids"]), ids)
+            self.assertTrue(set(valid["selection_train_ids"] + valid["holdout_ids"]) <= ids)
+            self.assertFalse(set(valid["selection_train_ids"]) & set(valid["holdout_ids"]))
+            for fold in valid["folds"]:
+                self.assertTrue(set(fold["train_ids"] + fold["validation_ids"]) <= set(valid["selection_train_ids"]))
+        report = reference_for_player(model, raw, 0)
+        self.assertEqual(report["counts"], {"ranked_7300": len(known["ranked_7300"])})
+        self.assertEqual(report["validation_matches"], len(model["cohorts"]["ranked_7300"]["validation"]["holdout_ids"]))
+        ranked = model["cohorts"]["ranked_7300"]["validation"]
+        for metric in report["metrics"]:
+            self.assertIsNotNone(metric["expected"])
+            self.assertEqual(metric["mae"], ranked["holdout"][ranked["winner"]][metric["key"]]["mae"])
+
+    def test_legacy_mixed_fit_is_never_served_and_unsupported_lobbies_get_no_benchmark(self):
+        model = {**self.model, "format": "patch-economic-reference-1", "fit": {"poison": True}}
+        del model["cohorts"]
+        ranked = reference_for_player(model, self.games[0], 0)
+        self.assertEqual(set(ranked["groups"]), {"ranked_7300"})
+        self.assertEqual(ranked["model_status"], "legacy_means_only")
+        self.assertTrue(all(m["mae"] is None and m["expected"] is None for m in ranked["metrics"]))
+        for raw in (dict(self.games[0], lobby_type=0), dict(self.games[0], game_mode=4),
+                    dict(self.games[1], league={"tier":"amateur"}), dict(self.games[1], league={"tier":"professional","leagueid":22})):
+            self.assertIn("reason", reference_for_player(model, raw, 0))
+            self.assertNotIn("metrics", reference_for_player(model, raw, 0))
+        known = dict(self.games[1], league=None)
+        self.assertEqual(client_cohort(known, model), "professional")
+        self.assertIsNone(client_cohort(dict(known, match_id=999999), model))
+
+    def test_loading_mislabeled_population_fit_rejects_mixed_weights(self):
+        model = copy.deepcopy(self.model)
+        model["cohorts"]["professional"]["fit"]["train_match_ids"].append(self.games[0]["match_id"])
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp, "model.json")
+            path.write_text(json.dumps(model), encoding="utf8")
+            with self.assertRaises(ValueError):
+                load_reference(path)
 
     def test_serving_verifies_newer_match_patch_and_fails_closed_when_calendar_unavailable(self):
         older = dict(self.games[0], start_time=self.start-1)
@@ -137,7 +189,7 @@ class PatchBenchmarkTests(unittest.TestCase):
         with patch("pro_replay.patch_reference._verified_calendar", side_effect=SourceError("offline")):
             self.assertNotIn("metrics", reference_for_player(self.model, newer, 0))
 
-    def test_client_session_uses_chosen_reference_file_and_renders_both_groups(self):
+    def test_client_session_uses_chosen_reference_file_and_only_renders_applicable_group(self):
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp, "specific.json")
             path.write_text(json.dumps(self.model), encoding="utf8")
@@ -151,18 +203,15 @@ class PatchBenchmarkTests(unittest.TestCase):
             html = render_session(result)
         parsed = Tables()
         parsed.feed(html)
-        rows = [r for r in parsed.rows if r and (r[0] == "Про-матчи" or r[0].startswith("Рейтинг 7"))]
-        self.assertEqual(len(rows), 2)
-        self.assertIn(["20", "38"], [r[1:3] for r in rows])
-        self.assertIn(["60", "40"], [r[1:3] for r in rows])
-        self.assertIn("Планки экономики на патче", html)
+        self.assertIn(["60", "40"], [r[1:3] for r in parsed.rows])
+        self.assertNotIn(["20", "38"], [r[1:3] for r in parsed.rows])
 
     def test_local_model_precedes_packaged_model_and_cli_accepts_explicit_override(self):
         with tempfile.TemporaryDirectory() as tmp:
             folder = Path(tmp)
             data = folder / "data"
             data.mkdir()
-            packaged = folder / "patch-reference-model.json"
+            packaged = folder / PACKAGED_MODEL
             packaged.write_text(json.dumps(dict(self.model, test_source="packaged")), encoding="utf8")
             path = data / "patch-reference.json"
             original_cwd = Path.cwd()
@@ -183,4 +232,38 @@ class PatchBenchmarkTests(unittest.TestCase):
                                "--focus", "lane", "--journal-only", "--from-json", str(raw),
                                "--reference", str(packaged), "--out", str(out)])
             self.assertEqual(result, 0)
-            self.assertIn("30 про-матчей", out.read_text(encoding="utf8"))
+            page = Tables()
+            page.feed(out.read_text(encoding="utf8"))
+            # Selected by team's farm rank (or position if archive inferred it).
+            self.assertTrue(any(row[1:2] == ["20"] for row in page.rows))
+            self.assertFalse(any(row[1:2] == ["60"] for row in page.rows))
+
+    def test_default_upgrades_covered_legacy_only_and_preserves_local_file(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            folder = Path(tmp)
+            data = folder / "data"
+            data.mkdir()
+            local = data / "patch-reference.json"
+            legacy = dict(self.model, format="patch-economic-reference-1")
+            del legacy["cohorts"]
+            legacy["cohort_ids"] = {s: mids[:-1] for s, mids in self.model["cohort_ids"].items()}
+            legacy["counts"] = {s: len(mids) for s, mids in legacy["cohort_ids"].items()}
+            (folder / PACKAGED_MODEL).write_text(json.dumps(self.model), encoding="utf8")
+            original = Path.cwd()
+            try:
+                os.chdir(folder)
+                with patch("pro_replay.patch_reference.EXAMPLES", folder):
+                    local.write_text(json.dumps(legacy), encoding="utf8")
+                    before = local.read_bytes()
+                    self.assertEqual(load_reference()["format"], self.model["format"])
+                    self.assertEqual(local.read_bytes(), before)
+                    self.assertEqual(load_reference(local), legacy)
+                    distinct = copy.deepcopy(legacy)
+                    distinct["cohort_ids"]["ranked_7300"].append(999999)
+                    distinct["counts"]["ranked_7300"] += 1
+                    for keep in (distinct, {**legacy, "policy": {**legacy["policy"], "patch": "7.42"}},
+                                 {**legacy, "policy": {**legacy["policy"], "as_of": self.as_of + 1}}):
+                        local.write_text(json.dumps(keep), encoding="utf8")
+                        self.assertEqual(load_reference(), keep)
+            finally:
+                os.chdir(original)

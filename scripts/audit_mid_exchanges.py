@@ -3,6 +3,7 @@
 import argparse
 from collections import Counter
 import json
+from math import dist
 from pathlib import Path
 import sys
 
@@ -37,6 +38,19 @@ def audit_view(raw, player, timeline):
         assert rival["visible_to"][str(team)] and actor["visible_to"][str(5 - team)]
         entry = {"second": t, "choice": c["action"], "our_level": actor["level"], "enemy_level": rival["level"]}
         own, reply, creep = c["own"], c["reply"], c["creep"]
+        support = c["support"]
+        entry["support"] = support
+        entry["coordinated"] = c["coordinated"]
+        if c["coordinated"]:
+            assert support["state"] == "ready" and support["movement"]["closing"]
+            ally = frame["heroes"][str(support["slot"])]
+            assert ally["alive"] and (support["slot"] < 128) == (slot < 128)
+            assert any(p["player_slot"] == support["slot"] and p["position_est"] in (4, 5) for p in raw["players"])
+            button = support["button"]
+            actual = ally["buttons"][button["key"]]
+            assert actual["level"] > 0 and actual["cooldown"] == 0 and ally["mana"] >= actual["mana_cost"]
+            assert dist((ally["x"], ally["y"]), (rival["x"], rival["y"])) <= button["reach"]
+            assert own["ready"] is True and own["arrival"] < button["duration"]
         if own:
             entry["hero_option"] = effect(own)
         if reply["best"]:
@@ -59,7 +73,7 @@ def audit_view(raw, player, timeline):
             entry["creep_option"] = {**effect(creep), "hp":target["hp"], "same_area":creep["joint_hero"]}
         compact.append(entry)
     return {"slot":slot, "hero":pair["self"]["name"], "opponent":pair["opponent"]["name"],
-            "seconds_sampled":result["seconds"], "decisions":compact,
+            "seconds_sampled":result["seconds"], "support_checks":result["support_checks"], "decisions":compact,
             "observed_exchanges":result["observed_exchanges"]}
 
 
@@ -97,7 +111,13 @@ def main():
             specific_buttons.update(keys)
     coverage = {**book["coverage"], "distinct_modeled_buttons": len(specific_buttons),
                 "heroes_with_modeled_buttons": len(specific_heroes)}
+    checks = [p["support_checks"] for m in matches for p in m["players"]]
+    states = Counter()
+    for check in checks:
+        states.update(check["states"])
     data = {"patch": book["patch"], "catalog": coverage,
+            "all_support_checks": {"windows": sum(c["windows"] for c in checks), "states": dict(states),
+                                   "coordinated": sum(c["coordinated"] for c in checks)},
             "reader_sha256":json_file(DECODER / "runtime.json")["reader_sha256"],
             "scope":"Selected displayed cards from the first ten minutes. Decisions are estimates; observed_exchanges sums actual attributed damage over at most three seconds. Counts are not measures of accuracy.",
             "decision_counts":dict(counts), "matches":matches}

@@ -171,7 +171,9 @@ def normalize(raw, account, directory, *, slot=None):
     row = extract_match(raw, account, player=player)
     hero = directory.get(row["hero_id"], {})
     row["hero_name"] = hero.get("localized_name")
-    row["league_name"] = (raw.get("league") or {}).get("name") or raw.get("league_name")
+    league = raw.get("league") if isinstance(raw.get("league"), dict) else {}
+    row["league_name"] = league.get("name") or raw.get("league_name")
+    row["league"] = {key: league[key] for key in ("leagueid", "tier") if key in league}
     row.update(event_data(raw, account, hero_unit=hero.get("name"), player=player))
     row["detail"] = match_detail(raw, player, directory)
     row["detail"]["build"] = extract_build(raw, row["player_slot"], directory)
