@@ -1,0 +1,142 @@
+[
+  {
+    "match_id": 8960577698,
+    "hero_id": 11,
+    "hero_name": "Shadow Fiend",
+    "duration": 2775,
+    "kills": 16,
+    "deaths": 1,
+    "assists": 7,
+    "team_kills": 42,
+    "timeline": [
+      {
+        "time": 711,
+        "kind": "tower",
+        "detail": "Разрушил башню Dire"
+      },
+      {
+        "time": 959,
+        "kind": "item",
+        "detail": "Купил Manta Style",
+        "key": "manta"
+      },
+      {
+        "time": 1265,
+        "kind": "aegis",
+        "detail": "Подобрал Aegis of the Immortal"
+      },
+      {
+        "time": 1294,
+        "kind": "item",
+        "detail": "Купил Hurricane Pike",
+        "key": "hurricane_pike"
+      },
+      {
+        "time": 1337,
+        "kind": "tower",
+        "detail": "Разрушил башню Dire"
+      }
+    ],
+    "account_id": 321580662,
+    "player_name": "Yatoro",
+    "start_time": null,
+    "date": "2026-08-23",
+    "patch": null,
+    "league_id": null,
+    "league_name": "The International 2026",
+    "team_name": "Team Spirit",
+    "opponent": "TEAM VISION",
+    "side": "radiant",
+    "win": true,
+    "kill_participation": 0.5476190476190477,
+    "last_hits_10": null,
+    "lh_10": null,
+    "gold_10": null,
+    "xp_10": null,
+    "first_core_item": null,
+    "first_core_time": null,
+    "purchase_log_available": false,
+    "purchases": [],
+    "core_items": [],
+    "event_coverage": {
+      "kill": false,
+      "observer": false,
+      "sentry": false
+    },
+    "sample_partial": true,
+    "source_url": "https://mobacast.com/recordings/8960577698"
+  },
+  {
+    "match_id": 8960762254,
+    "hero_id": 109,
+    "hero_name": "Terrorblade",
+    "duration": 2756,
+    "kills": 10,
+    "deaths": 1,
+    "assists": 12,
+    "team_kills": 26,
+    "timeline": [
+      {
+        "time": 552,
+        "kind": "tower",
+        "detail": "Разрушил башню Dire"
+      },
+      {
+        "time": 677,
+        "kind": "tower",
+        "detail": "Разрушил башню Dire"
+      },
+      {
+        "time": 872,
+        "kind": "item",
+        "detail": "Купил Manta Style",
+        "key": "manta"
+      },
+      {
+        "time": 1587,
+        "kind": "item",
+        "detail": "Купил Eye of Skadi",
+        "key": "skadi"
+      },
+      {
+        "time": 1805,
+        "kind": "item",
+        "detail": "Купил Black King Bar",
+        "key": "black_king_bar"
+      },
+      {
+        "time": 2580,
+        "kind": "aegis",
+        "detail": "Подобрал Aegis of the Immortal"
+      }
+    ],
+    "account_id": 321580662,
+    "player_name": "Yatoro",
+    "start_time": null,
+    "date": "2026-08-23",
+    "patch": null,
+    "league_id": null,
+    "league_name": "The International 2026",
+    "team_name": "Team Spirit",
+    "opponent": "TEAM VISION",
+    "side": "radiant",
+    "win": true,
+    "kill_participation": 0.8461538461538461,
+    "last_hits_10": null,
+    "lh_10": null,
+    "gold_10": null,
+    "xp_10": null,
+    "first_core_item": null,
+    "first_core_time": null,
+    "purchase_log_available": false,
+    "purchases": [],
+    "core_items": [],
+    "event_coverage": {
+      "kill": false,
+      "observer": false,
+      "sentry": false
+    },
+    "sample_partial": true,
+    "source_url": "https://mobacast.com/recordings/8960762254"
+  }
+]
