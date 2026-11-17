@@ -53,6 +53,7 @@ def _home():
 <button type="submit">Открыть состав</button></div></form>
 <p><a href="/example-decisions">Пример автоматического разбора</a></p>
 <details class="resources"><summary>Другие примеры</summary><nav><a href="/example-replay-support">Проверенные сейвы Snapfire</a><a href="/example-fight">Драка Mars</a>
+<a href="/example-economy">Фарм Anti-Mage на фоне игроков 7 300+ и про-сцены</a>
 <a href="/example-support">Выбор предмета на Rubick</a><a href="/example">Посмотреть готовый разбор Kez</a></nav></details></div>
 <img src="/kez.png" alt="Kez из Dota 2"></div>""")
 
@@ -163,6 +164,8 @@ class CoachHandler(BaseHTTPRequestHandler):
             return self._send(200, (EXAMPLES / "coach-kez.html").read_bytes())
         if path == "/example-decisions":
             return self._send(200, (EXAMPLES / "coach-decisions.html").read_bytes())
+        if path == "/example-economy":
+            return self._send(200, (EXAMPLES / "patch-reference-example.html").read_bytes())
         if path == "/example-replay-support":
             return self._send(200, (EXAMPLES / "coach-replay-support.html").read_bytes())
         if path == "/example-fight":
@@ -200,7 +203,8 @@ class CoachHandler(BaseHTTPRequestHandler):
             lessons = json_file(self.server.lessons_path)
             session = coach_by_id(archive, raw, slot, model, lessons, focus[0], at=at,
                                   cache=Path(self.server.db_path).parent / "replay-evidence",
-                                  position=role, purchase_index=PurchaseIndex.load(self.server.fight_model_path))
+                                  position=role, purchase_index=PurchaseIndex.load(self.server.fight_model_path),
+                                  reference_path=self.server.reference_path)
             if path == "/practice":
                 if not session["requested_available"]:
                     raise ValueError("Для выбранного упражнения недостаточно данных.")
@@ -242,20 +246,21 @@ class CoachHandler(BaseHTTPRequestHandler):
     do_POST = _dispatch
 
 
-def make_server(db_path, *, port=0, model_path=None, lessons_path=None, fight_model_path=None):
+def make_server(db_path, *, port=0, model_path=None, lessons_path=None, fight_model_path=None, reference_path=None):
     if type(port) is not int or not 0 <= port <= 65535:
         raise ValueError("Номер порта должен быть от 0 до 65535.")
     server = ThreadingHTTPServer(("127.0.0.1", port), CoachHandler)
     server.db_path = db_path
     server.model_path = model_path
+    server.reference_path = reference_path
     server.fight_model_path = fight_model_path
     server.lessons_path = Path(lessons_path) if lessons_path else EXAMPLES / "coach-lessons-model.json"
     return server
 
 
-def serve(db_path, *, port=0, open_browser=True, model_path=None, lessons_path=None, fight_model_path=None):
+def serve(db_path, *, port=0, open_browser=True, model_path=None, lessons_path=None, fight_model_path=None, reference_path=None):
     with make_server(db_path, port=port, model_path=model_path, lessons_path=lessons_path,
-                     fight_model_path=fight_model_path) as server:
+                     fight_model_path=fight_model_path, reference_path=reference_path) as server:
         url = f"http://127.0.0.1:{server.server_port}/"
         print(f"Тренер открыт по адресу {url}\nДля завершения нажми Ctrl+C.", flush=True)
         if open_browser:

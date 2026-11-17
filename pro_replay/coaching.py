@@ -10,6 +10,7 @@ from .analysis import select_player
 from .archive import normalize
 from .coach_lessons import retrieve_lessons
 from .coach_model import assess_player
+from .patch_reference import load_reference, reference_for_player
 from .fight_coach import analyze_fights
 from .match_decisions import top_decisions
 from .pro_purchases import PurchaseIndex, add_purchase_evidence
@@ -79,7 +80,7 @@ def lane_card(row, assessment, position):
     if metric and metric["gap"] is not None:
         size = abs(metric["gap"])
         if size <= metric["mae"]:
-            text += (f" Разница с про-ориентиром ({size:.0f}) укладывается в среднюю ошибку "
+            text += (f" Разница с ориентиром патча ({size:.0f}) укладывается в среднюю ошибку "
                      f"модели на проверке ({metric['mae']:.0f}).")
         else:
             relative = "ниже" if metric["gap"] < 0 else "выше"
@@ -257,7 +258,7 @@ def tactical_card(fight, row):
 
 
 def make_session(archive, raw, slot, model, lesson_model, focus="auto", *, at=None, position=None, purchase_index=None,
-                 timeline=None, replay_message=None):
+                 timeline=None, replay_message=None, reference_path=None):
     if focus not in FOCUSES or not select_player(raw, None, slot):
         raise ValueError("Проверь выбранную тему и слот игрока.")
     if at is not None and (type(at) is not int or at < 0 or (raw.get("duration") is not None and at > raw["duration"])):
@@ -269,6 +270,7 @@ def make_session(archive, raw, slot, model, lesson_model, focus="auto", *, at=No
     assessment = assess_player(model, raw, slot)
     role_override = position
     position = position or row["detail"]["build"].get("position")
+    reference = reference_for_player(load_reference(reference_path), raw, slot, position)
     fights = analyze_fights(raw, slot, heroes, position=position)
     if purchase_index is None:
         purchase_index = PurchaseIndex.load()
@@ -303,14 +305,14 @@ def make_session(archive, raw, slot, model, lesson_model, focus="auto", *, at=No
         focus = "fights"
     if timeline is not None and not mistakes and focus == "auto" and at is None:
         decision = None
-    candidates = [lane_card(row, assessment, position), decision, build_card(row), vision_card(row)]
+    candidates = [lane_card(row, reference, position), decision, build_card(row), vision_card(row)]
     cards = {c["topic"]: c for c in candidates if c}
     # A descriptive forecast gap is a replay prompt only when larger than the
     # held-out error. Supports never get a last-hit quota.
     metric = "xp" if position in (4,5) else "lh"
-    shortfall = any(m["key"] == metric and m.get("actual") is not None and m.get("expected") is not None
+    shortfall = not reference.get("in_reference") and any(m["key"] == metric and m.get("actual") is not None and m.get("expected") is not None
                     and m.get("mae") is not None and m["expected"] - m["actual"] > m["mae"]
-                    for m in assessment.get("metrics", []))
+                    for m in reference.get("metrics", []))
     preferred = (["fights"] if mistakes else []) + ([focus] if focus != "auto" else []) + (["lane"] if shortfall else [])
     preferred += ["fights", "vision" if position in (4,5) else "build", "lane", "build", "vision"]
     ordered = [cards[k] for k in dict.fromkeys(preferred) if k in cards][:3]
@@ -319,15 +321,15 @@ def make_session(archive, raw, slot, model, lesson_model, focus="auto", *, at=No
     for card in ordered:
         hits = retrieve_lessons(lesson_model, card["query"], position=position, limit=2, topic=card["topic"])
         card["lessons"] = [h for h in hits if urlsplit(h["url"]).scheme == "https"]
-    return {"row": row, "assessment": assessment, "cards": ordered, "focus": focus, "mistakes": mistakes,
+    return {"row": row, "assessment": assessment, "patch_reference": reference, "cards": ordered, "focus": focus, "mistakes": mistakes,
             "replay_checked": timeline is not None, "replay_message": replay_message, "excluded": excluded,
             "fights": fights, "selected_fight": selected, "at": at, "position": position, "role_override": role_override,
             "requested_available": focus == "auto" or focus in cards,
             "history": sessions(archive, row, position)}
 
 
-def coach_by_id(archive, raw, slot, model, lessons, focus, *, cache, at=None, position=None, purchase_index=None):
-    options = dict(at=at, position=position, purchase_index=purchase_index)
+def coach_by_id(archive, raw, slot, model, lessons, focus, *, cache, at=None, position=None, purchase_index=None, reference_path=None):
+    options = dict(at=at, position=position, purchase_index=purchase_index, reference_path=reference_path)
     if focus != "auto" or at is not None:
         return make_session(archive, raw, slot, model, lessons, focus, **options)
     from .replay_files import replay_evidence

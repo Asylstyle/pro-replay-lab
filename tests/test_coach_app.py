@@ -69,6 +69,7 @@ class CoachAppTests(unittest.TestCase):
         self.assertEqual(self.server.server_address[0], "127.0.0.1")
         (self.folder / "coach-kez.html").write_bytes(b"<h1>Kez</h1>")
         (self.folder / "coach-decisions.html").write_bytes(b"<h1>3 decisions</h1>")
+        (self.folder / "patch-reference-example.html").write_bytes(b"<h1>Anti-Mage economy</h1>")
         (self.folder / "coach-kez.png").write_bytes(b"image")
         with patch("pro_replay.coach_app.EXAMPLES", self.folder):
             status, html = self.request("GET", "/")
@@ -76,6 +77,8 @@ class CoachAppTests(unittest.TestCase):
             self.assertIn(b'action="/match"', html)
             self.assertIn(b'href="/example"', html)
             self.assertIn(b'href="/example-decisions"', html)
+            self.assertIn(b'href="/example-economy"', html)
+            self.assertEqual(self.request("GET", "/example-economy"), (200, b"<h1>Anti-Mage economy</h1>"))
             self.assertEqual(self.request("GET", "/example-decisions"), (200, b"<h1>3 decisions</h1>"))
             self.assertEqual(self.request("GET", "/example"), (200, b"<h1>Kez</h1>"))
             self.assertEqual(self.request("GET", "/kez.png"), (200, b"image"))

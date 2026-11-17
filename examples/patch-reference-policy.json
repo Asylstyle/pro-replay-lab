@@ -1,0 +1,8 @@
+{
+  "format": "opendota-patch-references-v1",
+  "calendar_source": "https://www.dota2.com/datafeed/patchnoteslist?language=english",
+  "patch": "7.41f",
+  "patch_start": 1789455600,
+  "as_of": 1794939485,
+  "minimum_avg_mmr": 7300
+}

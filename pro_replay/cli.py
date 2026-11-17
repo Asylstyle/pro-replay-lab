@@ -7,6 +7,7 @@ import re
 import sqlite3
 import sys
 import tempfile
+import time
 from pathlib import Path
 from urllib.parse import quote
 
@@ -89,6 +90,10 @@ def parser():
     p = argparse.ArgumentParser(description="Поиск действий про-игрока в матчах Dota 2")
     p.add_argument("--db", default="data/archive.sqlite", help="SQLite-кэш матчей")
     sub = p.add_subparsers(dest="cmd", required=True)
+    reference = sub.add_parser("train-reference", help="Обучить планки экономики текущего патча по про-играм и лобби 7 300+")
+    reference.add_argument("--replays", type=Path, nargs="+", help="Снимки OpenDota в JSON или JSON.GZ")
+    reference.add_argument("--out", type=Path, default=Path("data/patch-reference.json"))
+    reference.add_argument("--frozen-policy", type=Path, help="Повторить исторический эксперимент по сохранённой политике")
     experiment = sub.add_parser("benchmark-coach", help="Сравнить модели на фиксированных временных выборках")
     experiment.add_argument("--stage", choices=("select", "evaluate", "ranked-select", "ranked-evaluate"), required=True,
                             help="Сначала выбрать модель на обучении, затем открыть отложенную проверку")
@@ -110,6 +115,7 @@ def parser():
     coach.add_argument("--refresh", action="store_true")
     coach.add_argument("--out", type=Path)
     for command in (coach, school):
+        command.add_argument("--reference", type=Path, help="Модель планок экономики для патча")
         command.add_argument("--model", type=Path, help="Обученный ориентир по про-матчам")
         command.add_argument("--lessons", type=Path, help="Обученный индекс уроков")
         command.add_argument("--fight-model", type=Path, help="База сравнения предметов и действий в про-драках")
@@ -242,6 +248,28 @@ def review_one(archive, args):
 def main(argv=None):
     args = parser().parse_args(argv)
     try:
+        if args.cmd == "train-reference":
+            from .patch_reference import train_reference
+            from .reference_policy import make_policy
+            if args.frozen_policy:
+                policy = json_file(args.frozen_policy)
+            else:
+                policy = make_policy(valve_patches(), as_of=int(time.time()))
+            cards = []
+            files = ("patch-reference-pro.json.gz", "patch-reference-ranked.json.gz")
+            collected = Path("data/patch-references")
+            folder = collected if any((collected / n).exists() for n in files) else EXAMPLES
+            for path in args.replays or [folder / name for name in files]:
+                for file in (sorted((*path.glob("*.json"), *path.glob("*.json.gz"))) if path.is_dir() else [path]):
+                    data = json_file(file)
+                    if isinstance(data, dict) and "matches" in data:
+                        data = data["matches"]
+                    cards.extend(data if isinstance(data, list) else [data])
+            model = train_reference(cards, policy)
+            save_coach_model(model, args.out)
+            print_json({"patch": policy["patch"], "counts": model["counts"], "excluded": model["excluded"],
+                        "winner": model["validation"]["winner"], "file": str(args.out)})
+            return 0
         if args.cmd == "benchmark-coach":
             from .ml_benchmark import run_evaluation, run_selection, run_ranked_selection, run_ranked_evaluation
             if args.stage == "select":
@@ -271,7 +299,7 @@ def main(argv=None):
         if args.cmd == "school":
             from .coach_app import serve
             serve(args.db, port=args.port, open_browser=not args.no_browser,
-                  model_path=args.model, lessons_path=args.lessons, fight_model_path=args.fight_model)
+                  model_path=args.model, lessons_path=args.lessons, fight_model_path=args.fight_model, reference_path=args.reference)
             return 0
         if args.cmd == "youtube-captions":
             from .youtube_captions import download_captions
@@ -330,7 +358,8 @@ def main(argv=None):
                 options = {} if args.journal_only else {"cache": Path(args.db).parent / "replay-evidence"}
                 session = build(archive, raw, slot, load_coach_model(args.model),
                                 json_file(args.lessons or EXAMPLES / "coach-lessons-model.json"), args.focus,
-                                at=at, position=args.position, purchase_index=PurchaseIndex.load(args.fight_model), **options)
+                                at=at, position=args.position, purchase_index=PurchaseIndex.load(args.fight_model),
+                                reference_path=args.reference, **options)
                 path = args.out or Path(f"data/coach-{args.match_id}-{slot}.html")
                 save_text(path, render_session(session))
                 print(f"Тренировка сохранена в {path.resolve()}")

@@ -94,6 +94,34 @@ def pro_section(data):
             f'распределение фарма и действия соперника.</p>{interval_note}')
 
 
+def patch_benchmarks(data):
+    if not data.get("metrics"):
+        return '<p>' + h(data.get("reason", "Ориентир недоступен.")) + '</p>'
+    counts = data["counts"]
+    group = (f'позиции {data["position"]}' if data.get("position") in range(1, 6)
+             else f'{data["rank"]}-му месту по золоту среди союзников на 10:00')
+    intro = (f'<p>Патч {h(data["patch"])}. В выборке {counts["professional"]} про-матчей и '
+             f'{counts["ranked_7300"]} рейтинговых игр со средним MMR от 7 300 по OpenDota. '
+             f'В таблице показаны средние значения по {h(group)}.</p>')
+    if data["in_reference"]:
+        intro += '<p class="meta">Эта карта входит в итоговую выборку ориентиров.</p>'
+    rows = []
+    for name, label in (("ranked_7300", "Рейтинг 7 300+"), ("professional", "Про-матчи")):
+        entry = data["groups"][name]
+        rows.append((label, entry["players"] if entry else 0) + tuple(
+            number(entry[t][k]) if entry else "—" for t in ("at10", "at20") for k in ("lh","gold","xp")))
+    rows.append(("Твой герой", 1) + tuple(number(data["at10"][m["key"]]) for m in data["metrics"]) +
+                tuple(number(m["actual"]) for m in data["metrics"]))
+    summary = table(("Группа", "Выступления", "Крипы 10:00", "Золото 10:00", "Опыт 10:00",
+                     "Крипы 20:00", "Золото 20:00", "Опыт 20:00"), rows)
+    if data["metrics"][0]["expected"] is None:
+        return intro + summary + '<p>Для проверки ML по времени пока мало завершённых матчей этого патча.</p>'
+    forecast = table(("К 20:00", "Факт", "Ориентир ML", "Ошибка на проверке"), [
+        (m["label"], number(m["actual"]), number(m["expected"]), number(m["mae"])) for m in data["metrics"]])
+    return intro + summary + ('<p>ML оценивает, сколько ресурсов такой герой обычно получает к 20:00 '
+                              'при твоих показателях на 10:00. Ошибка измерена на более поздних картах до итогового обучения.</p>') + forecast
+
+
 def lessons_view(lessons):
     links = []
     for lesson in lessons:
@@ -368,7 +396,9 @@ def render_session(session, *, home_url=None, detail_url=None):
         parts.append('<section class="panel"><h2>Нужен разобранный повтор</h2><p>Карточка матча получена, но в ней пока нет '
                      'событий или снимков, на которых можно построить упражнение. После разбора повтора в OpenDota обнови карточку.</p></section>')
     parts.append(battle_timeline(session))
-    parts.append('<section><h2>Ориентир по про-играм</h2>' + pro_section(session["assessment"]) + '</section>')
+    if "patch_reference" in session:
+        parts.append('<section><h2>Планки экономики на патче</h2>' + patch_benchmarks(session["patch_reference"]) + '</section>')
+    parts.append('<details><summary>Прогноз экономики для твоего матча</summary>' + pro_section(session["assessment"]) + '</details>')
     previous = session["history"].get("previous")
     if previous:
         prior_id, drill, check = previous
