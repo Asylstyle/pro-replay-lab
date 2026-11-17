@@ -1,5 +1,7 @@
 # Источники демо
 
+Тренировка Kez использует [карточку рейтингового матча](https://www.opendota.com/matches/9086497898) и [разбор Satanic и Noticed от PARIVISION](https://www.youtube.com/watch?v=Xqapp58b9_Q). Источники всех учебных фрагментов, тип записи, время и атрибуция приведены в [манифесте уроков](coach-lessons-sources.json). Имена героев взяты из [OpenDota](https://api.opendota.com/api/heroes), изображение Kez — из [материалов Dota 2 от Valve](https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/kez.png).
+
 В `yatoro_case.json` собраны отдельные наблюдаемые события из двух карт Team Spirit против TEAM VISION на The International 2026. Обе сыграны 23 августа. Данные проверены 17 ноября 2026 г.
 
 | Игрок и карта | Источник |

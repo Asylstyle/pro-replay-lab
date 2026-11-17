@@ -1,0 +1,219 @@
+{
+  "sources": [
+    {
+      "title": "Satanic · Игра керри | PARIVISION",
+      "url": "https://www.youtube.com/watch?v=Xqapp58b9_Q",
+      "roles": [
+        1
+      ],
+      "kind": "transcript_note",
+      "segments": [
+        {
+          "start": 98,
+          "text": "В игре на Kez против BetBoom Satanic начинает с двух Circlet, двух Iron Branch, Faerie Fire и Tango. Magic Stick покупает позже. При разборе своей линии проверь, как стартовый закуп повлиял на размены за первые пачки.",
+          "end": 129,
+          "caption_concepts": {
+            "circlet": 2,
+            "items": 5,
+            "stick": 2
+          }
+        },
+        {
+          "start": 863,
+          "text": "На примере Kez и Phantom Lancer обсуждают порядок покупки основных предметов и выбор поздних слотов. Останови свой повтор перед покупкой и назови угрозу в драфте соперника, которую должен решить следующий предмет.",
+          "end": 902,
+          "caption_concepts": {
+            "items": 5
+          }
+        },
+        {
+          "start": 907,
+          "text": "Satanic связывает маршрут фарма между волной и лесом с возможностью давить противника. Посмотри, где была следующая пачка крипов, когда ты пошёл к нейтралам, и мог ли соперник безопасно занять линию.",
+          "end": 937,
+          "caption_concepts": {
+            "farm": 6
+          }
+        },
+        {
+          "start": 1460,
+          "text": "В этой игре на Templar Assassin Satanic выталкивает волну и продолжает фарм до Black King Bar (BKB), который считает важным для участия в драке. Перед своей дракой проверь тайминг предмета и какие вражеские заклинания тебе угрожали.",
+          "end": 1467,
+          "caption_concepts": {
+            "bkb": 2,
+            "fight": 1
+          }
+        },
+        {
+          "start": 1701,
+          "text": "При просмотре повтора Satanic проверяет, позволяла ли информация о позициях врагов сильнее надавить на линию. Открой свой эпизод с обзором своей команды и отметь последнего показавшегося соперника перед решением отпустить волну.",
+          "end": 1738,
+          "caption_concepts": {
+            "creep": 1
+          }
+        }
+      ],
+      "publisher": "PARIVISION Dota 2",
+      "published": "2026-11-11",
+      "verified_track": "ru (automatic)",
+      "feature_provenance": {
+        "track": "YouTube ru (automatic)",
+        "retrieved": "2026-11-17",
+        "local_export_sha256": "54c931f58373379f39a1ef9ab2fdd7682abc0b66767a62d647999e538b87a17b",
+        "method": "Counts of fixed game concepts in captions whose start falls in [start, end). Russian practice notes are written by the project."
+      }
+    },
+    {
+      "title": "9Class · Четвёртая позиция | PARIVISION",
+      "url": "https://www.youtube.com/watch?v=xyJjOd2NeX4",
+      "roles": [
+        4
+      ],
+      "kind": "description_note",
+      "segments": [
+        {
+          "text": "По описанию выпуска 9Class разбирает давление на линии в первые десять минут, отводы, обзор, контроль рун и ротации. Для просмотра выбери один свой уход с линии и посмотри, где в этот момент осталась волна крипов."
+        }
+      ]
+    },
+    {
+      "title": "No[o]ne · Игра на миде | PARIVISION",
+      "url": "https://www.youtube.com/watch?v=kadbPUE6AYs",
+      "roles": [
+        2
+      ],
+      "kind": "description_note",
+      "segments": [
+        {
+          "text": "В описании урока No[o]ne указаны разбор линии мидера, пример из паблика и трудная карта DreamLeague против Gaimin Gladiators. Для сравнения выбери одну волну своей средней линии, на которой изменился доступ к добиваниям."
+        }
+      ]
+    },
+    {
+      "title": "PainDota · Игра керри",
+      "url": "https://www.youtube.com/watch?v=rDDV6tjMKPw",
+      "roles": [
+        1
+      ],
+      "kind": "chapter_note",
+      "segments": [
+        {
+          "start": 617,
+          "text": "Глава про равновесие линии. Найди волну, после которой пришлось далеко выходить за добиваниями, и проверь, какие крипы умерли первыми."
+        },
+        {
+          "start": 967,
+          "text": "Глава о выборе момента для ухода с линии. Отметь на повторе последний доступный крип на линии и первый лесной лагерь после ухода."
+        },
+        {
+          "start": 1272,
+          "text": "Глава о маршрутах фарма керри. Нарисуй путь между двумя волнами и посчитай, сколько секунд ушло на переходы между лагерями."
+        },
+        {
+          "start": 1761,
+          "text": "Глава о числе добиваний керри. Выбери минуту с потерей темпа и посчитай отдельно пропущенных крипов на линии и время в пути."
+        },
+        {
+          "start": 1959,
+          "text": "Глава о выборе между фармом и участием в драке. Проверь, где начался бой, когда ты мог туда добраться и какую волну пришлось бы оставить."
+        },
+        {
+          "start": 2066,
+          "text": "Глава о выборе предметов керри. Перед покупкой отметь вражеский контроль и цель, до которой предстоит добраться в следующей драке."
+        },
+        {
+          "start": 2278,
+          "text": "Глава про командные драки керри. В первой драке после крупного предмета проследи, когда ты нанёс первый урон и какие способности врага к тому времени уже потрачены."
+        },
+        {
+          "start": 2498,
+          "text": "Глава о завершении игры и заходе на базу. Останови повтор перед атакой на башню и проверь состояние боковых волн и время до возрождения соперников."
+        }
+      ]
+    },
+    {
+      "title": "ZQuixotix · Обзор карты и варды",
+      "url": "https://www.youtube.com/watch?v=0VBHpS1utoU",
+      "roles": [
+        4,
+        5
+      ],
+      "kind": "chapter_note",
+      "segments": [
+        {
+          "start": 797,
+          "text": "Глава о том, как обзор меняется по ходу игры. Отметь свои варды на повторе и проверь, видел ли игрок на подходе к драке тот участок карты, где появился противник."
+        },
+        {
+          "start": 1182,
+          "text": "Глава о распределении обзора. Найди два одновременно стоящих варда и проверь, закрывали ли они разные пути к следующей командной цели."
+        }
+      ]
+    },
+    {
+      "title": "BSJ · Разбор матча на Razor",
+      "url": "https://www.youtube.com/watch?v=vxomHHLNzRc",
+      "notes_source": "https://bsjdota.com/blog/stop-throwing-easy-games-razor-guide/",
+      "roles": [
+        3
+      ],
+      "kind": "editorial_note",
+      "segments": [
+        {
+          "start": 760,
+          "text": "Razor выбирает между Crimson Guard и Pipe. В разборе BSJ связывает решение с угрозой от Meepo, который мог поймать его отдельно. По своей смерти выпиши, кто удерживал героя, какой урон прошёл и какой предмет успел бы сработать."
+        },
+        {
+          "start": 894,
+          "text": "BSJ связывает давление Razor с последовательностью башен и командных предметов. Отметь, какую область для фарма получила команда после первого сноса и кто смог там остаться."
+        },
+        {
+          "start": 1544,
+          "text": "BSJ разбирает осаду через Рошана, выдвинутые волны и драку вне базы. Перед первой атакой на возвышенность проверь, могла ли команда принять бой под своим обзором."
+        },
+        {
+          "start": 1680,
+          "text": "В этой игре Razor покупает Aghanim’s Scepter, когда команде не хватает урона по строениям. По своему драфту найди героя, который мог безопасно бить башню после выигранной драки."
+        }
+      ]
+    },
+    {
+      "title": "ModDota · Dota 2 Community Tutorial",
+      "url": "https://github.com/ModDota/dota-tutorial/blob/cc74d01a58377164c099e25f982b2e4fe6c6b832/game/resource/addon_english.txt",
+      "kind": "licensed_note",
+      "roles": [],
+      "segments": [
+        {
+          "url": "https://github.com/ModDota/dota-tutorial/blob/cc74d01a58377164c099e25f982b2e4fe6c6b832/game/resource/addon_english.txt#L461",
+          "text": "Учебник связывает добивание своего крипа с потерей опыта для соперника. На линии выбери пару крипов с низким здоровьем и проверь, кого было выгоднее ударить первым."
+        },
+        {
+          "url": "https://github.com/ModDota/dota-tutorial/blob/cc74d01a58377164c099e25f982b2e4fe6c6b832/game/resource/addon_english.txt#L472",
+          "text": "После смерти можно осмотреть карту и предметы соперника. Останови повтор перед возрождением, открой инвентарь последнего показавшегося врага и выбери безопасный маршрут."
+        },
+        {
+          "url": "https://github.com/ModDota/dota-tutorial/blob/cc74d01a58377164c099e25f982b2e4fe6c6b832/game/resource/addon_english.txt#L477",
+          "text": "В уроке про осаду крипы принимают атаки башни. Найди свой первый подход к строению и проверь, сколько времени союзная волна прикрывала атакующего героя."
+        },
+        {
+          "url": "https://github.com/ModDota/dota-tutorial/blob/cc74d01a58377164c099e25f982b2e4fe6c6b832/game/resource/addon_english.txt#L514",
+          "text": "Стаки лагерей дают команде дополнительный источник фарма, золота и опыта. Проверь, забрал ли союзник подготовленный лагерь и когда это произошло относительно его крупной покупки."
+        },
+        {
+          "url": "https://github.com/ModDota/dota-tutorial/blob/cc74d01a58377164c099e25f982b2e4fe6c6b832/game/resource/addon_english.txt#L561",
+          "text": "“Use wards defensively in your own jungle” — упражнение из главы об обзоре. В своей игре посмотри, увидела ли команда вторжение в лес до того, как враг добрался до героя на фарме."
+        },
+        {
+          "url": "https://github.com/ModDota/dota-tutorial/blob/cc74d01a58377164c099e25f982b2e4fe6c6b832/game/resource/addon_english.txt#L629",
+          "text": "Aegis после Рошана даёт владельцу вторую жизнь. Найди следующий бой и проверь, кто первым вошёл в драку и успели ли союзники воспользоваться временем до возрождения владельца."
+        }
+      ]
+    }
+  ],
+  "notices": [
+    {
+      "source": "ModDota · Dota 2 Community Tutorial",
+      "url": "https://github.com/ModDota/dota-tutorial/blob/cc74d01a58377164c099e25f982b2e4fe6c6b832/LICENSE",
+      "text": "MIT License\n\nCopyright (c) ModDota\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE."
+    }
+  ]
+}

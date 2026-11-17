@@ -10,7 +10,7 @@ import tempfile
 from pathlib import Path
 from urllib.parse import quote
 
-from .analysis import summarize
+from .analysis import select_player, summarize
 from .archive import Archive, normalize, pages, sync
 from .events import summarize_events
 from .learning import train_model, predict
@@ -19,6 +19,10 @@ from .report import render_report
 from .match_report import render_match
 from .impact import SLOTS
 from .source import OpenDota, SourceError, valve_patches
+from .coach_lessons import train_lessons
+from .coach_model import evaluate_ranked, load_coach_model, save_coach_model, train_coach_model
+from .coaching import EXAMPLES, FOCUSES, json_file, make_session, replay
+from .coach_report import render_session
 
 
 EXAMPLE = Path(__file__).resolve().parent.parent / "examples" / "yatoro_case.json"
@@ -83,6 +87,35 @@ def parser():
     p = argparse.ArgumentParser(description="Поиск действий про-игрока в матчах Dota 2")
     p.add_argument("--db", default="data/archive.sqlite", help="SQLite-кэш матчей")
     sub = p.add_subparsers(dest="cmd", required=True)
+    school = sub.add_parser("school", help="Открыть локального тренера в браузере")
+    school.add_argument("--port", type=int, choices=range(65536), metavar="PORT", default=0)
+    school.add_argument("--no-browser", action="store_true")
+    coach = sub.add_parser("coach", help="Подготовить тренировку для одного игрока")
+    coach.add_argument("player", help="Слот, например slot:128, ник про-игрока или account ID")
+    coach.add_argument("match_id", type=positive)
+    coach.add_argument("--from-json", type=Path, help="Локальная карточка OpenDota в JSON или JSON.GZ")
+    coach.add_argument("--focus", choices=FOCUSES, default="auto")
+    coach.add_argument("--refresh", action="store_true")
+    coach.add_argument("--out", type=Path)
+    for command in (coach, school):
+        command.add_argument("--model", type=Path, help="Обученный ориентир по про-матчам")
+        command.add_argument("--lessons", type=Path, help="Обученный индекс уроков")
+    fit = sub.add_parser("train-coach", help="Обучить ориентир на профессиональных картах")
+    evaluation = sub.add_parser("evaluate-coach", help="Проверить готовую модель на обычных рейтинговых матчах")
+    for command in (fit, evaluation):
+        inputs = command.add_mutually_exclusive_group(required=True)
+        inputs.add_argument("--replays", type=Path, nargs="+", help="Каталоги или файлы OpenDota в JSON или JSON.GZ")
+        inputs.add_argument("--match-list", type=Path, help="Текстовый файл с ID матчей")
+    evaluation.add_argument("--model", type=Path)
+    evaluation.add_argument("--out", type=Path, default=Path("data/coach-ranked-evaluation.json"))
+    fit.add_argument("--out", type=Path, default=Path("data/pro-coach-model.json"))
+    lessons = sub.add_parser("train-lessons", help="Построить поиск по урокам и субтитрам")
+    lessons.add_argument("manifest", type=Path)
+    lessons.add_argument("--out", type=Path, default=Path("data/coach-lessons-model.json"))
+    captions = sub.add_parser("youtube-captions", help="Сохранить доступную твоему аккаунту дорожку YouTube")
+    captions.add_argument("video", help="ID или ссылка на видео")
+    captions.add_argument("--language", default="ru")
+    captions.add_argument("--out", type=Path, required=True)
     demo = sub.add_parser("demo", help="Офлайн-разбор двух реальных карт Yatoro")
     demo.add_argument("--out", default="yatoro.html")
     sub.add_parser("patches", help="Обновить локальный календарь патчей Valve")
@@ -128,17 +161,45 @@ def print_json(value):
     print(json.dumps(value, ensure_ascii=False, indent=2))
 
 
-def review_one(archive, args):
-    api = OpenDota()
+def player_key(archive, player, api):
     slot = None
     account = None
-    if args.player.startswith("slot:"):
-        token = args.player[5:]
+    if player.startswith("slot:"):
+        token = player[5:]
         if not token.isascii() or not token.isdecimal() or int(token) not in SLOTS:
             raise ValueError("Слот Radiant от 0 до 4, слот Dire от 128 до 132.")
         slot = int(token)
     else:
-        account, _ = archive.match_player(args.player, api)
+        account, _ = archive.match_player(player, api)
+    return account, slot
+
+
+def training_cards(archive, args):
+    if args.match_list:
+        if args.match_list.suffix.lower() == ".json":
+            manifest = json_file(args.match_list)
+            values = manifest.get("source_match_ids") if isinstance(manifest, dict) else manifest
+            if not isinstance(values, list):
+                raise ValueError("В JSON ожидается список ID матчей или поле source_match_ids.")
+            ids = [str(value) for value in values]
+        else:
+            ids = args.match_list.read_text(encoding="utf-8-sig").split()
+        if any(not value.isascii() or not value.isdecimal() or not 0 < int(value) < 2**63 for value in ids):
+            raise ValueError("Для обучения укажи файл с числовыми ID матчей через пробел или новую строку.")
+        api = OpenDota()
+        for mid in dict.fromkeys(map(int, ids)):
+            yield replay(archive, api, mid)
+    else:
+        for path in args.replays:
+            paths = sorted((*path.glob("*.json"), *path.glob("*.json.gz"))) if path.is_dir() else [path]
+            for source in paths:
+                raw = json_file(source)
+                yield from raw if isinstance(raw, list) else [raw]
+
+
+def review_one(archive, args):
+    api = OpenDota()
+    account, slot = player_key(archive, args.player, api)
     row = archive.cached_match(args.match_id, account, slot)
     if not row or row.get("review_version") != 2:
         try:
@@ -165,6 +226,21 @@ def review_one(archive, args):
 def main(argv=None):
     args = parser().parse_args(argv)
     try:
+        if args.cmd == "school":
+            from .coach_app import serve
+            serve(args.db, port=args.port, open_browser=not args.no_browser,
+                  model_path=args.model, lessons_path=args.lessons)
+            return 0
+        if args.cmd == "youtube-captions":
+            from .youtube_captions import download_captions
+            save_text(args.out, download_captions(args.video, args.language, os.environ.get("YOUTUBE_OAUTH_TOKEN")))
+            print(f"Дорожка сохранена в {args.out.resolve()}")
+            return 0
+        if args.cmd == "train-lessons":
+            model = train_lessons(args.manifest)
+            save_text(args.out, json.dumps(model, ensure_ascii=False, indent=2) + "\n")
+            print(f'Индекс сохранён в {args.out.resolve()}. Источников {model["source_count"]}, фрагментов {model["passage_count"]}.')
+            return 0
         if args.cmd == "demo":
             rows = json.loads(EXAMPLE.read_text(encoding="utf-8"))
             report("Yatoro", rows, args.out, case=True)
@@ -181,6 +257,32 @@ def main(argv=None):
             return 0
         archive = Archive(args.db)
         try:
+            if args.cmd == "train-coach":
+                model = train_coach_model(training_cards(archive, args))
+                save_coach_model(model, args.out)
+                print_json({"coverage": model["coverage"], "metrics": model["metrics"]})
+                print(f"Модель сохранена в {args.out.resolve()}")
+                return 0
+            if args.cmd == "evaluate-coach":
+                result = evaluate_ranked(load_coach_model(args.model), training_cards(archive, args))
+                save_text(args.out, json.dumps(result, ensure_ascii=False, indent=2) + "\n")
+                print_json(result["after_train"]["metrics"])
+                print(f"Результаты проверки сохранены в {args.out.resolve()}")
+                return 0
+            if args.cmd == "coach":
+                api = OpenDota()
+                account, slot = player_key(archive, args.player, api)
+                raw = replay(archive, api, args.match_id, local=args.from_json, refresh=args.refresh)
+                player = select_player(raw, account, slot)
+                if not player:
+                    raise ValueError("В этом матче не найден указанный игрок.")
+                slot = int(player["player_slot"])
+                session = make_session(archive, raw, slot, load_coach_model(args.model),
+                                       json_file(args.lessons or EXAMPLES / "coach-lessons-model.json"), args.focus)
+                path = args.out or Path(f"data/coach-{args.match_id}-{slot}.html")
+                save_text(path, render_session(session))
+                print(f"Тренировка сохранена в {path.resolve()}")
+                return 0
             if args.cmd == "patches":
                 entries = valve_patches()
                 archive.save_patches(entries)
