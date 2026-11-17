@@ -1,4 +1,6 @@
 import copy
+import gzip
+import json
 from pathlib import Path
 import tempfile
 import unittest
@@ -44,6 +46,17 @@ class CoachingModelTests(unittest.TestCase):
         self.assertEqual(model["coverage"]["train_games"], 7)
         self.assertEqual(model["coverage"]["excluded"], {"overlapping_train_test_boundary": 1})
         self.assertLessEqual(model["coverage"]["train_last_end"], model["coverage"]["test_first_start"])
+
+    def test_position_evaluation_stratifies_only_known_labels(self):
+        self.games[0]["players"][0]["position_est"] = None
+        self.games[8]["players"][0]["position_est"] = 0
+        model = train_coach_model(self.games)
+        self.assertEqual(model["fit"], self.model["fit"])
+        counts = model["coverage"]["train_counts_by_reported_position"]
+        self.assertEqual((counts["5"], counts["unknown"], counts["1"]), (15, 1, 16))
+        self.assertEqual(model["metrics"]["lh"]["n"], 20)
+        self.assertEqual(model["metrics_by_position"]["5"]["lh"]["n"], 3)
+        self.assertEqual(model["metrics_by_position"]["1"]["xp"]["n"], 4)
 
     def test_future_values_and_full_match_estimated_position_never_enter_prediction(self):
         original = assess_player(self.model, self.games[-1], 0)
@@ -111,3 +124,22 @@ class CoachingModelTests(unittest.TestCase):
         self.assertAlmostEqual(metric["mae"], sum(abs(m["gap"]) for m in expected) / 10, places=2)
         self.assertEqual(metric["baseline_mae"], sum(abs(m["baseline"] - m["actual"]) for m in expected) / 10)
         self.assertIsNone(evaluate_ranked(self.model, [earlier])["after_train"]["metrics"]["xp"]["mae"])
+
+
+class PublishedCorpusTests(unittest.TestCase):
+    def test_offline_pro_sample_reproduces_published_split_and_holdout_errors(self):
+        folder = Path(__file__).resolve().parents[1] / "examples"
+        expected_ids = list(map(int, (folder / "coach-pro-match-ids.txt").read_text().split()))
+        with gzip.open(folder / "coach-pro-snapshots.json.gz", "rt", encoding="utf8") as source:
+            raw = json.load(source)
+        self.assertEqual([game["match_id"] for game in raw], expected_ids)
+        self.assertEqual(len(set(expected_ids)), len(expected_ids))
+        bundled = load_coach_model()
+        trained = train_coach_model(raw)
+        self.assertEqual(trained["coverage"], bundled["coverage"])
+        for role, targets in trained["metrics_by_position"].items():
+            for key, stats in targets.items():
+                reference = bundled["metrics_by_position"][role][key]
+                self.assertGreater(stats["n"], 0)
+                self.assertEqual(stats["n"], reference["n"])
+                self.assertAlmostEqual(stats["mae"], reference["mae"], places=8)

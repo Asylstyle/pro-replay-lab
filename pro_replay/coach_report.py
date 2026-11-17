@@ -5,7 +5,7 @@ from statistics import median
 from urllib.parse import urlsplit
 
 from .coaching import FOCUSES
-from .report import _date
+from .report import _clock, _date
 
 
 STYLE = """
@@ -21,6 +21,9 @@ a,summary{color:var(--accent);text-underline-offset:.21em}a:focus-visible,button
 .episode h3{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap}.exercise{background:#1b2d2d;border-left:4px solid var(--aqua)}
 .resource{padding:10px 0;border-top:1px solid var(--line)}.resource small{display:block;margin-top:.15em}
 .resources{margin-top:12px}.resources summary{cursor:pointer}.resources[open] summary{margin-bottom:8px}
+.battle{border-bottom:1px solid var(--line);padding:11px 0}.battle>summary{cursor:pointer;font-weight:650}
+.battle ul{padding-left:1.35em}.item-option{padding:12px 0;border-top:1px solid var(--line)}
+.item-option p{margin:.2em 0}.item-option small{display:block}.battle-body{padding:12px 0}
 table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}td,th{padding:7px 10px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}td:first-child,th:first-child{text-align:left}th{color:var(--soft);font-size:.86rem}.scroll{overflow:auto}
 nav,footer,.actions{display:flex;gap:10px 22px;flex-wrap:wrap;align-items:center}footer{border-top:1px solid var(--line);padding-top:15px}
 button,.button{display:inline-block;padding:.65em 1em;background:var(--accent);color:#142118;border:1px solid var(--accent);border-radius:4px;font:600 1rem/1.4 inherit;cursor:pointer;text-decoration:none}
@@ -80,11 +83,99 @@ def lessons_view(lessons):
                  "local_text": "Текст урока"}
         label = kinds.get(lesson.get("kind"), "Учебный материал")
         stamp = lesson.get("start")
-        minute = f' · {int(stamp)//60}:{int(stamp)%60:02d}' if stamp is not None else ''
+        minute = f' · время в видео {int(stamp)//60}:{int(stamp)%60:02d}' if stamp is not None else ''
         links.append(f'<div class="resource"><a href="{h(url)}">{h(lesson["title"])}</a>'
                      f'<small>{label}{minute}</small><p>{h(lesson["text"])}</p></div>')
     return ('<details class="resources" open><summary>Материалы к этому эпизоду</summary>'
             + ''.join(links) + '</details>') if links else ''
+
+
+def item_options(fight, position):
+    candidates = fight["items"]
+    if not candidates:
+        return '<p class="meta">Для этого эпизода данных на конкретный предмет недостаточно.</p>'
+    categories = list(dict.fromkeys(i["category"] for i in candidates))
+    def preference(item):
+        available = item["status"] in ("used", "prior_purchase")
+        stat = item.get("pro")
+        rate = stat["bought"] / stat["n"] if stat else 0
+        return (categories.index(item["category"]), not available, -rate)
+    ordered = sorted(candidates, key=preference)
+    # Present both an existing tool and an alternative when the replay supports both.
+    lead = [ordered[0]]
+    alternative = next((i for i in ordered if i["category"] == lead[0]["category"]
+                        and i["status"] in ("unseen", "later_purchase") and i is not lead[0]), None)
+    if alternative:
+        lead.append(alternative)
+    def render(item):
+        status = {"used": "Применён в драке", "prior_purchase": "Куплен до драки",
+                  "during_purchase": "Куплен во время драки", "later_purchase": "Куплен позднее",
+                  "unseen": "Вариант покупки", "unknown_timing": "Нужно проверить время получения"}[item["status"]]
+        cost = (f' · справочная цена {number(item["cost"])} золота' if item["status"] in ("unseen", "later_purchase")
+                and item.get("cost") else "")
+        html = (f'<div class="item-option"><b>{h(item["name"])}</b><small>{status}{cost}. '
+                f'Угроза — {h(item["threat_hero"])} · {h(item["ability"])}</small>'
+                f'<p>{h(item["rationale"])}</p><small>{h(item["evidence"])}</small>')
+        stat = item.get("pro")
+        if stat:
+            scope = " на твоём герое" if stat["same_hero"] else ""
+            html += (f'<small>В более ранних про-играх этого патча до {_clock(fight["start"])} покупка записана '
+                     f'в {stat["bought"]} из {stat["n"]} выступлений{scope} на позиции {int(position)} '
+                     f'против {h(" / ".join(stat["opponents"]))}.')
+            if stat["bought"] >= 3:
+                html += f' Медиана первой покупки у успевших к этому времени — {_clock(stat["median"])}.'
+            if stat["example"]:
+                html += f' <a href="https://www.opendota.com/matches/{int(stat["example"])}/purchases">Пример покупки</a>'
+            html += '</small>'
+        activation = item.get("fight_pro")
+        if activation:
+            html += (f'<small>Применение предмета отмечено в {activation["uses"]} из {activation["n"]} сопоставимых '
+                     f'про-драк на этой позиции, где его покупка уже была записана. У {h(activation["enemy"])} '
+                     f'в этих окнах отмечено {h(activation["threat"])}. Допуск по началу боя — пять минут.</small>')
+        return html + f'<small><a href="{h(item["source_url"])}">Описание предмета у Valve</a></small></div>'
+    more = [i for i in ordered if i not in lead]
+    parts = ['<h3>Что мог дать предмет</h3>', *(render(i) for i in lead)]
+    if more:
+        parts.append('<details class="resources"><summary>Другие варианты и ограничения</summary>' +
+                     ''.join(render(i) for i in more) + '</details>')
+    return ''.join(parts)
+
+
+def peer_action(fight):
+    pro = fight.get("pro_action")
+    if not pro:
+        return ""
+    return (f'<p class="meta">В {pro["count"]} из {pro["n"]} сопоставимых про-драк на этом герое и позиции '
+            f'записано применение {h(pro["ability"])}. В той же драке {h(pro["enemy"])} '
+            f'применял {h(pro["threat"])}. Сравнение охватывает бои на том же патче с разницей '
+            f'до пяти минут по времени начала. <a href="https://www.opendota.com/matches/{int(pro["example"])}/teamfights">'
+            f'Пример на {_clock(pro["example_start"])}</a>.</p>')
+
+
+def battle_timeline(session):
+    fights = session["fights"]
+    if not fights:
+        return ''
+    selected = session["selected_fight"]
+    parts = ['<section id="fight-timeline"><h2>Драки по времени</h2>',
+             '<p class="meta">Открой интервал, чтобы посмотреть решение и предметы. Время убийства или смерти '
+             'берётся из журнала. Для большинства заклинаний OpenDota даёт число применений за весь интервал.</p>']
+    for fight in fights:
+        summary = f'{_clock(fight["start"])}–{_clock(fight["end"])}'
+        named = fight["threats"][0] if fight["threats"] else None
+        if named:
+            summary += f' · {named["hero"]} — {named["ability"]}'
+        if fight is selected and session["cards"] and session["cards"][0]["topic"] == "fights":
+            parts.append(f'<p class="battle"><a href="#selected-fight">{h(summary)}</a> · выбранный эпизод</p>')
+            continue
+        facts = ''.join(f'<li>{h(f)}</li>' for f in fight["observations"])
+        parts.append(f'<details class="battle"><summary>{h(summary)}</summary><div class="battle-body">'
+                     f'<span class="stamp">{h(_clock(fight["anchor"]))}</span> · {h(fight["anchor_text"])}'
+                     f'<ul>{facts}</ul><p><b>Вариант действия.</b> {h(fight["action"])}</p>'
+                     f'<p>{h(fight["check"])}</p>{peer_action(fight)}{item_options(fight, session["position"])}'
+                     f'{lessons_view(fight["lessons"])}</div></details>')
+    parts.append('</section>')
+    return ''.join(parts)
 
 
 def progress_section(history):
@@ -105,27 +196,46 @@ def progress_section(history):
 def render_session(session, *, home_url=None, detail_url=None):
     row, cards = session["row"], session["cards"]
     hero = row.get("hero_name") or f'Герой #{row["hero_id"]}'
-    pos = row["detail"]["build"].get("position")
-    role = f'Позиция {pos} по оценке OpenDota · ' if pos else ''
+    pos = session["position"]
+    role_source = "выбрана игроком" if session["role_override"] else "по оценке OpenDota"
+    role = f'Позиция {pos} {role_source} · ' if pos else ''
     result = {True:"Победа", False:"Поражение"}.get(row.get("win"), "Исход неизвестен")
     mid = int(row["match_id"])
     header = (f'<header><p class="eyebrow">PRO REPLAY LAB / ТРЕНИРОВКА ПО МАТЧУ {mid}</p>'
               f'<h1>{h(hero)}</h1><p class="meta">{role}{result} · {h(_date(row.get("start_time")))} · '
               f'K/D/A {number(row["kills"])} / {number(row["deaths"])} / {number(row["assists"])}</p></header>')
     parts = [header]
-    if not session["requested_available"]:
+    if session["fights"]:
+        parts.append(f'<nav><a href="#fight-timeline">Драки по времени ({len(session["fights"])})</a></nav>')
+    if session["at"] is not None and session["selected_fight"] is None:
+        parts.append(f'<section class="panel"><h2>На {_clock(session["at"])} нет размеченной драки для разбора</h2>'
+                     '<p>Выбери соседний интервал с записями игрока или другой тайминг.</p></section>')
+    elif not session["requested_available"]:
         parts.append(f'<p class="meta">Для темы «{h(FOCUSES[session["focus"]])}» недостаточно записей. Показаны эпизоды с данными.</p>')
     if cards:
         lead = cards[0]
-        parts.append(f'<section class="focus"><p class="eyebrow">ФОКУС НА ЭТУ ТРЕНИРОВКУ</p>'
+        battle = session["selected_fight"] if lead["topic"] == "fights" else None
+        fight_body = ""
+        if battle:
+            requested = f'Выбранное время {_clock(session["at"])}. ' if session["at"] is not None else ""
+            fight_body = (f'<p class="meta">{requested}Интервал драки {_clock(battle["start"])}–{_clock(battle["end"])}</p>'
+                          + peer_action(battle) + item_options(battle, pos))
+        parts.append(f'<section class="focus" id="selected-fight"><p class="eyebrow">ФОКУС НА ЭТУ ТРЕНИРОВКУ</p>'
                      f'<h2>{h(lead["title"])}</h2><p><span class="stamp">{h(lead["time"])}</span> · {h(lead["evidence"])}</p>'
-                     f'<p>{h(lead["review"])}</p></section><section class="exercise"><h3>Задание на следующую игру</h3>'
+                     f'<p>{h(lead["review"])}</p>{fight_body}</section><section class="exercise"><h3>Задание на следующую игру</h3>'
                      f'<p>{h(lead["drill"])}</p><p><b>Как проверить.</b> {h(lead["check"])}</p></section>')
         if home_url:
-            if session["history"].get("saved") == lead["topic"]:
+            if (session["history"].get("saved") == lead["topic"] and
+                    session["history"].get("saved_content") == (lead["drill"], lead["check"])):
                 parts.append('<p role="status">Задание сохранено в твоём локальном плане.</p>')
             else:
-                parts.append(f'<form method="post" action="/practice"><input type="hidden" name="match" value="{mid}">'
+                carry = ""
+                if battle:
+                    chosen = session["at"] if session["at"] is not None else battle["anchor"]
+                    carry += f'<input type="hidden" name="at" value="{h(_clock(chosen))}">'
+                if session["role_override"]:
+                    carry += f'<input type="hidden" name="role" value="{int(pos)}">'
+                parts.append(f'<form method="post" action="/practice">{carry}<input type="hidden" name="match" value="{mid}">'
                              f'<input type="hidden" name="slot" value="{int(row["player_slot"])}">'
                              f'<input type="hidden" name="focus" value="{h(lead["topic"])}">'
                              '<button type="submit">Взять задание на следующую игру</button></form>')
@@ -137,9 +247,10 @@ def render_session(session, *, home_url=None, detail_url=None):
                 parts.append(f'<article class="episode"><h3><span class="stamp">{h(c["time"])}</span>{h(c["title"])}</h3>'
                              f'<p>{h(c["evidence"])}</p><p>{h(c["review"])}</p>{lessons_view(c.get("lessons", []))}</article>')
             parts.append('</section>')
-    else:
+    elif session["at"] is None:
         parts.append('<section class="panel"><h2>Нужен разобранный повтор</h2><p>Карточка матча получена, но в ней пока нет '
                      'событий или снимков, на которых можно построить упражнение. После разбора повтора в OpenDota обнови карточку.</p></section>')
+    parts.append(battle_timeline(session))
     parts.append('<section><h2>Ориентир по про-играм</h2>' + pro_section(session["assessment"]) + '</section>')
     previous = session["history"].get("previous")
     if previous:

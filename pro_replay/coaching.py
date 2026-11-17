@@ -2,6 +2,7 @@
 
 import gzip
 import json
+import re
 from pathlib import Path
 from urllib.parse import urlsplit
 
@@ -9,12 +10,21 @@ from .analysis import select_player
 from .archive import normalize
 from .coach_lessons import retrieve_lessons
 from .coach_model import assess_player
+from .fight_coach import analyze_fights
+from .pro_purchases import PurchaseIndex, add_purchase_evidence
 from .report import _clock, _item
 
 
 FOCUSES = {"auto": "Выбрать по игре", "lane": "Линия и экономика",
            "fights": "Решения в драках", "build": "Покупки против драфта", "vision": "Обзор"}
 EXAMPLES = Path(__file__).resolve().parent.parent / "examples"
+
+
+def parse_clock(value):
+    if not isinstance(value, str) or not re.fullmatch(r"[0-9]{1,4}:[0-5][0-9]", value):
+        raise ValueError("Введи игровое время в формате ММ:СС, например 21:12.")
+    minutes, seconds = value.split(":")
+    return 60 * int(minutes) + int(seconds)
 
 
 def json_file(path):
@@ -163,7 +173,7 @@ def vision_card(row):
                      "обзор варды вижен саппорт контроль карты ward vision map support")
 
 
-def sessions(archive, row):
+def sessions(archive, row, role):
     db = archive.db
     db.execute("""CREATE TABLE IF NOT EXISTS coaching_sessions(
         match_id INTEGER, slot INTEGER, account INTEGER, role INTEGER, population TEXT, mode INTEGER,
@@ -171,7 +181,6 @@ def sessions(archive, row):
     db.execute("""CREATE TABLE IF NOT EXISTS coaching_tasks(
         match_id INTEGER, slot INTEGER, topic TEXT NOT NULL, drill TEXT NOT NULL, check_text TEXT NOT NULL,
         PRIMARY KEY(match_id,slot))""")
-    role = row["detail"]["build"].get("position")
     population = "pro" if row.get("league_id") else f"lobby-{row.get('lobby_type')}"
     points = {p["time"]: p for p in row["detail"]["checkpoints"]}
     stats = {}
@@ -180,7 +189,7 @@ def sessions(archive, row):
         stats[key] = b - a if a is not None and b is not None and b >= a else None
     earlier = []
     previous = None
-    saved = db.execute("SELECT topic FROM coaching_tasks WHERE match_id=? AND slot=?",
+    saved = db.execute("SELECT topic, drill, check_text FROM coaching_tasks WHERE match_id=? AND slot=?",
                        (row["match_id"], row["player_slot"])).fetchone()
     if row.get("account_id") and role in range(1, 6) and row.get("start_time") and row.get("game_mode") is not None:
         params = (row["account_id"], role, population, row["game_mode"], row["start_time"], row["match_id"])
@@ -195,7 +204,7 @@ def sessions(archive, row):
                    (row["match_id"], row["player_slot"], row.get("account_id"), role, population,
                     row.get("game_mode"), row.get("start_time"), json.dumps(stats)))
     return {"actual": stats, "prior": earlier, "identified": bool(row.get("account_id")),
-            "saved": saved[0] if saved else None, "previous": previous}
+            "saved": saved[0] if saved else None, "saved_content": saved[1:] if saved else None, "previous": previous}
 
 
 def save_exercise(archive, session):
@@ -206,15 +215,70 @@ def save_exercise(archive, session):
         archive.db.execute("INSERT OR REPLACE INTO coaching_tasks VALUES (?,?,?,?,?)",
                            (row["match_id"], row["player_slot"], card["topic"], card["drill"], card["check"]))
     session["history"]["saved"] = card["topic"]
+    session["history"]["saved_content"] = card["drill"], card["check"]
 
 
-def make_session(archive, raw, slot, model, lesson_model, focus="auto"):
+def selected_fight(fights, at):
+    if at is not None:
+        matches = [f for f in fights if f["start"] <= at <= f["end"]]
+        chosen = min(matches, key=lambda f: abs(f["anchor"] - at), default=None)
+        if chosen and chosen["events"]:
+            event = min(chosen["events"], key=lambda e: (abs(e["time"] - at), e["kind"] == "ally_death"))
+            chosen.update(anchor=event["time"], anchor_kind=event["kind"], anchor_text=event["text"])
+        return chosen
+    return max(fights, key=lambda f: (bool(f["threats"]), f["anchor_kind"] == "death",
+                                      bool(f["items"]), f["anchor_kind"] != "interval"), default=None)
+
+
+def tactical_card(fight, row):
+    spells = " ".join(t["ability"] for t in fight["threats"][:3])
+    personal = [i for i in fight["items"] if i["status"] in ("used", "prior_purchase")]
+    gear = " ".join(i["name"] for i in (personal or fight["items"])[:2])
+    concepts = {"target": "контроль инициация", "pierce": "позиционирование цель инициация",
+                "magic_burst": "магический урон защита сейв", "mobility": "удержать цель контроль",
+                "silence": "сайленс развеивание", "vision": "обнаружение обзор",
+                "physical_pressure": "физический урон сейв", "area": "позиционирование дистанция"}
+    topic = concepts.get(fight["threats"][0]["category"], "") if fight["threats"] else ""
+    drills = {1: "Перед входом выбери доступную цель для атак и назови способность, которая может их прервать.",
+              2: "Перед выходом на цель назови свой способ входа и то, как выйдешь после первого прокаста.",
+              3: "Перед инициацией проверь, успевает ли ближайший союзник продолжить твой контроль.",
+              4: "До начала драки выбери цель и реши, чей контроль продолжишь или какой каст прервёшь.",
+              5: "До начала драки выбери союзника, которому может понадобиться спасение, и точку в радиусе помощи."}
+    title = "Решение в драке"
+    if fight["threats"]:
+        title += " против " + fight["threats"][0]["hero"]
+    return make_card("fights", title, _clock(fight["anchor"]),
+                     " ".join([fight["anchor_text"].rstrip(".") + ".", *fight["observations"][:2]]),
+                     fight["action"],
+                     drills.get(fight["position"], "Перед похожей дракой назови первую угрозу и выбери момент входа."),
+                     f'Сравни свой следующий бой с эпизодом на {_clock(fight["anchor"])}. {fight["check"]}',
+                     f"командная драка {topic} {row.get('hero_name', '')} {spells} {gear}")
+
+
+def make_session(archive, raw, slot, model, lesson_model, focus="auto", *, at=None, position=None, purchase_index=None):
     if focus not in FOCUSES or not select_player(raw, None, slot):
         raise ValueError("Проверь выбранную тему и слот игрока.")
-    row = archive.with_patch_versions([normalize(raw, None, directory(archive), slot=slot)])[0]
+    if at is not None and (type(at) is not int or at < 0 or (raw.get("duration") is not None and at > raw["duration"])):
+        raise ValueError("Выбранное время выходит за пределы матча.")
+    if position is not None and (type(position) is not int or not 1 <= position <= 5):
+        raise ValueError("Выбери игровую позицию от 1 до 5.")
+    heroes = directory(archive)
+    row = archive.with_patch_versions([normalize(raw, None, heroes, slot=slot)])[0]
     assessment = assess_player(model, raw, slot)
-    position = row["detail"]["build"].get("position")
-    candidates = [lane_card(row, assessment, position), fight_card(row), build_card(row), vision_card(row)]
+    role_override = position
+    position = position or row["detail"]["build"].get("position")
+    fights = analyze_fights(raw, slot, heroes, position=position)
+    if purchase_index is None:
+        purchase_index = PurchaseIndex.load()
+    for fight in fights:
+        add_purchase_evidence(fight, row, position, purchase_index)
+        query = tactical_card(fight, row)["query"]
+        fight["lessons"] = retrieve_lessons(lesson_model, query, position=position, limit=1, topic="fights")
+    selected = selected_fight(fights, at)
+    decision = tactical_card(selected, row) if selected else (fight_card(row) if at is None else None)
+    if at is not None:
+        focus = "fights"
+    candidates = [lane_card(row, assessment, position), decision, build_card(row), vision_card(row)]
     cards = {c["topic"]: c for c in candidates if c}
     # A descriptive forecast gap is a replay prompt only when larger than the
     # held-out error. Supports never get a last-hit quota.
@@ -225,9 +289,12 @@ def make_session(archive, raw, slot, model, lesson_model, focus="auto"):
     preferred = ([focus] if focus != "auto" else []) + (["lane"] if shortfall else [])
     preferred += ["fights", "vision" if position in (4,5) else "build", "lane", "build", "vision"]
     ordered = [cards[k] for k in dict.fromkeys(preferred) if k in cards][:3]
+    if at is not None and not selected:
+        ordered = []
     for card in ordered:
-        hits = retrieve_lessons(lesson_model, card["query"], position=position, limit=2)
+        hits = retrieve_lessons(lesson_model, card["query"], position=position, limit=2, topic=card["topic"])
         card["lessons"] = [h for h in hits if urlsplit(h["url"]).scheme == "https"]
     return {"row": row, "assessment": assessment, "cards": ordered, "focus": focus,
+            "fights": fights, "selected_fight": selected, "at": at, "position": position, "role_override": role_override,
             "requested_available": focus == "auto" or focus in cards,
-            "history": sessions(archive, row)}
+            "history": sessions(archive, row, position)}

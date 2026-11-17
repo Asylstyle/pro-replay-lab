@@ -1,7 +1,7 @@
 {
   "study": "Fixed professional-match model evaluated on independent Ranked All Pick match IDs",
   "model_file": "pro-coach-model.json",
-  "model_sha256": "3c2948de2919120998b7b5ba2d87a1ddd251ba697df66bae93ae65c0095d8603",
+  "model_sha256": "624b70af5c188d08a1d0a0cce3e4f98b25880f0c1765438663f979d926db26fc",
   "source": "OpenDota /matches/{match_id}; lobby-rank tiers from OpenDota public_matches.avg_rank_tier",
   "selection": "120 parsed 5v5 Ranked All Pick matches without recorded leavers, selected from ten match-ID windows with 40 matches per lobby-rank group. Only complete, cumulative 10:00 and 20:00 snapshots for all ten players are scored.",
   "source_match_ids": [
@@ -147,12 +147,12 @@
     }
   },
   "account_overlap": {
-    "known_unique_train_accounts": 95,
+    "known_unique_train_accounts": 502,
     "known_unique_ranked_accounts": 1188,
     "ranked_rows_with_known_account": 1190,
-    "shared_known_accounts": 0
+    "shared_known_accounts": 1
   },
-  "train_last_end": 1793277938,
+  "train_last_end": 1791740932,
   "excluded": {
     "ended_before_minute_20": 1
   },
@@ -284,19 +284,106 @@
     ],
     "metrics": {
       "lh": {
-        "mae": 18.578621161899466,
-        "baseline_mae": 28.131932773109245,
+        "mae": 19.685013360010007,
+        "baseline_mae": 28.653781512605043,
         "n": 1190
       },
       "gold": {
-        "mae": 748.2189014662482,
-        "baseline_mae": 985.3176470588236,
+        "mae": 764.1989813794651,
+        "baseline_mae": 996.0058823529412,
         "n": 1190
       },
       "xp": {
-        "mae": 1133.6301703046254,
-        "baseline_mae": 1353.5142857142857,
+        "mae": 1133.868041736226,
+        "baseline_mae": 1334.3848739495797,
         "n": 1190
+      }
+    },
+    "metrics_by_position": {
+      "1": {
+        "lh": {
+          "mae": 23.075511570274642,
+          "baseline_mae": 30.884453781512605,
+          "n": 238
+        },
+        "gold": {
+          "mae": 812.7414061939435,
+          "baseline_mae": 1047.892857142857,
+          "n": 238
+        },
+        "xp": {
+          "mae": 1174.5685915726701,
+          "baseline_mae": 1467.2478991596638,
+          "n": 238
+        }
+      },
+      "2": {
+        "lh": {
+          "mae": 24.96682608505848,
+          "baseline_mae": 44.596638655462186,
+          "n": 238
+        },
+        "gold": {
+          "mae": 889.8533536309135,
+          "baseline_mae": 1241.4705882352941,
+          "n": 238
+        },
+        "xp": {
+          "mae": 1248.4502485035052,
+          "baseline_mae": 1520.546218487395,
+          "n": 238
+        }
+      },
+      "3": {
+        "lh": {
+          "mae": 28.314593020928612,
+          "baseline_mae": 40.93487394957983,
+          "n": 238
+        },
+        "gold": {
+          "mae": 842.8923467112189,
+          "baseline_mae": 1188.439075630252,
+          "n": 238
+        },
+        "xp": {
+          "mae": 1202.447046619336,
+          "baseline_mae": 1483.6470588235295,
+          "n": 238
+        }
+      },
+      "4": {
+        "lh": {
+          "mae": 12.302856312584543,
+          "baseline_mae": 15.029411764705882,
+          "n": 238
+        },
+        "gold": {
+          "mae": 693.6736689176696,
+          "baseline_mae": 830.4117647058823,
+          "n": 238
+        },
+        "xp": {
+          "mae": 1057.0764239799903,
+          "baseline_mae": 1144.310924369748,
+          "n": 238
+        }
+      },
+      "5": {
+        "lh": {
+          "mae": 9.765279811203754,
+          "baseline_mae": 11.823529411764707,
+          "n": 238
+        },
+        "gold": {
+          "mae": 581.8341314435795,
+          "baseline_mae": 671.8151260504202,
+          "n": 238
+        },
+        "xp": {
+          "mae": 986.797898005628,
+          "baseline_mae": 1056.172268907563,
+          "n": 238
+        }
       }
     }
   },
@@ -428,6 +515,117 @@
     ],
     "metrics": {
       "lh": {
+        "mae": 19.685013360010007,
+        "baseline_mae": 28.653781512605043,
+        "n": 1190
+      },
+      "gold": {
+        "mae": 764.1989813794651,
+        "baseline_mae": 996.0058823529412,
+        "n": 1190
+      },
+      "xp": {
+        "mae": 1133.868041736226,
+        "baseline_mae": 1334.3848739495797,
+        "n": 1190
+      }
+    },
+    "metrics_by_position": {
+      "1": {
+        "lh": {
+          "mae": 23.075511570274642,
+          "baseline_mae": 30.884453781512605,
+          "n": 238
+        },
+        "gold": {
+          "mae": 812.7414061939435,
+          "baseline_mae": 1047.892857142857,
+          "n": 238
+        },
+        "xp": {
+          "mae": 1174.5685915726701,
+          "baseline_mae": 1467.2478991596638,
+          "n": 238
+        }
+      },
+      "2": {
+        "lh": {
+          "mae": 24.96682608505848,
+          "baseline_mae": 44.596638655462186,
+          "n": 238
+        },
+        "gold": {
+          "mae": 889.8533536309135,
+          "baseline_mae": 1241.4705882352941,
+          "n": 238
+        },
+        "xp": {
+          "mae": 1248.4502485035052,
+          "baseline_mae": 1520.546218487395,
+          "n": 238
+        }
+      },
+      "3": {
+        "lh": {
+          "mae": 28.314593020928612,
+          "baseline_mae": 40.93487394957983,
+          "n": 238
+        },
+        "gold": {
+          "mae": 842.8923467112189,
+          "baseline_mae": 1188.439075630252,
+          "n": 238
+        },
+        "xp": {
+          "mae": 1202.447046619336,
+          "baseline_mae": 1483.6470588235295,
+          "n": 238
+        }
+      },
+      "4": {
+        "lh": {
+          "mae": 12.302856312584543,
+          "baseline_mae": 15.029411764705882,
+          "n": 238
+        },
+        "gold": {
+          "mae": 693.6736689176696,
+          "baseline_mae": 830.4117647058823,
+          "n": 238
+        },
+        "xp": {
+          "mae": 1057.0764239799903,
+          "baseline_mae": 1144.310924369748,
+          "n": 238
+        }
+      },
+      "5": {
+        "lh": {
+          "mae": 9.765279811203754,
+          "baseline_mae": 11.823529411764707,
+          "n": 238
+        },
+        "gold": {
+          "mae": 581.8341314435795,
+          "baseline_mae": 671.8151260504202,
+          "n": 238
+        },
+        "xp": {
+          "mae": 986.797898005628,
+          "baseline_mae": 1056.172268907563,
+          "n": 238
+        }
+      }
+    }
+  },
+  "model_hash_encoding": "UTF-8 file contents with LF line endings",
+  "previous_model_same_ranked_sample": {
+    "model_from_commit": "9551fef2700eb861b2197adc69d67650526f34f6",
+    "model_sha256": "3c2948de2919120998b7b5ba2d87a1ddd251ba697df66bae93ae65c0095d8603",
+    "train_matches": 80,
+    "test_matches": 119,
+    "metrics": {
+      "lh": {
         "mae": 18.578621161899466,
         "baseline_mae": 28.131932773109245,
         "n": 1190
@@ -443,6 +641,5 @@
         "n": 1190
       }
     }
-  },
-  "model_hash_encoding": "UTF-8 file contents with LF line endings"
+  }
 }

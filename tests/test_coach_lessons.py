@@ -114,6 +114,46 @@ class LessonTrainingTests(unittest.TestCase):
         self.assertIn("Xqapp58b9_Q&t=1460s", hit["url"])
         self.assertIn("Copyright (c) ModDota", bundled["notices"][0]["text"])
 
+    def test_individual_passages_from_a_shared_guide_keep_their_roles(self):
+        clips = [{"start": 10, "text": "фарм под защитой", "roles": [1]},
+                 {"start": 20, "text": "спасать через force staff", "roles": [5]}]
+        model = self.fit(self.source(roles=[1, 5], segments=clips),
+                         self.source(url="https://example.org/common", segments=[{"text": "обзор"}]))
+        self.assertEqual(model["role_coverage"]["5"], {"sources": 1, "passages": 1})
+        self.assertEqual(model["role_coverage"]["2"], {"sources": 0, "passages": 0})
+        self.assertFalse(retrieve_lessons(model, "форс", position=1))
+        self.assertEqual(retrieve_lessons(model, "форс", position=5)[0]["start"], 20)
+        for audience in ([4], [], [True]):
+            with self.subTest(audience=audience), self.assertRaises(ValueError):
+                self.fit(self.source(roles=[1, 5], segments=[dict(clips[0], roles=audience)]))
+
+    def test_real_fight_or_item_search_for_every_position(self):
+        path = Path(__file__).resolve().parents[1] / "examples" / "coach-lessons-model.json"
+        model = json.loads(path.read_text(encoding="utf8"))
+        cases = [(1, "цель саппорт Nullifier против Ghost Scepter", "nByrWi0YPtY", 318),
+                 (2, "Sand King Blink Dagger идти с командой", "kadbPUE6AYs", 719),
+                 (3, "Charge Spirit Breaker прыжок Blink Lion Ember", "Ulzg8-8xsYI", 1159),
+                 (4, "предмет Blink Dagger Aether Lens Bane", "xyJjOd2NeX4", 131),
+                 (5, "Force Staff Glimmer Cape предмет союзник сейв", "aUwBY5FBRcs", 2292)]
+        for role, query, video, second in cases:
+            with self.subTest(role=role):
+                [lesson] = retrieve_lessons(model, query, position=role, topic="fights", limit=1)
+                self.assertEqual(lesson["url"], f"https://www.youtube.com/watch?v={video}&t={second}s")
+                self.assertIn(role, lesson["roles"])
+                self.assertTrue(lesson["caption_concepts"])
+                self.assertEqual(lesson["kind"], "transcript_note")
+
+    def test_focus_excludes_a_lane_lesson_from_fight_review(self):
+        model = self.fit(self.source(segments=[
+            {"start": 11, "topics": ["lane"], "text": "мидер драка переход ротация"},
+            {"start": 42, "topics": ["fights"], "text": "мидер драка контроль"}]))
+        query = "мидер ротация переход драка"
+        self.assertEqual(retrieve_lessons(model, query, limit=1)[0]["start"], 11)
+        self.assertEqual(retrieve_lessons(model, query, topic="fights")[0]["start"], 42)
+        self.assertEqual(retrieve_lessons(model, query, topic="vision"), [])
+        untagged = self.fit(self.source(segments=[{"start": 3, "text": "драка"}]))
+        self.assertEqual(retrieve_lessons(untagged, "драка", topic="fights")[0]["start"], 3)
+
 
 if __name__ == "__main__":
     unittest.main()

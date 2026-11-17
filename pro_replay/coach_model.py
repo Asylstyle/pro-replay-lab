@@ -53,8 +53,10 @@ def _player_rows(raw):
             continue
         if slot in by_slot:
             return {}
+        position = _int(p.get("position_est"))
         by_slot[slot] = {"hero": _int(p.get("hero_id")), "at10": _snapshot(p, 600, duration),
-                         "at20": _snapshot(p, 1200, duration), "rank": None}
+                         "at20": _snapshot(p, 1200, duration), "rank": None,
+                         "reported_position": position if position in range(1, 6) else None}
     for side in (SLOTS[:5], SLOTS[5:]):
         gold = [by_slot.get(s, {}).get("at10", {}).get("gold") for s in side]
         if None not in gold:
@@ -160,14 +162,22 @@ def _forecast(fit, row):
 
 def _prediction_errors(fit, games):
     errors = {k: [] for k in TARGETS}
+    by_position = {str(position): {k: [] for k in TARGETS} for position in range(1, 6)}
     for game in games:
         for row in game["rows"]:
             for key, (prediction, baseline) in _forecast(fit, row).items():
                 actual = row["at20"][key]
-                errors[key].append((abs(prediction - actual), abs(baseline - actual)))
-    return {key: {"mae": mean(x for x, _ in pairs) if pairs else None,
-                  "baseline_mae": mean(y for _, y in pairs) if pairs else None, "n": len(pairs)}
-            for key, pairs in errors.items()}
+                pair = (abs(prediction - actual), abs(baseline - actual))
+                errors[key].append(pair)
+                if row["reported_position"] is not None:
+                    by_position[str(row["reported_position"])][key].append(pair)
+
+    def summarize(group):
+        return {key: {"mae": mean(x for x, _ in pairs) if pairs else None,
+                      "baseline_mae": mean(y for _, y in pairs) if pairs else None, "n": len(pairs)}
+                for key, pairs in group.items()}
+
+    return summarize(errors), {position: summarize(group) for position, group in by_position.items()}
 
 
 def train_coach_model(raw_matches):
@@ -192,13 +202,16 @@ def train_coach_model(raw_matches):
     if len(train) < 5 or not test:
         raise ValueError("Недостаточно завершённых карт до хронологической границы проверки.")
     excluded["overlapping_train_test_boundary"] += len(ordered) - len(train) - len(test)
-    fit = _fit([r for g in train for r in g["rows"]])
-    metrics = _prediction_errors(fit, test)
+    train_rows = [r for g in train for r in g["rows"]]
+    fit = _fit(train_rows)
+    metrics, metrics_by_position = _prediction_errors(fit, test)
+    roles = Counter(str(r["reported_position"] or "unknown") for r in train_rows)
     return {"format": "pro-replay-coach-1", "algorithm": "multioutput_ridge_on_10_to_20_gains",
             "penalty": RIDGE_PENALTY, "input_minute": 10, "target_minute": 20, "targets": list(TARGETS),
-            "fit": fit, "metrics": metrics, "coverage": {
+            "fit": fit, "metrics": metrics, "metrics_by_position": metrics_by_position, "coverage": {
                 "eligible_games": len(ordered), "train_games": len(train), "test_games": len(test),
                 "train_players": len(train)*10, "test_players": len(test)*10, "excluded": dict(+excluded),
+                "train_counts_by_reported_position": dict(sorted(roles.items())),
                 "train_first_start": train[0]["start"], "train_last_end": max(g["end"] for g in train),
                 "test_first_start": test[0]["start"], "test_last_end": max(g["end"] for g in test),
                 "train_match_ids": [g["match_id"] for g in train], "test_match_ids": [g["match_id"] for g in test],
@@ -226,11 +239,12 @@ def evaluate_ranked(model, raw_matches):
     groups = {"all_ranked": ordered, "after_train": [g for g in ordered if g["start"] > cutoff]}
     result = {"train_last_end": cutoff, "excluded": dict(excluded)}
     for name, group in groups.items():
+        metrics, by_position = _prediction_errors(model["fit"], group)
         result[name] = {"games": len(group), "players": len(group)*10,
                         "first_start": group[0]["start"] if group else None,
                         "last_end": max((g["end"] for g in group), default=None),
                         "match_ids": [g["match_id"] for g in group],
-                        "metrics": _prediction_errors(model["fit"], group)}
+                        "metrics": metrics, "metrics_by_position": by_position}
     return result
 
 

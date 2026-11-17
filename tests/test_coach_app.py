@@ -76,6 +76,22 @@ class CoachAppTests(unittest.TestCase):
             self.assertEqual(self.request("GET", "/example"), (200, b"<h1>Kez</h1>"))
             self.assertEqual(self.request("GET", "/kez.png"), (200, b"image"))
 
+    def test_entered_time_and_corrected_role_survive_saving_a_tactical_exercise(self):
+        with patch("pro_replay.coach_app.OpenDota.match", return_value=scorecard()):
+            form = {"match": 999, "slot": 132, "at": "10:00", "role": "5", "focus": "lane"}
+            status, html = self.request("POST", "/coach", form=form)
+            self.assertEqual(status, 200)
+            self.assertIn("Позиция 5 выбрана игроком", html.decode())
+            self.assertIn('name="at" value="10:00"', html.decode())
+            self.assertIn("твоё убийство", html.decode().lower())
+            status, saved = self.request("POST", "/practice", form=form)
+            self.assertEqual(status, 200)
+            self.assertIn("Задание сохранено", saved.decode())
+            _, between = self.request("POST", "/coach", form={**form, "at": "00:10"})
+            self.assertIn("нет размеченной драки", between.decode())
+            self.assertNotIn('action="/practice"', between.decode())
+            self.assertEqual(self.request("POST", "/coach", form={**form, "at": "10:60"})[0], 400)
+
     def test_local_forms_and_match_params(self):
         form = {"match": 999, "slot": 132}
         with patch("pro_replay.coach_app.OpenDota.match") as match:

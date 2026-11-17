@@ -21,8 +21,10 @@ from .impact import SLOTS
 from .source import OpenDota, SourceError, valve_patches
 from .coach_lessons import train_lessons
 from .coach_model import evaluate_ranked, load_coach_model, save_coach_model, train_coach_model
-from .coaching import EXAMPLES, FOCUSES, json_file, make_session, replay
+from .coaching import EXAMPLES, FOCUSES, json_file, make_session, parse_clock, replay
 from .coach_report import render_session
+from .fight_coach import CANDIDATES
+from .pro_purchases import PurchaseIndex, fit_purchase_reference, write_reference
 
 
 EXAMPLE = Path(__file__).resolve().parent.parent / "examples" / "yatoro_case.json"
@@ -95,14 +97,20 @@ def parser():
     coach.add_argument("match_id", type=positive)
     coach.add_argument("--from-json", type=Path, help="Локальная карточка OpenDota в JSON или JSON.GZ")
     coach.add_argument("--focus", choices=FOCUSES, default="auto")
+    coach.add_argument("--at", metavar="MM:SS", help="Разобрать драку в указанное игровое время")
+    coach.add_argument("--position", type=int, choices=range(1, 6), help="Игровая позиция, если нужна ручная поправка")
     coach.add_argument("--refresh", action="store_true")
     coach.add_argument("--out", type=Path)
     for command in (coach, school):
         command.add_argument("--model", type=Path, help="Обученный ориентир по про-матчам")
         command.add_argument("--lessons", type=Path, help="Обученный индекс уроков")
+        command.add_argument("--fight-model", type=Path, help="База сравнения предметов и действий в про-драках")
     fit = sub.add_parser("train-coach", help="Обучить ориентир на профессиональных картах")
     evaluation = sub.add_parser("evaluate-coach", help="Проверить готовую модель на обычных рейтинговых матчах")
-    for command in (fit, evaluation):
+    fight_fit = sub.add_parser("train-fight-items", help="Обучить сравнение действий и покупок в про-драках")
+    fight_fit.add_argument("--model", type=Path, help="Модель экономики с хронологическим разделением матчей")
+    fight_fit.add_argument("--out", type=Path, default=Path("data/pro-fight-purchases.json.gz"))
+    for command in (fit, evaluation, fight_fit):
         inputs = command.add_mutually_exclusive_group(required=True)
         inputs.add_argument("--replays", type=Path, nargs="+", help="Каталоги или файлы OpenDota в JSON или JSON.GZ")
         inputs.add_argument("--match-list", type=Path, help="Текстовый файл с ID матчей")
@@ -229,7 +237,7 @@ def main(argv=None):
         if args.cmd == "school":
             from .coach_app import serve
             serve(args.db, port=args.port, open_browser=not args.no_browser,
-                  model_path=args.model, lessons_path=args.lessons)
+                  model_path=args.model, lessons_path=args.lessons, fight_model_path=args.fight_model)
             return 0
         if args.cmd == "youtube-captions":
             from .youtube_captions import download_captions
@@ -257,6 +265,12 @@ def main(argv=None):
             return 0
         archive = Archive(args.db)
         try:
+            if args.cmd == "train-fight-items":
+                tracked = {key for items in CANDIDATES.values() for key in items}
+                comparison = fit_purchase_reference(training_cards(archive, args), load_coach_model(args.model), tracked)
+                write_reference(comparison, args.out)
+                print_json({"games": len(comparison["games"]), "observations_by_position": comparison["roles"]})
+                return 0
             if args.cmd == "train-coach":
                 model = train_coach_model(training_cards(archive, args))
                 save_coach_model(model, args.out)
@@ -270,6 +284,7 @@ def main(argv=None):
                 print(f"Результаты проверки сохранены в {args.out.resolve()}")
                 return 0
             if args.cmd == "coach":
+                at = parse_clock(args.at) if args.at is not None else None
                 api = OpenDota()
                 account, slot = player_key(archive, args.player, api)
                 raw = replay(archive, api, args.match_id, local=args.from_json, refresh=args.refresh)
@@ -278,7 +293,8 @@ def main(argv=None):
                     raise ValueError("В этом матче не найден указанный игрок.")
                 slot = int(player["player_slot"])
                 session = make_session(archive, raw, slot, load_coach_model(args.model),
-                                       json_file(args.lessons or EXAMPLES / "coach-lessons-model.json"), args.focus)
+                                       json_file(args.lessons or EXAMPLES / "coach-lessons-model.json"), args.focus,
+                                       at=at, position=args.position, purchase_index=PurchaseIndex.load(args.fight_model))
                 path = args.out or Path(f"data/coach-{args.match_id}-{slot}.html")
                 save_text(path, render_session(session))
                 print(f"Тренировка сохранена в {path.resolve()}")

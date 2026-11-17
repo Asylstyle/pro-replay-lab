@@ -11,9 +11,11 @@ import webbrowser
 from .archive import Archive, normalize
 from .coach_model import load_coach_model
 from .coach_report import page, render_session
-from .coaching import EXAMPLES, FOCUSES, directory, json_file, make_session, replay, save_exercise
+from .coaching import EXAMPLES, FOCUSES, directory, json_file, make_session, parse_clock, replay, save_exercise
+from .pro_purchases import PurchaseIndex
 from .impact import SLOTS
 from .match_report import render_match
+from .report import _clock
 from .source import OpenDota, SourceError
 
 
@@ -32,6 +34,8 @@ ENTRY_STYLE = """<style>
 .coach-sides legend{font-weight:700;padding:0 6px}.hero-pick{display:flex;align-items:center;gap:.7rem;padding:.65rem .55rem;border-bottom:1px solid #37464e;cursor:pointer}
 .hero-pick:last-child{border-bottom:0}.hero-pick input{accent-color:#cce880}.hero-pick small{display:block;overflow-wrap:anywhere}
 .coach-picker select{margin:0 10px 6px 0}.pick-actions{margin-top:8px}
+.fight-inputs{display:flex;gap:.75rem 1.5rem;flex-wrap:wrap;margin:15px 0}
+.fight-inputs label,.fight-inputs small{display:block}.fight-inputs select,.fight-inputs input{margin-top:4px}
 @media(max-width:680px){.coach-entry{grid-template-columns:1fr}.coach-entry img{max-height:240px;order:-1}.coach-sides{grid-template-columns:1fr}}
 </style>"""
 
@@ -44,7 +48,8 @@ def _home():
 <input id="match-id" type="text" name="match" inputmode="numeric" pattern="[0-9]+" maxlength="19"
        placeholder="9086497898" required>
 <button type="submit">Открыть состав</button></div></form>
-<a href="/example">Посмотреть готовый разбор Kez</a></div>
+<nav><a href="/example-fight">Драка Mars</a><a href="/example-support">Выбор предмета на Rubick</a>
+<a href="/example">Посмотреть готовый разбор Kez</a></nav></div>
 <img src="/kez.png" alt="Kez из Dota 2"></div>""")
 
 
@@ -76,12 +81,23 @@ def _match_form(raw, heroes):
                            f'<span><b>{escape(str(hero))}</b>{caption}</span></label>')
         sides.append(f'<fieldset><legend>{team}</legend>{"".join(choices) or "Состав недоступен"}</fieldset>')
     options = "".join(f'<option value="{key}">{escape(label)}</option>' for key, label in FOCUSES.items())
+    roles = "".join(f'<option value="{i}">{i} · {label}</option>' for i, label in
+                    enumerate(("Керри", "Мид", "Офлейн", "Поддержка", "Полная поддержка"), 1))
+    intervals = [f for f in raw.get("teamfights") or [] if isinstance(f, dict) and
+                 type(f.get("start")) is int and type(f.get("end")) is int and 0 <= f["start"] <= f["end"]]
+    timings = ''.join(f'<option value="{_clock(f["start"])}">{_clock(f["start"])}–{_clock(f["end"])}</option>'
+                      for f in sorted(intervals, key=lambda f: f["start"]))
     return page("Выбор игрока", ENTRY_STYLE + f'<div class="coach-picker"><a href="/">← Другой матч</a>'
                 f'<h1>Выбери своего героя</h1><p>Матч #{mid} · <a href="/match?match={mid}&amp;refresh=1">Обновить из OpenDota</a></p>'
                 '<form method="post" action="/coach">'
                 f'<input type="hidden" name="match" value="{mid}"><div class="coach-sides">{"".join(sides)}</div>'
-                '<label for="focus">Что разобрать</label><div class="pick-actions">'
-                f'<select id="focus" name="focus">{options}</select><button type="submit">Получить разбор</button>'
+                '<div class="fight-inputs"><label for="focus">Что разобрать'
+                f'<select id="focus" name="focus">{options}</select></label><label for="role">Твоя позиция'
+                f'<select id="role" name="role"><option value="">По данным матча</option>{roles}</select></label>'
+                '<label for="fight-time">Время драки <small>По желанию, мин:сек</small>'
+                '<input id="fight-time" list="intervals" name="at" type="text" placeholder="21:12" maxlength="7" '
+                f'pattern="[0-9]{{1,4}}:[0-5][0-9]"></label><datalist id="intervals">{timings}</datalist></div>'
+                '<div class="pick-actions"><button type="submit">Получить разбор</button>'
                 '</div></form></div>')
 
 
@@ -136,6 +152,10 @@ class CoachHandler(BaseHTTPRequestHandler):
             return self._send(200, _home())
         if path == "/example":
             return self._send(200, (EXAMPLES / "coach-kez.html").read_bytes())
+        if path == "/example-fight":
+            return self._send(200, (EXAMPLES / "coach-fight.html").read_bytes())
+        if path == "/example-support":
+            return self._send(200, (EXAMPLES / "coach-rubick.html").read_bytes())
         if path in ("/kez.png", "/coach-kez.png"):
             return self._send(200, (EXAMPLES / "coach-kez.png").read_bytes(), "image/png")
         if path not in ("/match", "/coach", "/detail", "/practice"):
@@ -146,6 +166,11 @@ class CoachHandler(BaseHTTPRequestHandler):
             focus = params.get("focus", ["auto"])
             if len(focus) != 1 or focus[0] not in FOCUSES:
                 raise ValueError("Выбери одну из доступных тем.")
+            times, roles = params.get("at", [""]), params.get("role", [""])
+            if len(times) != 1 or len(roles) != 1 or roles[0] not in ("", "1", "2", "3", "4", "5"):
+                raise ValueError("Выбери одну позицию и один тайминг.")
+            at = parse_clock(times[0]) if times[0] else None
+            role = int(roles[0]) if roles[0] else None
         archive = Archive(self.server.db_path)
         with closing(archive.db):
             refresh = path == "/match" and params.get("refresh") == ["1"]
@@ -160,7 +185,8 @@ class CoachHandler(BaseHTTPRequestHandler):
                 return self._send(200, render_match(row, archive.personal_history(row), archive.references()))
             model = load_coach_model(self.server.model_path)
             lessons = json_file(self.server.lessons_path)
-            session = make_session(archive, raw, slot, model, lessons, focus=focus[0])
+            session = make_session(archive, raw, slot, model, lessons, focus=focus[0], at=at,
+                                   position=role, purchase_index=PurchaseIndex.load(self.server.fight_model_path))
             if path == "/practice":
                 if not session["requested_available"]:
                     raise ValueError("Для выбранного упражнения недостаточно данных.")
@@ -202,18 +228,20 @@ class CoachHandler(BaseHTTPRequestHandler):
     do_POST = _dispatch
 
 
-def make_server(db_path, *, port=0, model_path=None, lessons_path=None):
+def make_server(db_path, *, port=0, model_path=None, lessons_path=None, fight_model_path=None):
     if type(port) is not int or not 0 <= port <= 65535:
         raise ValueError("Номер порта должен быть от 0 до 65535.")
     server = ThreadingHTTPServer(("127.0.0.1", port), CoachHandler)
     server.db_path = db_path
     server.model_path = model_path
+    server.fight_model_path = fight_model_path
     server.lessons_path = Path(lessons_path) if lessons_path else EXAMPLES / "coach-lessons-model.json"
     return server
 
 
-def serve(db_path, *, port=0, open_browser=True, model_path=None, lessons_path=None):
-    with make_server(db_path, port=port, model_path=model_path, lessons_path=lessons_path) as server:
+def serve(db_path, *, port=0, open_browser=True, model_path=None, lessons_path=None, fight_model_path=None):
+    with make_server(db_path, port=port, model_path=model_path, lessons_path=lessons_path,
+                     fight_model_path=fight_model_path) as server:
         url = f"http://127.0.0.1:{server.server_port}/"
         print(f"Тренер открыт по адресу {url}\nДля завершения нажми Ctrl+C.", flush=True)
         if open_browser:

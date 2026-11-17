@@ -14,6 +14,7 @@ from .youtube_captions import video_id
 _TIME = r"(?:\d+:)?\d{1,2}:\d{2}(?:[.,]\d{1,3})?"
 _CUE = re.compile(rf"^({_TIME})\s+-->\s+({_TIME})(?:\s+.*)?$")
 _TXT_TIME = re.compile(rf"^\[?({_TIME})\]?\s+(.+)$")
+_TOPICS = {"lane", "fights", "build", "vision"}
 _SKIP_WORDS = set("""как это этой этом чтобы что для при или тут кто где под над после перед если
     когда между него этих какие какой уже игры игру игре игрок игрока героя герое герои
     свои свою свой разбор сравни проверь посмотри для себя как его was can only more
@@ -29,7 +30,8 @@ _VOCAB = {
     "exp": ("xp", "xpm", "опыт*", "experience"),
     "lane": ("laning", "lane*", "лини*", "лайн*"),
     "wave": ("волн*", "wave*"),
-    "vision": ("ward*", "обзор*", "вижен*", "вард*", "vision", "detection", "sentry", "observer"),
+    "vision": ("ward*", "обзор*", "вижен*", "вард*", "vision", "detection", "sentry", "observer", "сентр*"),
+    "deward": ("deward*", "девард*"),
     "fight": ("fight*", "teamfight*", "файт*", "драк*", "драч*", "дратьс*", "сражен*"),
     "items": ("items", "item", "itemization", "build*", "предмет*", "билд*", "закуп*", "покуп*"),
     "bkb": ("бкб", "бкбш*"),
@@ -46,6 +48,18 @@ _VOCAB = {
     "timing": ("тайминг*", "timing*"),
     "control": ("stun*", "стан", "контрол*", "disable*"),
     "heal": ("heal*", "лечени*", "хил", "лечение"),
+    "initiate": ("initiat*", "инициац*", "инициир*", "врыв*", "jump"),
+    "save": ("saves", "сейв*", "спасен*", "спаса*"),
+    "silence": ("silenc*", "сайленс*", "безмолв*"),
+    "dispel": ("dispell*", "dispels", "диспел*", "развеив*"),
+    "burst": ("burst*", "взрывн*"),
+    "target": ("targets", "цель", "цели", "целей", "целью"),
+    "blink": ("blink", "dagger", "блинк*", "даггер*"),
+    "glimmer": ("глиммер*", "glimmer_cape"),
+    "force_staff": ("форсстаф*", "форсстафф*", "форс", "форсом"),
+    "linkens": ("линкен*", "linken", "линка", "линку"),
+    "nullifier": ("нулифаер*", "нуллифаер*", "нулификатор*"),
+    "smoke": ("smokes", "смок*"),
 }
 _EXACT = {v: k for k, aliases in _VOCAB.items() for v in (k, *aliases) if "*" not in v}
 _PREFIX = [(v[:-1], k) for k, aliases in _VOCAB.items() for v in aliases if v.endswith("*")]
@@ -56,6 +70,7 @@ def _terms(text):
     text = re.sub(r"\bblack king bar\b", " bkb ", text)
     text = re.sub(r"\bmagic stick\b", " magic_stick ", text)
     text = re.sub(r"\biron branch(?:es)?\b", " iron_branch ", text)
+    text = re.sub(r"\b(?:force staff|форс ста[ф]+\w*)\b", " force_staff ", text)
     words = re.findall(r"[a-zа-я][a-zа-я_0-9]+", text)
     result = []
     for word in words:
@@ -218,6 +233,12 @@ def _vector(terms, idf):
     return {k: v / norm for k, v in weights.items()} if norm else {}
 
 
+def _roles(value):
+    if not isinstance(value, list) or any(type(n) is not int or not 1 <= n <= 5 for n in value):
+        raise ValueError("roles принимает список позиций от 1 до 5.")
+    return sorted(set(value))
+
+
 def train_lessons(manifest_path):
     """Read local sources listed in a manifest and fit inverse document frequencies on their passages."""
     path = Path(manifest_path).resolve()
@@ -231,15 +252,22 @@ def train_lessons(manifest_path):
         if not isinstance(segments, list) or not segments:
             raise ValueError("Источник не содержит читаемых учебных фрагментов.")
         title = source.get("title")
-        roles = source.get("roles", [])
+        roles = _roles(source.get("roles", []))
         if not isinstance(title, str) or not title.strip():
             raise ValueError("Добавь название источника.")
-        if not isinstance(roles, list) or any(type(n) is not int or not 1 <= n <= 5 for n in roles):
-            raise ValueError("roles принимает список позиций от 1 до 5.")
         url = _url(source.get("url"))
         for segment in segments:
             if not isinstance(segment, dict) or not isinstance(segment.get("text"), str):
                 raise ValueError("Каждому фрагменту нужен текст.")
+            audience = _roles(segment.get("roles", roles))
+            if roles and (not audience or not set(audience) <= set(roles)):
+                raise ValueError("Позиции фрагмента должны входить в список позиций источника.")
+            topics = segment.get("topics", source.get("topics"))
+            if topics is not None:
+                if (not isinstance(topics, list) or not topics or
+                        any(not isinstance(t, str) or t not in _TOPICS for t in topics)):
+                    raise ValueError("Темы фрагмента должны быть из списка lane, fights, build, vision.")
+                topics = sorted(set(topics))
             start, end = segment.get("start"), segment.get("end")
             if any(t is not None and (type(t) not in (int, float) or not math.isfinite(t) or t < 0)
                    for t in (start, end)) or (end is not None and (start is None or end < start)):
@@ -254,12 +282,14 @@ def train_lessons(manifest_path):
             for i in range(0, len(words), 52):
                 excerpt = " ".join(words[i:i + 52])
                 terms = Counter(_terms(excerpt))
-                identity = (evidence_url, start, end, excerpt)
+                identity = (evidence_url, start, end, excerpt, tuple(audience), tuple(topics or []))
                 if not terms or identity in seen:
                     continue
                 seen.add(identity)
-                doc = {"title": title.strip(), "url": evidence_url, "source_url": url, "roles": roles,
+                doc = {"title": title.strip(), "url": evidence_url, "source_url": url, "roles": audience,
                        "start": start, "end": end, "kind": kind, "text": excerpt}
+                if topics:
+                    doc["topics"] = topics
                 if i == 0 and concepts:
                     terms.update(concepts)
                     doc["caption_concepts"] = concepts
@@ -271,15 +301,22 @@ def train_lessons(manifest_path):
     idf = {term: 1 + math.log((1 + len(docs)) / (1 + frequency[term])) for term in sorted(frequency)}
     for doc, terms in zip(docs, terms_by_doc):
         doc["weights"] = _vector(terms, idf)
+    role_coverage = {}
+    for role in range(1, 6):
+        specific = [d for d in docs if role in d["roles"]]
+        role_coverage[str(role)] = {"sources": len({d["source_url"] for d in specific}), "passages": len(specific)}
     return {"format": "pro-replay-lessons-v1", "algorithm": "TF-IDF + cosine", "idf": idf,
             "notices": manifest.get("notices", []),
+            "role_coverage": role_coverage,
             "source_count": len({d["source_url"] for d in docs}), "passage_count": len(docs), "segments": docs}
 
 
-def retrieve_lessons(model, query, *, position=None, limit=2):
+def retrieve_lessons(model, query, *, position=None, topic=None, limit=2):
     """Return relevant, source-attributed passages; role is a constraint, never a reason to match."""
     if not isinstance(model, dict) or model.get("format") != "pro-replay-lessons-v1":
         raise ValueError("Неизвестный формат индекса учебных материалов.")
+    if topic is not None and topic not in _TOPICS:
+        raise ValueError("Неизвестная тема урока.")
     if type(limit) is not int or limit <= 0:
         return []
     query_vec = _vector(_terms(query), model["idf"])
@@ -288,6 +325,8 @@ def retrieve_lessons(model, query, *, position=None, limit=2):
     hits = []
     for doc in model["segments"]:
         if position and doc["roles"] and position not in doc["roles"]:
+            continue
+        if topic and doc.get("topics") and topic not in doc["topics"]:
             continue
         score = sum(w * doc["weights"].get(k, 0) for k, w in query_vec.items())
         if score >= 0.12:

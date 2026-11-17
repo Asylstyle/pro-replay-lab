@@ -1,5 +1,7 @@
 """Player actions, team totals and timed evidence in OpenDota teamfight windows."""
 
+import json
+from pathlib import Path
 import re
 
 from .analysis import _int
@@ -10,6 +12,8 @@ from .report import _clock, _h, _item
 SLOTS = (0, 1, 2, 3, 4, 128, 129, 130, 131, 132)
 PREFIX = "npc_dota_hero_"
 _BARRACKS = re.compile(r"npc_dota_(goodguys|badguys)_(melee|range)_rax_(top|mid|bot)")
+with Path(__file__).with_name("ability_names.json").open(encoding="utf8") as _source:
+    ABILITY_NAMES = json.load(_source)["names"]
 
 
 def _count(value):
@@ -175,6 +179,8 @@ def _summary_counts(counts, name):
 
 
 def _spell_name(key, hero_prefix):
+    if key in ABILITY_NAMES:
+        return ABILITY_NAMES[key]
     if hero_prefix:
         key = key.removeprefix(hero_prefix + "_")
     return key.replace("_", " ").title()
