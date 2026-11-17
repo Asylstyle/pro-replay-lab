@@ -1,0 +1,3172 @@
+{
+  "patch": "7.41f",
+  "catalog": {
+    "heroes": 127,
+    "abilities": 667,
+    "impact_abilities": 115,
+    "impact_heroes": 95,
+    "distinct_modeled_buttons": 129,
+    "heroes_with_modeled_buttons": 103
+  },
+  "reader_sha256": "4a30ae5234793bd9ca3f94d91f729c415f32a71ecee03b0561ab348930d3e50f",
+  "scope": "Selected displayed cards from the first ten minutes. Decisions are estimates; observed_exchanges sums actual attributed damage over at most three seconds. Counts are not measures of accuracy.",
+  "decision_counts": {
+    "trade": 6,
+    "uncertain": 18,
+    "creep": 35,
+    "both": 3
+  },
+  "matches": [
+    {
+      "match_id": 9088199723,
+      "source": "https://www.opendota.com/matches/9088199723",
+      "players": [
+        {
+          "slot": 1,
+          "hero": "Rubick",
+          "opponent": "Sand King",
+          "seconds_sampled": 601,
+          "decisions": [
+            {
+              "second": 49,
+              "choice": "trade",
+              "our_level": 2,
+              "enemy_level": 1,
+              "hero_option": {
+                "button": "rubick_fade_bolt",
+                "damage": [
+                  61,
+                  61
+                ]
+              },
+              "blocked_replies": [
+                {
+                  "spell": "Stinger",
+                  "cooldown": 6.7
+                }
+              ],
+              "health_margin_pp": 8.5
+            },
+            {
+              "second": 81,
+              "choice": "uncertain",
+              "our_level": 2,
+              "enemy_level": 2,
+              "hero_option": {
+                "button": "rubick_fade_bolt",
+                "damage": [
+                  61,
+                  61
+                ]
+              },
+              "blocked_replies": [
+                {
+                  "spell": "Stinger",
+                  "cooldown": 9.5
+                }
+              ],
+              "uncertainty": [
+                "Sand Storm — ответ зависит от механики навыка"
+              ]
+            },
+            {
+              "second": 194,
+              "choice": "creep",
+              "our_level": 4,
+              "enemy_level": 3,
+              "hero_option": {
+                "button": "rubick_fade_bolt",
+                "damage": [
+                  119,
+                  119
+                ]
+              },
+              "blocked_replies": [
+                {
+                  "spell": "Sand Storm",
+                  "cooldown": 7.6
+                }
+              ],
+              "uncertainty": [
+                "Stinger — ответ зависит от механики навыка"
+              ],
+              "prior_hits": [
+                {
+                  "side": "enemy",
+                  "source_slot": 130,
+                  "target_slot": 1,
+                  "key": "sandking_scorpion_strike",
+                  "spell": "Stinger",
+                  "rank": 1,
+                  "count": 1,
+                  "damage_min": 88,
+                  "damage_max": 88,
+                  "last_time": 152.03334045410156,
+                  "last_tick": 10684
+                }
+              ],
+              "creep_option": {
+                "button": "rubick_fade_bolt",
+                "damage": [
+                  165,
+                  165
+                ],
+                "hp": 94,
+                "same_area": false
+              }
+            },
+            {
+              "second": 339,
+              "choice": "creep",
+              "our_level": 6,
+              "enemy_level": 5,
+              "hero_option": {
+                "button": "rubick_fade_bolt",
+                "damage": [
+                  177,
+                  177
+                ]
+              },
+              "blocked_replies": [
+                {
+                  "spell": "Sand Storm",
+                  "cooldown": 26.7
+                }
+              ],
+              "uncertainty": [
+                "соперник под контролем или уже выполняет другое действие"
+              ],
+              "creep_option": {
+                "button": "rubick_fade_bolt",
+                "damage": [
+                  245,
+                  245
+                ],
+                "hp": 161,
+                "same_area": false
+              }
+            },
+            {
+              "second": 574,
+              "choice": "creep",
+              "our_level": 8,
+              "enemy_level": 7,
+              "blocked_replies": [
+                {
+                  "spell": "Stinger",
+                  "cooldown": 6.9
+                }
+              ],
+              "uncertainty": [
+                "Burrowstrike — попадание ответом не установлено",
+                "Sand Storm — ответ зависит от механики навыка",
+                "Epicenter — ответ зависит от механики навыка"
+              ],
+              "creep_option": {
+                "button": "rubick_fade_bolt",
+                "damage": [
+                  325,
+                  325
+                ],
+                "hp": 312,
+                "same_area": false
+              }
+            }
+          ],
+          "observed_exchanges": [
+            {
+              "start": 38.13331604003906,
+              "end": 40.73332214355469,
+              "dealt": 35,
+              "received": 103,
+              "own_actions": {
+                "Обычная атака": 35
+              },
+              "enemy_actions": {
+                "Caustic Finale": 25,
+                "Stinger": 78
+              }
+            },
+            {
+              "start": 145.6999969482422,
+              "end": 147.6333465576172,
+              "dealt": 237,
+              "received": 35,
+              "own_actions": {
+                "Fade Bolt": 133,
+                "Обычная атака": 104
+              },
+              "enemy_actions": {
+                "Caustic Finale": 35
+              }
+            },
+            {
+              "start": 576.4666900634766,
+              "end": 577.8000030517578,
+              "dealt": 270,
+              "received": 56,
+              "own_actions": {
+                "Stinger": 85,
+                "Fade Bolt": 185
+              },
+              "enemy_actions": {
+                "Burrowstrike": 56
+              }
+            }
+          ]
+        },
+        {
+          "slot": 130,
+          "hero": "Sand King",
+          "opponent": "Rubick",
+          "seconds_sampled": 601,
+          "decisions": [
+            {
+              "second": 263,
+              "choice": "uncertain",
+              "our_level": 4,
+              "enemy_level": 5,
+              "hero_option": {
+                "button": "sandking_burrowstrike",
+                "damage": [
+                  56,
+                  56
+                ]
+              },
+              "enemy_option": {
+                "button": "attack",
+                "damage": [
+                  56,
+                  61
+                ]
+              },
+              "enemy_control": [
+                "Telekinesis"
+              ],
+              "blocked_replies": [
+                {
+                  "spell": "Fade Bolt",
+                  "cooldown": 7.7
+                }
+              ],
+              "uncertainty": [
+                "после применения изменится позиция героя или неизвестна полная защита цели"
+              ],
+              "health_margin_pp": -0.6
+            }
+          ],
+          "observed_exchanges": [
+            {
+              "start": 38.13331604003906,
+              "end": 40.73332214355469,
+              "dealt": 103,
+              "received": 35,
+              "own_actions": {
+                "Caustic Finale": 25,
+                "Stinger": 78
+              },
+              "enemy_actions": {
+                "Обычная атака": 35
+              }
+            },
+            {
+              "start": 145.6999969482422,
+              "end": 147.6333465576172,
+              "dealt": 35,
+              "received": 237,
+              "own_actions": {
+                "Caustic Finale": 35
+              },
+              "enemy_actions": {
+                "Fade Bolt": 133,
+                "Обычная атака": 104
+              }
+            },
+            {
+              "start": 576.4666900634766,
+              "end": 577.8000030517578,
+              "dealt": 56,
+              "received": 270,
+              "own_actions": {
+                "Burrowstrike": 56
+              },
+              "enemy_actions": {
+                "Stinger": 85,
+                "Fade Bolt": 185
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "match_id": 9093297478,
+      "source": "https://www.opendota.com/matches/9093297478",
+      "players": [
+        {
+          "slot": 0,
+          "hero": "Queen of Pain",
+          "opponent": "Ember Spirit",
+          "seconds_sampled": 601,
+          "decisions": [
+            {
+              "second": 100,
+              "choice": "creep",
+              "our_level": 2,
+              "enemy_level": 3,
+              "hero_option": {
+                "button": "attack",
+                "damage": [
+                  44,
+                  49
+                ]
+              },
+              "enemy_option": {
+                "button": "ember_spirit_sleight_of_fist",
+                "damage": [
+                  81,
+                  84
+                ]
+              },
+              "uncertainty": [
+                "момент попадания ответного навыка выходит за пределы короткого размена или неизвестен",
+                "Flame Guard — проверь уже начатое действие или действующий эффект"
+              ],
+              "health_margin_pp": -7.3,
+              "creep_option": {
+                "button": "attack",
+                "damage": [
+                  59,
+                  65
+                ],
+                "hp": 6,
+                "same_area": false
+              }
+            },
+            {
+              "second": 187,
+              "choice": "both",
+              "our_level": 4,
+              "enemy_level": 4,
+              "hero_option": {
+                "button": "queenofpain_scream_of_pain",
+                "damage": [
+                  125,
+                  125
+                ]
+              },
+              "blocked_replies": [
+                {
+                  "spell": "Searing Chains",
+                  "cooldown": 12.5
+                },
+                {
+                  "spell": "Sleight of Fist",
+                  "cooldown": 0.6
+                }
+              ],
+              "uncertainty": [
+                "Sleight of Fist скоро восстановится",
+                "Flame Guard — проверь уже начатое действие или действующий эффект"
+              ],
+              "creep_option": {
+                "button": "queenofpain_scream_of_pain",
+                "damage": [
+                  175,
+                  175
+                ],
+                "hp": 135,
+                "same_area": true
+              }
+            },
+            {
+              "second": 209,
+              "choice": "uncertain",
+              "our_level": 4,
+              "enemy_level": 4,
+              "hero_option": {
+                "button": "queenofpain_scream_of_pain",
+                "damage": [
+                  125,
+                  125
+                ]
+              },
+              "enemy_option": {
+                "button": "attack",
+                "damage": [
+                  50,
+                  53
+                ]
+              },
+              "blocked_replies": [
+                {
+                  "spell": "Searing Chains",
+                  "cooldown": 12.7
+                },
+                {
+                  "spell": "Sleight of Fist",
+                  "mana_short": true
+                }
+              ],
+              "uncertainty": [
+                "Flame Guard — проверь уже начатое действие или действующий эффект"
+              ],
+              "health_margin_pp": 7.8
+            },
+            {
+              "second": 441,
+              "choice": "both",
+              "our_level": 7,
+              "enemy_level": 7,
+              "hero_option": {
+                "button": "queenofpain_scream_of_pain",
+                "damage": [
+                  245,
+                  245
+                ]
+              },
+              "enemy_option": {
+                "button": "ember_spirit_sleight_of_fist",
+                "damage": [
+                  113,
+                  116
+                ]
+              },
+              "blocked_replies": [
+                {
+                  "spell": "Searing Chains",
+                  "cooldown": 12.4
+                }
+              ],
+              "uncertainty": [
+                "момент попадания ответного навыка выходит за пределы короткого размена или неизвестен",
+                "Flame Guard — проверь уже начатое действие или действующий эффект",
+                "Activate Fire Remnant — ответ зависит от механики навыка",
+                "Fire Remnant — ответ зависит от механики навыка"
+              ],
+              "prior_hits": [
+                {
+                  "side": "enemy",
+                  "source_slot": 131,
+                  "target_slot": 0,
+                  "key": "ember_spirit_sleight_of_fist",
+                  "spell": "Sleight of Fist",
+                  "rank": 2,
+                  "count": 3,
+                  "damage_min": 103,
+                  "damage_max": 116,
+                  "last_time": 274.33335876464844,
+                  "last_tick": 14490
+                }
+              ],
+              "health_margin_pp": 11.3,
+              "creep_option": {
+                "button": "queenofpain_scream_of_pain",
+                "damage": [
+                  345,
+                  345
+                ],
+                "hp": 300,
+                "same_area": true
+              }
+            },
+            {
+              "second": 475,
+              "choice": "both",
+              "our_level": 7,
+              "enemy_level": 7,
+              "hero_option": {
+                "button": "queenofpain_scream_of_pain",
+                "damage": [
+                  245,
+                  245
+                ]
+              },
+              "enemy_option": {
+                "button": "ember_spirit_sleight_of_fist",
+                "damage": [
+                  113,
+                  116
+                ]
+              },
+              "uncertainty": [
+                "момент попадания ответного навыка выходит за пределы короткого размена или неизвестен",
+                "Searing Chains — ответ зависит от механики навыка",
+                "Flame Guard — проверь уже начатое действие или действующий эффект",
+                "Activate Fire Remnant — ответ зависит от механики навыка",
+                "Fire Remnant — ответ зависит от механики навыка"
+              ],
+              "prior_hits": [
+                {
+                  "side": "enemy",
+                  "source_slot": 131,
+                  "target_slot": 0,
+                  "key": "ember_spirit_searing_chains",
+                  "spell": "Searing Chains",
+                  "rank": 1,
+                  "count": 10,
+                  "damage_min": 35,
+                  "damage_max": 36,
+                  "last_time": 441.36671447753906,
+                  "last_tick": 19500
+                },
+                {
+                  "side": "enemy",
+                  "source_slot": 131,
+                  "target_slot": 0,
+                  "key": "ember_spirit_sleight_of_fist",
+                  "spell": "Sleight of Fist",
+                  "rank": 2,
+                  "count": 4,
+                  "damage_min": 103,
+                  "damage_max": 116,
+                  "last_time": 441.83338928222656,
+                  "last_tick": 19514
+                }
+              ],
+              "health_margin_pp": 11.3,
+              "creep_option": {
+                "button": "queenofpain_scream_of_pain",
+                "damage": [
+                  345,
+                  345
+                ],
+                "hp": 300,
+                "same_area": true
+              }
+            }
+          ],
+          "observed_exchanges": [
+            {
+              "start": 92.43333435058594,
+              "end": 95.33335876464844,
+              "dealt": 70,
+              "received": 37,
+              "own_actions": {
+                "Обычная атака": 50,
+                "Scream Of Pain": 20
+              },
+              "enemy_actions": {
+                "Flame Guard": 33,
+                "Immolation": 4
+              }
+            },
+            {
+              "start": 155.6666717529297,
+              "end": 156.2000274658203,
+              "dealt": 127,
+              "received": 2,
+              "own_actions": {
+                "Scream Of Pain": 127
+              },
+              "enemy_actions": {
+                "Immolation": 2
+              }
+            },
+            {
+              "start": 271.2666778564453,
+              "end": 274.2000274658203,
+              "dealt": 31,
+              "received": 235,
+              "own_actions": {
+                "Scream Of Pain": 31
+              },
+              "enemy_actions": {
+                "Flame Guard": 70,
+                "Immolation": 39,
+                "Searing Chains": 72,
+                "Обычная атака": 54
+              }
+            }
+          ]
+        },
+        {
+          "slot": 131,
+          "hero": "Ember Spirit",
+          "opponent": "Queen of Pain",
+          "seconds_sampled": 601,
+          "decisions": [
+            {
+              "second": 39,
+              "choice": "uncertain",
+              "our_level": 1,
+              "enemy_level": 1,
+              "hero_option": {
+                "button": "ember_spirit_sleight_of_fist",
+                "damage": [
+                  78,
+                  81
+                ]
+              },
+              "enemy_option": {
+                "button": "attack",
+                "damage": [
+                  44,
+                  49
+                ]
+              },
+              "blocked_replies": [
+                {
+                  "spell": "Scream Of Pain",
+                  "cooldown": 7.2
+                }
+              ],
+              "uncertainty": [
+                "попадание своего навыка требует дополнительного времени"
+              ],
+              "health_margin_pp": 5.8
+            },
+            {
+              "second": 97,
+              "choice": "creep",
+              "our_level": 2,
+              "enemy_level": 2,
+              "hero_option": {
+                "button": "ember_spirit_sleight_of_fist",
+                "damage": [
+                  78,
+                  81
+                ]
+              },
+              "enemy_option": {
+                "button": "attack",
+                "damage": [
+                  46,
+                  50
+                ]
+              },
+              "blocked_replies": [
+                {
+                  "spell": "Scream Of Pain",
+                  "cooldown": 4.9
+                }
+              ],
+              "uncertainty": [
+                "Blink — возможна защита или уход",
+                "попадание своего навыка требует дополнительного времени"
+              ],
+              "health_margin_pp": 5.0,
+              "creep_option": {
+                "button": "ember_spirit_sleight_of_fist",
+                "damage": [
+                  58,
+                  62
+                ],
+                "hp": 1,
+                "same_area": false
+              }
+            },
+            {
+              "second": 141,
+              "choice": "creep",
+              "our_level": 3,
+              "enemy_level": 3,
+              "hero_option": {
+                "button": "ember_spirit_sleight_of_fist",
+                "damage": [
+                  111,
+                  114
+                ]
+              },
+              "enemy_option": {
+                "button": "queenofpain_scream_of_pain",
+                "damage": [
+                  126,
+                  126
+                ]
+              },
+              "uncertainty": [
+                "Blink — возможна защита или уход",
+                "попадание своего навыка требует дополнительного времени"
+              ],
+              "health_margin_pp": -0.1,
+              "creep_option": {
+                "button": "ember_spirit_sleight_of_fist",
+                "damage": [
+                  61,
+                  65
+                ],
+                "hp": 4,
+                "same_area": false
+              }
+            },
+            {
+              "second": 420,
+              "choice": "creep",
+              "our_level": 7,
+              "enemy_level": 7,
+              "hero_option": {
+                "button": "ember_spirit_sleight_of_fist",
+                "damage": [
+                  113,
+                  116
+                ]
+              },
+              "enemy_option": {
+                "button": "attack",
+                "damage": [
+                  52,
+                  56
+                ]
+              },
+              "blocked_replies": [
+                {
+                  "spell": "Scream Of Pain",
+                  "cooldown": 5.7
+                }
+              ],
+              "uncertainty": [
+                "Blink — возможна защита или уход",
+                "Sonic Wave — ответ зависит от механики навыка",
+                "попадание своего навыка требует дополнительного времени"
+              ],
+              "prior_hits": [
+                {
+                  "side": "self",
+                  "source_slot": 131,
+                  "target_slot": 0,
+                  "key": "ember_spirit_searing_chains",
+                  "spell": "Searing Chains",
+                  "rank": 1,
+                  "count": 8,
+                  "damage_min": 36,
+                  "damage_max": 36,
+                  "last_time": 274.00001525878906,
+                  "last_tick": 14480
+                },
+                {
+                  "side": "self",
+                  "source_slot": 131,
+                  "target_slot": 0,
+                  "key": "ember_spirit_sleight_of_fist",
+                  "spell": "Sleight of Fist",
+                  "rank": 2,
+                  "count": 3,
+                  "damage_min": 103,
+                  "damage_max": 116,
+                  "last_time": 274.33335876464844,
+                  "last_tick": 14490
+                }
+              ],
+              "health_margin_pp": 6.9,
+              "creep_option": {
+                "button": "ember_spirit_sleight_of_fist",
+                "damage": [
+                  75,
+                  79
+                ],
+                "hp": 67,
+                "same_area": false
+              }
+            }
+          ],
+          "observed_exchanges": [
+            {
+              "start": 92.43333435058594,
+              "end": 95.33335876464844,
+              "dealt": 37,
+              "received": 70,
+              "own_actions": {
+                "Flame Guard": 33,
+                "Immolation": 4
+              },
+              "enemy_actions": {
+                "Обычная атака": 50,
+                "Scream Of Pain": 20
+              }
+            },
+            {
+              "start": 155.6666717529297,
+              "end": 156.2000274658203,
+              "dealt": 2,
+              "received": 127,
+              "own_actions": {
+                "Immolation": 2
+              },
+              "enemy_actions": {
+                "Scream Of Pain": 127
+              }
+            },
+            {
+              "start": 271.2666778564453,
+              "end": 274.2000274658203,
+              "dealt": 235,
+              "received": 31,
+              "own_actions": {
+                "Flame Guard": 70,
+                "Immolation": 39,
+                "Searing Chains": 72,
+                "Обычная атака": 54
+              },
+              "enemy_actions": {
+                "Scream Of Pain": 31
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "match_id": 9094400691,
+      "source": "https://www.opendota.com/matches/9094400691",
+      "players": [
+        {
+          "slot": 4,
+          "hero": "Outworld Destroyer",
+          "opponent": "Shadow Fiend",
+          "seconds_sampled": 601,
+          "decisions": [
+            {
+              "second": 43,
+              "choice": "creep",
+              "our_level": 1,
+              "enemy_level": 1,
+              "hero_option": {
+                "button": "obsidian_destroyer_astral_imprisonment",
+                "damage": [
+                  65,
+                  65
+                ]
+              },
+              "enemy_option": {
+                "button": "attack",
+                "damage": [
+                  39,
+                  44
+                ]
+              },
+              "blocked_replies": [
+                {
+                  "spell": "Shadowraze · дальний",
+                  "cooldown": 6.4
+                },
+                {
+                  "spell": "Shadowraze · средний",
+                  "cooldown": 3.5
+                },
+                {
+                  "spell": "Shadowraze · ближний",
+                  "mana_short": true
+                }
+              ],
+              "uncertainty": [
+                "оценён один компонент навыка. Длительность и итог действия требуют проверки",
+                "попадание своего навыка требует дополнительного времени"
+              ],
+              "health_margin_pp": 4.2,
+              "creep_option": {
+                "button": "obsidian_destroyer_astral_imprisonment",
+                "damage": [
+                  90,
+                  90
+                ],
+                "hp": 71,
+                "same_area": false
+              }
+            },
+            {
+              "second": 236,
+              "choice": "uncertain",
+              "our_level": 4,
+              "enemy_level": 4,
+              "hero_option": {
+                "button": "obsidian_destroyer_astral_imprisonment",
+                "damage": [
+                  130,
+                  130
+                ]
+              },
+              "enemy_option": {
+                "button": "attack",
+                "damage": [
+                  52,
+                  57
+                ]
+              },
+              "blocked_replies": [
+                {
+                  "spell": "Shadowraze · дальний",
+                  "cooldown": 2.1
+                },
+                {
+                  "spell": "Shadowraze · ближний",
+                  "mana_short": true
+                },
+                {
+                  "spell": "Shadowraze · средний",
+                  "mana_short": true
+                }
+              ],
+              "uncertainty": [
+                "оценён один компонент навыка. Длительность и итог действия требуют проверки",
+                "попадание своего навыка требует дополнительного времени"
+              ],
+              "prior_hits": [
+                {
+                  "side": "self",
+                  "source_slot": 4,
+                  "target_slot": 128,
+                  "key": "obsidian_destroyer_astral_imprisonment",
+                  "spell": "Astral Imprisonment",
+                  "rank": 2,
+                  "count": 3,
+                  "damage_min": 131,
+                  "damage_max": 132,
+                  "last_time": 215.66665649414062,
+                  "last_tick": 13508
+                }
+              ],
+              "health_margin_pp": 10.7
+            },
+            {
+              "second": 275,
+              "choice": "creep",
+              "our_level": 5,
+              "enemy_level": 5,
+              "hero_option": {
+                "button": "obsidian_destroyer_astral_imprisonment",
+                "damage": [
+                  195,
+                  195
+                ]
+              },
+              "blocked_replies": [
+                {
+                  "spell": "Shadowraze · средний",
+                  "cooldown": 2.4
+                }
+              ],
+              "uncertainty": [
+                "соперник под контролем или уже выполняет другое действие",
+                "Shadowraze · дальний — проверь уже начатое действие или действующий эффект",
+                "оценён один компонент навыка. Длительность и итог действия требуют проверки",
+                "попадание своего навыка требует дополнительного времени"
+              ],
+              "creep_option": {
+                "button": "obsidian_destroyer_astral_imprisonment",
+                "damage": [
+                  270,
+                  270
+                ],
+                "hp": 209,
+                "same_area": false
+              }
+            },
+            {
+              "second": 426,
+              "choice": "creep",
+              "our_level": 7,
+              "enemy_level": 6,
+              "blocked_replies": [
+                {
+                  "spell": "Shadowraze · дальний",
+                  "cooldown": 1.0
+                }
+              ],
+              "uncertainty": [
+                "Shadowraze · дальний скоро восстановится",
+                "Requiem of Souls — ответ зависит от механики навыка"
+              ],
+              "creep_option": {
+                "button": "obsidian_destroyer_astral_imprisonment",
+                "damage": [
+                  360,
+                  360
+                ],
+                "hp": 300,
+                "same_area": false
+              }
+            },
+            {
+              "second": 457,
+              "choice": "creep",
+              "our_level": 7,
+              "enemy_level": 6,
+              "blocked_replies": [
+                {
+                  "spell": "Shadowraze · дальний",
+                  "cooldown": 6.9
+                },
+                {
+                  "spell": "Shadowraze · средний",
+                  "cooldown": 2.4
+                },
+                {
+                  "spell": "Requiem of Souls",
+                  "mana_short": true
+                }
+              ],
+              "prior_hits": [
+                {
+                  "side": "self",
+                  "source_slot": 4,
+                  "target_slot": 128,
+                  "key": "obsidian_destroyer_astral_imprisonment",
+                  "spell": "Astral Imprisonment",
+                  "rank": 4,
+                  "count": 1,
+                  "damage_min": 174,
+                  "damage_max": 174,
+                  "last_time": 431.1000061035156,
+                  "last_tick": 21390
+                }
+              ],
+              "creep_option": {
+                "button": "obsidian_destroyer_astral_imprisonment",
+                "damage": [
+                  360,
+                  360
+                ],
+                "hp": 300,
+                "same_area": false
+              }
+            }
+          ],
+          "observed_exchanges": [
+            {
+              "start": 43.76666259765625,
+              "end": 45.633331298828125,
+              "dealt": 66,
+              "received": 44,
+              "own_actions": {
+                "Astral Imprisonment": 66
+              },
+              "enemy_actions": {
+                "Обычная атака": 44
+              }
+            },
+            {
+              "start": 121.0,
+              "end": 122.0,
+              "dealt": 132,
+              "received": 65,
+              "own_actions": {
+                "Astral Imprisonment": 132
+              },
+              "enemy_actions": {
+                "Shadowraze · дальний": 65
+              }
+            },
+            {
+              "start": 124.43331909179688,
+              "end": 125.33331298828125,
+              "dealt": 58,
+              "received": 203,
+              "own_actions": {
+                "Обычная атака": 58
+              },
+              "enemy_actions": {
+                "Shadowraze · средний": 147,
+                "Обычная атака": 56
+              }
+            }
+          ]
+        },
+        {
+          "slot": 128,
+          "hero": "Shadow Fiend",
+          "opponent": "Outworld Destroyer",
+          "seconds_sampled": 601,
+          "decisions": [
+            {
+              "second": 36,
+              "choice": "uncertain",
+              "our_level": 1,
+              "enemy_level": 1,
+              "hero_option": {
+                "button": "nevermore_shadowraze2",
+                "damage": [
+                  60,
+                  60
+                ]
+              },
+              "blocked_replies": [
+                {
+                  "spell": "Astral Imprisonment",
+                  "cooldown": 6.4
+                }
+              ],
+              "uncertainty": [
+                "оценён один компонент навыка. Длительность и итог действия требуют проверки"
+              ],
+              "health_margin_pp": 9.0
+            },
+            {
+              "second": 75,
+              "choice": "creep",
+              "our_level": 2,
+              "enemy_level": 2,
+              "blocked_replies": [
+                {
+                  "spell": "Astral Imprisonment",
+                  "cooldown": 15.4
+                }
+              ],
+              "uncertainty": [
+                "Arcane Orb — ответ зависит от механики навыка"
+              ],
+              "prior_hits": [
+                {
+                  "side": "self",
+                  "source_slot": 128,
+                  "target_slot": 4,
+                  "key": "nevermore_shadowraze2",
+                  "spell": "Shadowraze · средний",
+                  "rank": 1,
+                  "count": 1,
+                  "damage_min": 64,
+                  "damage_max": 64,
+                  "last_time": 37.466644287109375,
+                  "last_tick": 8162
+                }
+              ],
+              "creep_option": {
+                "button": "nevermore_shadowraze3",
+                "damage": [
+                  85,
+                  85
+                ],
+                "hp": 84,
+                "same_area": false
+              }
+            },
+            {
+              "second": 167,
+              "choice": "creep",
+              "our_level": 3,
+              "enemy_level": 4,
+              "blocked_replies": [
+                {
+                  "spell": "Astral Imprisonment",
+                  "cooldown": 5.5
+                }
+              ],
+              "uncertainty": [
+                "Arcane Orb — ответ зависит от механики навыка",
+                "Objurgation — ответ зависит от механики навыка"
+              ],
+              "creep_option": {
+                "button": "nevermore_shadowraze1",
+                "damage": [
+                  150,
+                  150
+                ],
+                "hp": 5,
+                "same_area": false
+              }
+            },
+            {
+              "second": 279,
+              "choice": "creep",
+              "our_level": 5,
+              "enemy_level": 5,
+              "blocked_replies": [
+                {
+                  "spell": "Astral Imprisonment",
+                  "cooldown": 10.5
+                }
+              ],
+              "uncertainty": [
+                "Arcane Orb — ответ зависит от механики навыка",
+                "Objurgation — ответ зависит от механики навыка"
+              ],
+              "creep_option": {
+                "button": "nevermore_shadowraze1",
+                "damage": [
+                  215,
+                  215
+                ],
+                "hp": 214,
+                "same_area": false
+              }
+            },
+            {
+              "second": 426,
+              "choice": "creep",
+              "our_level": 6,
+              "enemy_level": 7,
+              "blocked_replies": [
+                {
+                  "spell": "Objurgation",
+                  "cooldown": 13.9
+                }
+              ],
+              "uncertainty": [
+                "Arcane Orb — ответ зависит от механики навыка",
+                "Astral Imprisonment — попадание ответом не установлено",
+                "Sanity's Eclipse — ответ зависит от механики навыка"
+              ],
+              "creep_option": {
+                "button": "nevermore_shadowraze2",
+                "damage": [
+                  215,
+                  215
+                ],
+                "hp": 108,
+                "same_area": false
+              }
+            }
+          ],
+          "observed_exchanges": [
+            {
+              "start": 43.76666259765625,
+              "end": 45.633331298828125,
+              "dealt": 44,
+              "received": 66,
+              "own_actions": {
+                "Обычная атака": 44
+              },
+              "enemy_actions": {
+                "Astral Imprisonment": 66
+              }
+            },
+            {
+              "start": 121.0,
+              "end": 122.0,
+              "dealt": 65,
+              "received": 132,
+              "own_actions": {
+                "Shadowraze · дальний": 65
+              },
+              "enemy_actions": {
+                "Astral Imprisonment": 132
+              }
+            },
+            {
+              "start": 124.43331909179688,
+              "end": 125.33331298828125,
+              "dealt": 203,
+              "received": 58,
+              "own_actions": {
+                "Shadowraze · средний": 147,
+                "Обычная атака": 56
+              },
+              "enemy_actions": {
+                "Обычная атака": 58
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "match_id": 9094426614,
+      "source": "https://www.opendota.com/matches/9094426614",
+      "players": [
+        {
+          "slot": 2,
+          "hero": "Huskar",
+          "opponent": "Necrophos",
+          "seconds_sampled": 601,
+          "decisions": [
+            {
+              "second": 39,
+              "choice": "uncertain",
+              "our_level": 1,
+              "enemy_level": 1,
+              "hero_option": {
+                "button": "attack",
+                "damage": [
+                  41,
+                  45
+                ]
+              },
+              "enemy_option": {
+                "button": "necrolyte_death_pulse",
+                "damage": [
+                  73,
+                  73
+                ]
+              },
+              "health_margin_pp": -3.3
+            },
+            {
+              "second": 188,
+              "choice": "creep",
+              "our_level": 4,
+              "enemy_level": 3,
+              "uncertainty": [
+                "игрок в 850 ед. от вражеской средней T1"
+              ],
+              "creep_option": {
+                "button": "attack",
+                "damage": [
+                  61,
+                  66
+                ],
+                "hp": 45,
+                "same_area": false
+              }
+            }
+          ],
+          "observed_exchanges": [
+            {
+              "start": 25.800003051757812,
+              "end": 28.76666259765625,
+              "dealt": 39,
+              "received": 102,
+              "own_actions": {
+                "Обычная атака": 39
+              },
+              "enemy_actions": {
+                "Обычная атака": 102
+              }
+            },
+            {
+              "start": 29.099990844726562,
+              "end": 32.09999084472656,
+              "dealt": 77,
+              "received": 50,
+              "own_actions": {
+                "Burning Spear": 39,
+                "Обычная атака": 38
+              },
+              "enemy_actions": {
+                "Обычная атака": 50
+              }
+            },
+            {
+              "start": 166.7666778564453,
+              "end": 169.7666778564453,
+              "dealt": 163,
+              "received": 18,
+              "own_actions": {
+                "Обычная атака": 88,
+                "Burning Spear": 75
+              },
+              "enemy_actions": {
+                "Heartstopper Aura": 18
+              }
+            }
+          ]
+        },
+        {
+          "slot": 128,
+          "hero": "Necrophos",
+          "opponent": "Huskar",
+          "seconds_sampled": 601,
+          "decisions": [
+            {
+              "second": 39,
+              "choice": "uncertain",
+              "our_level": 1,
+              "enemy_level": 1,
+              "hero_option": {
+                "button": "necrolyte_death_pulse",
+                "damage": [
+                  73,
+                  73
+                ]
+              },
+              "enemy_option": {
+                "button": "huskar_burning_spear",
+                "damage": [
+                  41,
+                  45
+                ]
+              },
+              "uncertainty": [
+                "часть урона или защиты для ответа не измерена",
+                "Burning Spear недавно наносил периодический урон. Проверь, продолжал ли действовать эффект"
+              ],
+              "health_margin_pp": 2.7
+            }
+          ],
+          "observed_exchanges": [
+            {
+              "start": 25.800003051757812,
+              "end": 28.76666259765625,
+              "dealt": 102,
+              "received": 39,
+              "own_actions": {
+                "Обычная атака": 102
+              },
+              "enemy_actions": {
+                "Обычная атака": 39
+              }
+            },
+            {
+              "start": 29.099990844726562,
+              "end": 32.09999084472656,
+              "dealt": 50,
+              "received": 77,
+              "own_actions": {
+                "Обычная атака": 50
+              },
+              "enemy_actions": {
+                "Burning Spear": 39,
+                "Обычная атака": 38
+              }
+            },
+            {
+              "start": 166.7666778564453,
+              "end": 169.7666778564453,
+              "dealt": 18,
+              "received": 163,
+              "own_actions": {
+                "Heartstopper Aura": 18
+              },
+              "enemy_actions": {
+                "Обычная атака": 88,
+                "Burning Spear": 75
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "match_id": 9094508560,
+      "source": "https://www.opendota.com/matches/9094508560",
+      "players": [
+        {
+          "slot": 0,
+          "hero": "Tinker",
+          "opponent": "Pangolier",
+          "seconds_sampled": 601,
+          "decisions": [
+            {
+              "second": 27,
+              "choice": "trade",
+              "our_level": 1,
+              "enemy_level": 1,
+              "hero_option": {
+                "button": "tinker_laser",
+                "damage": [
+                  75,
+                  75
+                ]
+              },
+              "blocked_replies": [
+                {
+                  "spell": "Shield Crash",
+                  "cooldown": 14.0
+                }
+              ],
+              "health_margin_pp": 11.2
+            },
+            {
+              "second": 48,
+              "choice": "creep",
+              "our_level": 1,
+              "enemy_level": 1,
+              "hero_option": {
+                "button": "tinker_laser",
+                "damage": [
+                  75,
+                  75
+                ]
+              },
+              "enemy_option": {
+                "button": "pangolier_shield_crash",
+                "damage": [
+                  45,
+                  45
+                ]
+              },
+              "uncertainty": [
+                "часть урона или защиты для ответа не измерена",
+                "Shield Crash меняет положение соперника"
+              ],
+              "prior_hits": [
+                {
+                  "side": "enemy",
+                  "source_slot": 130,
+                  "target_slot": 0,
+                  "key": "pangolier_shield_crash",
+                  "spell": "Shield Crash",
+                  "rank": 1,
+                  "count": 1,
+                  "damage_min": 46,
+                  "damage_max": 46,
+                  "last_time": 26.433319091796875,
+                  "last_tick": 7854
+                }
+              ],
+              "health_margin_pp": 3.7,
+              "creep_option": {
+                "button": "tinker_laser",
+                "damage": [
+                  75,
+                  75
+                ],
+                "hp": 50,
+                "same_area": false
+              }
+            },
+            {
+              "second": 145,
+              "choice": "uncertain",
+              "our_level": 3,
+              "enemy_level": 3,
+              "hero_option": {
+                "button": "tinker_laser",
+                "damage": [
+                  75,
+                  75
+                ]
+              },
+              "enemy_option": {
+                "button": "attack",
+                "damage": [
+                  45,
+                  50
+                ]
+              },
+              "blocked_replies": [
+                {
+                  "spell": "Shield Crash",
+                  "cooldown": 11.4
+                }
+              ],
+              "uncertainty": [
+                "Swashbuckle — ответ зависит от механики навыка"
+              ],
+              "prior_hits": [
+                {
+                  "side": "enemy",
+                  "source_slot": 130,
+                  "target_slot": 0,
+                  "key": "pangolier_swashbuckle",
+                  "spell": "Swashbuckle",
+                  "rank": 1,
+                  "count": 6,
+                  "damage_min": 23,
+                  "damage_max": 27,
+                  "last_time": 120.9666748046875,
+                  "last_tick": 10690
+                }
+              ],
+              "health_margin_pp": 2.7
+            },
+            {
+              "second": 184,
+              "choice": "trade",
+              "our_level": 4,
+              "enemy_level": 4,
+              "hero_option": {
+                "button": "tinker_laser",
+                "damage": [
+                  150,
+                  150
+                ]
+              },
+              "blocked_replies": [
+                {
+                  "spell": "Shield Crash",
+                  "cooldown": 11.1
+                },
+                {
+                  "spell": "Swashbuckle",
+                  "cooldown": 8.4
+                }
+              ],
+              "health_margin_pp": 17.7
+            },
+            {
+              "second": 325,
+              "choice": "trade",
+              "our_level": 5,
+              "enemy_level": 6,
+              "hero_option": {
+                "button": "tinker_laser",
+                "damage": [
+                  150,
+                  150
+                ]
+              },
+              "blocked_replies": [
+                {
+                  "spell": "Swashbuckle",
+                  "cooldown": 8.7
+                },
+                {
+                  "spell": "Shield Crash",
+                  "cooldown": 7.7
+                }
+              ],
+              "health_margin_pp": 15.7
+            }
+          ],
+          "observed_exchanges": [
+            {
+              "start": 23.633331298828125,
+              "end": 26.433319091796875,
+              "dealt": 85,
+              "received": 46,
+              "own_actions": {
+                "Обычная атака": 85
+              },
+              "enemy_actions": {
+                "Shield Crash": 46
+              }
+            },
+            {
+              "start": 232.80001831054688,
+              "end": 235.10000610351562,
+              "dealt": 96,
+              "received": 276,
+              "own_actions": {
+                "Обычная атака": 96
+              },
+              "enemy_actions": {
+                "Обычная атака": 117,
+                "Swashbuckle": 159
+              }
+            },
+            {
+              "start": 296.26666259765625,
+              "end": 298.79998779296875,
+              "dealt": 410,
+              "received": 328,
+              "own_actions": {
+                "Обычная атака": 97,
+                "March of the Machines": 163,
+                "Laser": 150
+              },
+              "enemy_actions": {
+                "Swashbuckle": 231,
+                "Shield Crash": 97
+              }
+            }
+          ]
+        },
+        {
+          "slot": 130,
+          "hero": "Pangolier",
+          "opponent": "Tinker",
+          "seconds_sampled": 601,
+          "decisions": [
+            {
+              "second": 139,
+              "choice": "creep",
+              "our_level": 3,
+              "enemy_level": 3,
+              "blocked_replies": [
+                {
+                  "spell": "March of the Machines",
+                  "cooldown": 11.1
+                }
+              ],
+              "uncertainty": [
+                "Laser — попадание ответом не установлено"
+              ],
+              "prior_hits": [
+                {
+                  "side": "self",
+                  "source_slot": 130,
+                  "target_slot": 0,
+                  "key": "pangolier_shield_crash",
+                  "spell": "Shield Crash",
+                  "rank": 2,
+                  "count": 1,
+                  "damage_min": 90,
+                  "damage_max": 90,
+                  "last_time": 118.93331909179688,
+                  "last_tick": 10630
+                }
+              ],
+              "creep_option": {
+                "button": "pangolier_shield_crash",
+                "damage": [
+                  120,
+                  120
+                ],
+                "hp": 66,
+                "same_area": false
+              }
+            },
+            {
+              "second": 182,
+              "choice": "creep",
+              "our_level": 4,
+              "enemy_level": 4,
+              "hero_option": {
+                "button": "pangolier_shield_crash",
+                "damage": [
+                  88,
+                  88
+                ]
+              },
+              "enemy_option": {
+                "button": "attack",
+                "damage": [
+                  47,
+                  52
+                ]
+              },
+              "blocked_replies": [
+                {
+                  "spell": "March of the Machines",
+                  "cooldown": 11.2
+                },
+                {
+                  "spell": "Laser",
+                  "cooldown": 0.5
+                }
+              ],
+              "uncertainty": [
+                "Laser скоро восстановится",
+                "после применения изменится позиция героя или неизвестна полная защита цели",
+                "оценён один компонент навыка. Длительность и итог действия требуют проверки"
+              ],
+              "prior_hits": [
+                {
+                  "side": "self",
+                  "source_slot": 130,
+                  "target_slot": 0,
+                  "key": "pangolier_shield_crash",
+                  "spell": "Shield Crash",
+                  "rank": 2,
+                  "count": 2,
+                  "damage_min": 90,
+                  "damage_max": 90,
+                  "last_time": 144.79998779296875,
+                  "last_tick": 11406
+                }
+              ],
+              "health_margin_pp": 5.8,
+              "creep_option": {
+                "button": "pangolier_shield_crash",
+                "damage": [
+                  120,
+                  120
+                ],
+                "hp": 114,
+                "same_area": false
+              }
+            },
+            {
+              "second": 213,
+              "choice": "creep",
+              "our_level": 4,
+              "enemy_level": 4,
+              "hero_option": {
+                "button": "pangolier_shield_crash",
+                "damage": [
+                  88,
+                  88
+                ]
+              },
+              "blocked_replies": [
+                {
+                  "spell": "March of the Machines",
+                  "cooldown": 19.9
+                }
+              ],
+              "uncertainty": [
+                "урон или условия обычной атаки не установлены",
+                "соперник под контролем или уже выполняет другое действие",
+                "Laser — проверь уже начатое действие или действующий эффект",
+                "после применения изменится позиция героя или неизвестна полная защита цели",
+                "оценён один компонент навыка. Длительность и итог действия требуют проверки"
+              ],
+              "prior_hits": [
+                {
+                  "side": "self",
+                  "source_slot": 130,
+                  "target_slot": 0,
+                  "key": "pangolier_shield_crash",
+                  "spell": "Shield Crash",
+                  "rank": 2,
+                  "count": 4,
+                  "damage_min": 79,
+                  "damage_max": 90,
+                  "last_time": 200.20001220703125,
+                  "last_tick": 13068
+                }
+              ],
+              "creep_option": {
+                "button": "pangolier_shield_crash",
+                "damage": [
+                  120,
+                  120
+                ],
+                "hp": 28,
+                "same_area": false
+              }
+            },
+            {
+              "second": 334,
+              "choice": "uncertain",
+              "our_level": 6,
+              "enemy_level": 5,
+              "hero_option": {
+                "button": "pangolier_shield_crash",
+                "damage": [
+                  131,
+                  131
+                ]
+              },
+              "blocked_replies": [
+                {
+                  "spell": "March of the Machines",
+                  "cooldown": 21.1
+                },
+                {
+                  "spell": "Laser",
+                  "cooldown": 17.9
+                }
+              ],
+              "uncertainty": [
+                "после применения изменится позиция героя или неизвестна полная защита цели",
+                "оценён один компонент навыка. Длительность и итог действия требуют проверки"
+              ],
+              "prior_hits": [
+                {
+                  "side": "self",
+                  "source_slot": 130,
+                  "target_slot": 0,
+                  "key": "pangolier_swashbuckle",
+                  "spell": "Swashbuckle",
+                  "rank": 3,
+                  "count": 9,
+                  "damage_min": 67,
+                  "damage_max": 77,
+                  "last_time": 321.0333251953125,
+                  "last_tick": 16692
+                }
+              ],
+              "health_margin_pp": 16.8
+            }
+          ],
+          "observed_exchanges": [
+            {
+              "start": 23.633331298828125,
+              "end": 26.433319091796875,
+              "dealt": 46,
+              "received": 85,
+              "own_actions": {
+                "Shield Crash": 46
+              },
+              "enemy_actions": {
+                "Обычная атака": 85
+              }
+            },
+            {
+              "start": 232.80001831054688,
+              "end": 235.10000610351562,
+              "dealt": 276,
+              "received": 96,
+              "own_actions": {
+                "Обычная атака": 117,
+                "Swashbuckle": 159
+              },
+              "enemy_actions": {
+                "Обычная атака": 96
+              }
+            },
+            {
+              "start": 296.26666259765625,
+              "end": 298.79998779296875,
+              "dealt": 328,
+              "received": 410,
+              "own_actions": {
+                "Swashbuckle": 231,
+                "Shield Crash": 97
+              },
+              "enemy_actions": {
+                "Обычная атака": 97,
+                "March of the Machines": 163,
+                "Laser": 150
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "match_id": 9094532191,
+      "source": "https://www.opendota.com/matches/9094532191",
+      "players": [
+        {
+          "slot": 0,
+          "hero": "Invoker",
+          "opponent": "Puck",
+          "seconds_sampled": 601,
+          "decisions": [
+            {
+              "second": 96,
+              "choice": "creep",
+              "our_level": 3,
+              "enemy_level": 2,
+              "hero_option": {
+                "button": "invoker_cold_snap",
+                "damage": [
+                  20,
+                  20
+                ]
+              },
+              "blocked_replies": [
+                {
+                  "spell": "Illusory Orb",
+                  "cooldown": 10.2
+                }
+              ],
+              "uncertainty": [
+                "Phase Shift — возможна защита или уход",
+                "puck_ethereal_jaunt — дополнительный навык вне набора героя",
+                "оценён один компонент навыка. Длительность и итог действия требуют проверки"
+              ],
+              "creep_option": {
+                "button": "attack",
+                "damage": [
+                  69,
+                  75
+                ],
+                "hp": 53,
+                "same_area": false
+              }
+            },
+            {
+              "second": 117,
+              "choice": "uncertain",
+              "our_level": 3,
+              "enemy_level": 3,
+              "hero_option": {
+                "button": "invoker_cold_snap",
+                "damage": [
+                  20,
+                  20
+                ]
+              },
+              "enemy_option": {
+                "button": "puck_illusory_orb",
+                "damage": [
+                  99,
+                  99
+                ]
+              },
+              "blocked_replies": [
+                {
+                  "spell": "Phase Shift",
+                  "cooldown": 6.6
+                }
+              ],
+              "uncertainty": [
+                "оценён один компонент навыка. Длительность и итог действия требуют проверки"
+              ],
+              "health_margin_pp": -10.0
+            },
+            {
+              "second": 261,
+              "choice": "creep",
+              "our_level": 4,
+              "enemy_level": 5,
+              "hero_option": {
+                "button": "invoker_cold_snap",
+                "damage": [
+                  25,
+                  25
+                ]
+              },
+              "enemy_option": {
+                "button": "puck_illusory_orb",
+                "damage": [
+                  146,
+                  146
+                ]
+              },
+              "blocked_replies": [
+                {
+                  "spell": "Phase Shift",
+                  "cooldown": 0.9
+                }
+              ],
+              "uncertainty": [
+                "Waning Rift — попадание ответом не установлено",
+                "Phase Shift скоро восстановится",
+                "оценён один компонент навыка. Длительность и итог действия требуют проверки"
+              ],
+              "health_margin_pp": -13.1,
+              "creep_option": {
+                "button": "attack",
+                "damage": [
+                  85,
+                  91
+                ],
+                "hp": 78,
+                "same_area": false
+              }
+            },
+            {
+              "second": 280,
+              "choice": "creep",
+              "our_level": 5,
+              "enemy_level": 5,
+              "hero_option": {
+                "button": "invoker_cold_snap",
+                "damage": [
+                  25,
+                  25
+                ]
+              },
+              "blocked_replies": [
+                {
+                  "spell": "Illusory Orb",
+                  "cooldown": 9.4
+                }
+              ],
+              "uncertainty": [
+                "Waning Rift — попадание ответом не установлено",
+                "Phase Shift — возможна защита или уход",
+                "puck_ethereal_jaunt — дополнительный навык вне набора героя",
+                "оценён один компонент навыка. Длительность и итог действия требуют проверки"
+              ],
+              "creep_option": {
+                "button": "invoker_cold_snap",
+                "damage": [
+                  36,
+                  36
+                ],
+                "hp": 3,
+                "same_area": false
+              }
+            },
+            {
+              "second": 312,
+              "choice": "creep",
+              "our_level": 5,
+              "enemy_level": 5,
+              "hero_option": {
+                "button": "invoker_cold_snap",
+                "damage": [
+                  25,
+                  25
+                ]
+              },
+              "enemy_option": {
+                "button": "attack",
+                "damage": [
+                  57,
+                  64
+                ]
+              },
+              "blocked_replies": [
+                {
+                  "spell": "Illusory Orb",
+                  "cooldown": 9.8
+                }
+              ],
+              "uncertainty": [
+                "Waning Rift — попадание ответом не установлено",
+                "Phase Shift — возможна защита или уход",
+                "puck_ethereal_jaunt — дополнительный навык вне набора героя",
+                "оценён один компонент навыка. Длительность и итог действия требуют проверки"
+              ],
+              "health_margin_pp": -3.4,
+              "creep_option": {
+                "button": "attack",
+                "damage": [
+                  96,
+                  102
+                ],
+                "hp": 88,
+                "same_area": false
+              }
+            }
+          ],
+          "observed_exchanges": [
+            {
+              "start": 24.566665649414062,
+              "end": 24.600006103515625,
+              "dealt": 50,
+              "received": 42,
+              "own_actions": {
+                "Обычная атака": 50
+              },
+              "enemy_actions": {
+                "Обычная атака": 42
+              }
+            },
+            {
+              "start": 141.06668090820312,
+              "end": 143.86666870117188,
+              "dealt": 161,
+              "received": 103,
+              "own_actions": {
+                "Cold Snap": 84,
+                "Обычная атака": 77
+              },
+              "enemy_actions": {
+                "Illusory Orb": 103
+              }
+            },
+            {
+              "start": 312.0666809082031,
+              "end": 314.2666931152344,
+              "dealt": 26,
+              "received": 88,
+              "own_actions": {
+                "Cold Snap": 26
+              },
+              "enemy_actions": {
+                "Illusory Orb": 88
+              }
+            }
+          ]
+        },
+        {
+          "slot": 130,
+          "hero": "Puck",
+          "opponent": "Invoker",
+          "seconds_sampled": 601,
+          "decisions": [
+            {
+              "second": 148,
+              "choice": "creep",
+              "our_level": 3,
+              "enemy_level": 3,
+              "blocked_replies": [
+                {
+                  "spell": "Cold Snap",
+                  "cooldown": 12.1
+                },
+                {
+                  "spell": "Forge Spirit",
+                  "cooldown": 2.4
+                }
+              ],
+              "uncertainty": [
+                "Invoke — ответ зависит от механики навыка",
+                "игрок в 850 ед. от вражеской средней T1"
+              ],
+              "creep_option": {
+                "button": "attack",
+                "damage": [
+                  57,
+                  65
+                ],
+                "hp": 3,
+                "same_area": false
+              }
+            },
+            {
+              "second": 180,
+              "choice": "trade",
+              "our_level": 4,
+              "enemy_level": 4,
+              "hero_option": {
+                "button": "puck_illusory_orb",
+                "damage": [
+                  98,
+                  98
+                ]
+              },
+              "blocked_replies": [
+                {
+                  "spell": "Invoke",
+                  "cooldown": 5.8
+                },
+                {
+                  "spell": "Cold Snap",
+                  "mana_short": true
+                },
+                {
+                  "spell": "Forge Spirit",
+                  "mana_short": true
+                }
+              ],
+              "health_margin_pp": 11.0
+            },
+            {
+              "second": 272,
+              "choice": "creep",
+              "our_level": 5,
+              "enemy_level": 4,
+              "hero_option": {
+                "button": "puck_illusory_orb",
+                "damage": [
+                  146,
+                  146
+                ]
+              },
+              "enemy_option": {
+                "button": "invoker_cold_snap",
+                "damage": [
+                  25,
+                  25
+                ]
+              },
+              "enemy_control": [
+                "Cold Snap"
+              ],
+              "blocked_replies": [
+                {
+                  "spell": "Forge Spirit",
+                  "cooldown": 19.3
+                }
+              ],
+              "uncertainty": [
+                "часть урона или защиты для ответа не измерена",
+                "Invoke — ответ зависит от механики навыка"
+              ],
+              "health_margin_pp": 13.1,
+              "creep_option": {
+                "button": "puck_illusory_orb",
+                "damage": [
+                  210,
+                  210
+                ],
+                "hp": 179,
+                "same_area": false
+              }
+            },
+            {
+              "second": 336,
+              "choice": "uncertain",
+              "our_level": 6,
+              "enemy_level": 5,
+              "hero_option": {
+                "button": "puck_illusory_orb",
+                "damage": [
+                  145,
+                  145
+                ]
+              },
+              "enemy_option": {
+                "button": "invoker_cold_snap",
+                "damage": [
+                  25,
+                  25
+                ]
+              },
+              "enemy_control": [
+                "Cold Snap"
+              ],
+              "blocked_replies": [
+                {
+                  "spell": "Sun Strike",
+                  "cooldown": 10.2
+                },
+                {
+                  "spell": "Invoke",
+                  "cooldown": 3.0
+                }
+              ],
+              "uncertainty": [
+                "часть урона или защиты для ответа не измерена"
+              ],
+              "prior_hits": [
+                {
+                  "side": "enemy",
+                  "source_slot": 0,
+                  "target_slot": 130,
+                  "key": "invoker_cold_snap",
+                  "spell": "Cold Snap",
+                  "rank": 1,
+                  "count": 1,
+                  "damage_min": 26,
+                  "damage_max": 26,
+                  "last_time": 312.8333435058594,
+                  "last_tick": 15598
+                }
+              ],
+              "health_margin_pp": 12.1
+            },
+            {
+              "second": 364,
+              "choice": "trade",
+              "our_level": 6,
+              "enemy_level": 6,
+              "hero_option": {
+                "button": "puck_illusory_orb",
+                "damage": [
+                  144,
+                  144
+                ]
+              },
+              "blocked_replies": [
+                {
+                  "spell": "Sun Strike",
+                  "cooldown": 21.3
+                },
+                {
+                  "spell": "Forge Spirit",
+                  "cooldown": 11.5
+                },
+                {
+                  "spell": "Invoke",
+                  "cooldown": 3.5
+                }
+              ],
+              "health_margin_pp": 14.4
+            }
+          ],
+          "observed_exchanges": [
+            {
+              "start": 24.566665649414062,
+              "end": 24.600006103515625,
+              "dealt": 42,
+              "received": 50,
+              "own_actions": {
+                "Обычная атака": 42
+              },
+              "enemy_actions": {
+                "Обычная атака": 50
+              }
+            },
+            {
+              "start": 141.06668090820312,
+              "end": 143.86666870117188,
+              "dealt": 103,
+              "received": 161,
+              "own_actions": {
+                "Illusory Orb": 103
+              },
+              "enemy_actions": {
+                "Cold Snap": 84,
+                "Обычная атака": 77
+              }
+            },
+            {
+              "start": 312.0666809082031,
+              "end": 314.2666931152344,
+              "dealt": 88,
+              "received": 26,
+              "own_actions": {
+                "Illusory Orb": 88
+              },
+              "enemy_actions": {
+                "Cold Snap": 26
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "match_id": 9094340218,
+      "source": "https://www.opendota.com/matches/9094340218",
+      "players": [
+        {
+          "slot": 3,
+          "hero": "Outworld Destroyer",
+          "opponent": "Viper",
+          "seconds_sampled": 601,
+          "decisions": [
+            {
+              "second": 65,
+              "choice": "creep",
+              "our_level": 1,
+              "enemy_level": 2,
+              "hero_option": {
+                "button": "obsidian_destroyer_astral_imprisonment",
+                "damage": [
+                  65,
+                  65
+                ]
+              },
+              "uncertainty": [
+                "Poison Attack — ответ зависит от механики навыка",
+                "оценён один компонент навыка. Длительность и итог действия требуют проверки",
+                "попадание своего навыка требует дополнительного времени"
+              ],
+              "prior_hits": [
+                {
+                  "side": "self",
+                  "source_slot": 3,
+                  "target_slot": 128,
+                  "key": "obsidian_destroyer_astral_imprisonment",
+                  "spell": "Astral Imprisonment",
+                  "rank": 1,
+                  "count": 1,
+                  "damage_min": 66,
+                  "damage_max": 66,
+                  "last_time": 42.73333740234375,
+                  "last_tick": 7580
+                }
+              ],
+              "creep_option": {
+                "button": "obsidian_destroyer_astral_imprisonment",
+                "damage": [
+                  90,
+                  90
+                ],
+                "hp": 33,
+                "same_area": false
+              }
+            },
+            {
+              "second": 128,
+              "choice": "uncertain",
+              "our_level": 3,
+              "enemy_level": 3,
+              "hero_option": {
+                "button": "obsidian_destroyer_astral_imprisonment",
+                "damage": [
+                  65,
+                  65
+                ]
+              },
+              "enemy_option": {
+                "button": "viper_poison_attack",
+                "damage": [
+                  47,
+                  49
+                ]
+              },
+              "uncertainty": [
+                "часть урона или защиты для ответа не измерена",
+                "оценён один компонент навыка. Длительность и итог действия требуют проверки",
+                "попадание своего навыка требует дополнительного времени"
+              ],
+              "prior_hits": [
+                {
+                  "side": "self",
+                  "source_slot": 3,
+                  "target_slot": 128,
+                  "key": "obsidian_destroyer_astral_imprisonment",
+                  "spell": "Astral Imprisonment",
+                  "rank": 1,
+                  "count": 2,
+                  "damage_min": 59,
+                  "damage_max": 66,
+                  "last_time": 98.89999389648438,
+                  "last_tick": 9266
+                }
+              ],
+              "health_margin_pp": 1.3
+            },
+            {
+              "second": 259,
+              "choice": "creep",
+              "our_level": 4,
+              "enemy_level": 5,
+              "hero_option": {
+                "button": "obsidian_destroyer_astral_imprisonment",
+                "damage": [
+                  129,
+                  129
+                ]
+              },
+              "uncertainty": [
+                "Poison Attack — ответ зависит от механики навыка",
+                "Poison Attack недавно наносил периодический урон. Проверь, продолжал ли действовать эффект",
+                "оценён один компонент навыка. Длительность и итог действия требуют проверки",
+                "попадание своего навыка требует дополнительного времени"
+              ],
+              "prior_hits": [
+                {
+                  "side": "self",
+                  "source_slot": 3,
+                  "target_slot": 128,
+                  "key": "obsidian_destroyer_astral_imprisonment",
+                  "spell": "Astral Imprisonment",
+                  "rank": 2,
+                  "count": 3,
+                  "damage_min": 111,
+                  "damage_max": 118,
+                  "last_time": 222.80001831054688,
+                  "last_tick": 12982
+                }
+              ],
+              "creep_option": {
+                "button": "obsidian_destroyer_astral_imprisonment",
+                "damage": [
+                  180,
+                  180
+                ],
+                "hp": 62,
+                "same_area": false
+              }
+            },
+            {
+              "second": 276,
+              "choice": "creep",
+              "our_level": 5,
+              "enemy_level": 5,
+              "hero_option": {
+                "button": "obsidian_destroyer_arcane_orb",
+                "damage": [
+                  110,
+                  117
+                ]
+              },
+              "enemy_option": {
+                "button": "viper_poison_attack",
+                "damage": [
+                  50,
+                  51
+                ]
+              },
+              "uncertainty": [
+                "часть урона или защиты для ответа не измерена"
+              ],
+              "health_margin_pp": 5.3,
+              "creep_option": {
+                "button": "obsidian_destroyer_arcane_orb",
+                "damage": [
+                  126,
+                  135
+                ],
+                "hp": 95,
+                "same_area": false
+              }
+            },
+            {
+              "second": 554,
+              "choice": "creep",
+              "our_level": 8,
+              "enemy_level": 8,
+              "enemy_option": {
+                "button": "viper_poison_attack",
+                "damage": [
+                  70,
+                  71
+                ]
+              },
+              "blocked_replies": [
+                {
+                  "spell": "Viper Strike",
+                  "cooldown": 49.1
+                },
+                {
+                  "spell": "Nethertoxin",
+                  "cooldown": 10.4
+                }
+              ],
+              "uncertainty": [
+                "часть урона или защиты для ответа не измерена",
+                "в радиусе 850 ед. виден ещё один враг"
+              ],
+              "creep_option": {
+                "button": "obsidian_destroyer_arcane_orb",
+                "damage": [
+                  201,
+                  210
+                ],
+                "hp": 192,
+                "same_area": false
+              }
+            }
+          ],
+          "observed_exchanges": [
+            {
+              "start": 94.13333129882812,
+              "end": 97.13333129882812,
+              "dealt": 87,
+              "received": 24,
+              "own_actions": {
+                "Arcane Orb": 27,
+                "Обычная атака": 60
+              },
+              "enemy_actions": {
+                "Corrosive Skin": 24
+              }
+            },
+            {
+              "start": 238.80001831054688,
+              "end": 241.80001831054688,
+              "dealt": 73,
+              "received": 53,
+              "own_actions": {
+                "Arcane Orb": 5,
+                "Обычная атака": 68
+              },
+              "enemy_actions": {
+                "Обычная атака": 3,
+                "Poison Attack": 26,
+                "Corrosive Skin": 24
+              }
+            },
+            {
+              "start": 300.1666564941406,
+              "end": 303.1666564941406,
+              "dealt": 166,
+              "received": 33,
+              "own_actions": {
+                "Astral Imprisonment": 166
+              },
+              "enemy_actions": {
+                "Corrosive Skin": 33
+              }
+            }
+          ]
+        },
+        {
+          "slot": 128,
+          "hero": "Viper",
+          "opponent": "Outworld Destroyer",
+          "seconds_sampled": 601,
+          "decisions": [
+            {
+              "second": 46,
+              "choice": "creep",
+              "our_level": 1,
+              "enemy_level": 1,
+              "hero_option": {
+                "button": "viper_poison_attack",
+                "damage": [
+                  44,
+                  46
+                ]
+              },
+              "blocked_replies": [
+                {
+                  "spell": "Astral Imprisonment",
+                  "cooldown": 13.0
+                }
+              ],
+              "uncertainty": [
+                "оценён один компонент навыка. Длительность и итог действия требуют проверки"
+              ],
+              "health_margin_pp": 6.2,
+              "creep_option": {
+                "button": "attack",
+                "damage": [
+                  55,
+                  57
+                ],
+                "hp": 20,
+                "same_area": false
+              }
+            },
+            {
+              "second": 226,
+              "choice": "creep",
+              "our_level": 4,
+              "enemy_level": 4,
+              "hero_option": {
+                "button": "viper_poison_attack",
+                "damage": [
+                  49,
+                  51
+                ]
+              },
+              "blocked_replies": [
+                {
+                  "spell": "Astral Imprisonment",
+                  "cooldown": 10.3
+                },
+                {
+                  "spell": "Arcane Orb",
+                  "cooldown": 1.2
+                }
+              ],
+              "uncertainty": [
+                "Arcane Orb скоро восстановится",
+                "Objurgation — ответ зависит от механики навыка",
+                "оценён один компонент навыка. Длительность и итог действия требуют проверки"
+              ],
+              "creep_option": {
+                "button": "attack",
+                "damage": [
+                  63,
+                  65
+                ],
+                "hp": 51,
+                "same_area": false
+              }
+            },
+            {
+              "second": 394,
+              "choice": "creep",
+              "our_level": 6,
+              "enemy_level": 6,
+              "uncertainty": [
+                "Arcane Orb — ответ зависит от механики навыка",
+                "Astral Imprisonment — попадание ответом не установлено",
+                "Objurgation — ответ зависит от механики навыка",
+                "Sanity's Eclipse — ответ зависит от механики навыка"
+              ],
+              "prior_hits": [
+                {
+                  "side": "enemy",
+                  "source_slot": 3,
+                  "target_slot": 128,
+                  "key": "obsidian_destroyer_astral_imprisonment",
+                  "spell": "Astral Imprisonment",
+                  "rank": 3,
+                  "count": 2,
+                  "damage_min": 166,
+                  "damage_max": 166,
+                  "last_time": 300.1666564941406,
+                  "last_tick": 15304
+                }
+              ],
+              "creep_option": {
+                "button": "attack",
+                "damage": [
+                  79,
+                  81
+                ],
+                "hp": 69,
+                "same_area": false
+              }
+            },
+            {
+              "second": 558,
+              "choice": "uncertain",
+              "our_level": 8,
+              "enemy_level": 8,
+              "hero_option": {
+                "button": "viper_poison_attack",
+                "damage": [
+                  58,
+                  59
+                ]
+              },
+              "enemy_option": {
+                "button": "obsidian_destroyer_arcane_orb",
+                "damage": [
+                  157,
+                  163
+                ]
+              },
+              "blocked_replies": [
+                {
+                  "spell": "Objurgation",
+                  "cooldown": 32.6
+                },
+                {
+                  "spell": "Sanity's Eclipse",
+                  "cooldown": 13.9
+                },
+                {
+                  "spell": "Astral Imprisonment",
+                  "cooldown": 5.9
+                }
+              ],
+              "uncertainty": [
+                "оценён один компонент навыка. Длительность и итог действия требуют проверки"
+              ],
+              "health_margin_pp": -8.8
+            }
+          ],
+          "observed_exchanges": [
+            {
+              "start": 94.13333129882812,
+              "end": 97.13333129882812,
+              "dealt": 24,
+              "received": 87,
+              "own_actions": {
+                "Corrosive Skin": 24
+              },
+              "enemy_actions": {
+                "Arcane Orb": 27,
+                "Обычная атака": 60
+              }
+            },
+            {
+              "start": 238.80001831054688,
+              "end": 241.80001831054688,
+              "dealt": 53,
+              "received": 73,
+              "own_actions": {
+                "Обычная атака": 3,
+                "Poison Attack": 26,
+                "Corrosive Skin": 24
+              },
+              "enemy_actions": {
+                "Arcane Orb": 5,
+                "Обычная атака": 68
+              }
+            },
+            {
+              "start": 300.1666564941406,
+              "end": 303.1666564941406,
+              "dealt": 33,
+              "received": 166,
+              "own_actions": {
+                "Corrosive Skin": 33
+              },
+              "enemy_actions": {
+                "Astral Imprisonment": 166
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "match_id": 9094350943,
+      "source": "https://www.opendota.com/matches/9094350943",
+      "players": [
+        {
+          "slot": 3,
+          "hero": "Sniper",
+          "opponent": "Invoker",
+          "seconds_sampled": 601,
+          "decisions": [
+            {
+              "second": 262,
+              "choice": "uncertain",
+              "our_level": 5,
+              "enemy_level": 4,
+              "hero_option": {
+                "button": "sniper_shrapnel",
+                "damage": [
+                  41,
+                  41
+                ]
+              },
+              "enemy_option": {
+                "button": "attack",
+                "damage": [
+                  52,
+                  56
+                ]
+              },
+              "blocked_replies": [
+                {
+                  "spell": "Ice Wall",
+                  "cooldown": 22.4
+                },
+                {
+                  "spell": "Cold Snap",
+                  "cooldown": 17.4
+                },
+                {
+                  "spell": "Invoke",
+                  "cooldown": 4.8
+                }
+              ],
+              "uncertainty": [
+                "оценён один компонент навыка. Длительность и итог действия требуют проверки"
+              ],
+              "prior_hits": [
+                {
+                  "side": "self",
+                  "source_slot": 3,
+                  "target_slot": 128,
+                  "key": "sniper_shrapnel",
+                  "spell": "Shrapnel",
+                  "rank": 3,
+                  "count": 2,
+                  "damage_min": 42,
+                  "damage_max": 42,
+                  "last_time": 261.3333435058594,
+                  "last_tick": 14970
+                }
+              ],
+              "health_margin_pp": -2.6
+            }
+          ],
+          "observed_exchanges": [
+            {
+              "start": 31.133331298828125,
+              "end": 31.833343505859375,
+              "dealt": 46,
+              "received": 42,
+              "own_actions": {
+                "Обычная атака": 46
+              },
+              "enemy_actions": {
+                "Обычная атака": 42
+              }
+            },
+            {
+              "start": 259.8333435058594,
+              "end": 262.3333435058594,
+              "dealt": 295,
+              "received": 26,
+              "own_actions": {
+                "Обычная атака": 169,
+                "Shrapnel": 126
+              },
+              "enemy_actions": {
+                "Cold Snap": 26
+              }
+            },
+            {
+              "start": 384.3999938964844,
+              "end": 386.8999938964844,
+              "dealt": 42,
+              "received": 197,
+              "own_actions": {
+                "Shrapnel": 42
+              },
+              "enemy_actions": {
+                "Cold Snap": 78,
+                "Обычная атака": 119
+              }
+            }
+          ]
+        },
+        {
+          "slot": 128,
+          "hero": "Invoker",
+          "opponent": "Sniper",
+          "seconds_sampled": 601,
+          "decisions": [
+            {
+              "second": 163,
+              "choice": "uncertain",
+              "our_level": 3,
+              "enemy_level": 3,
+              "hero_option": {
+                "button": "invoker_cold_snap",
+                "damage": [
+                  20,
+                  20
+                ]
+              },
+              "enemy_option": {
+                "button": "sniper_shrapnel",
+                "damage": [
+                  31,
+                  31
+                ]
+              },
+              "uncertainty": [
+                "часть урона или защиты для ответа не измерена",
+                "Take Aim — ответ зависит от механики навыка",
+                "оценён один компонент навыка. Длительность и итог действия требуют проверки"
+              ],
+              "health_margin_pp": -1.3
+            }
+          ],
+          "observed_exchanges": [
+            {
+              "start": 31.133331298828125,
+              "end": 31.833343505859375,
+              "dealt": 42,
+              "received": 46,
+              "own_actions": {
+                "Обычная атака": 42
+              },
+              "enemy_actions": {
+                "Обычная атака": 46
+              }
+            },
+            {
+              "start": 259.8333435058594,
+              "end": 262.3333435058594,
+              "dealt": 26,
+              "received": 295,
+              "own_actions": {
+                "Cold Snap": 26
+              },
+              "enemy_actions": {
+                "Обычная атака": 169,
+                "Shrapnel": 126
+              }
+            },
+            {
+              "start": 384.3999938964844,
+              "end": 386.8999938964844,
+              "dealt": 197,
+              "received": 42,
+              "own_actions": {
+                "Cold Snap": 78,
+                "Обычная атака": 119
+              },
+              "enemy_actions": {
+                "Shrapnel": 42
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "match_id": 9094431073,
+      "source": "https://www.opendota.com/matches/9094431073",
+      "players": [
+        {
+          "slot": 3,
+          "hero": "Tinker",
+          "opponent": "Arc Warden",
+          "seconds_sampled": 601,
+          "decisions": [
+            {
+              "second": 39,
+              "choice": "creep",
+              "our_level": 1,
+              "enemy_level": 1,
+              "uncertainty": [
+                "Spark Wraith — ответ зависит от механики навыка"
+              ],
+              "creep_option": {
+                "button": "attack",
+                "damage": [
+                  58,
+                  64
+                ],
+                "hp": 36,
+                "same_area": false
+              }
+            },
+            {
+              "second": 64,
+              "choice": "uncertain",
+              "our_level": 2,
+              "enemy_level": 2,
+              "hero_option": {
+                "button": "tinker_laser",
+                "damage": [
+                  75,
+                  75
+                ]
+              },
+              "enemy_option": {
+                "button": "attack",
+                "damage": [
+                  48,
+                  53
+                ]
+              },
+              "uncertainty": [
+                "Spark Wraith — ответ зависит от механики навыка"
+              ],
+              "health_margin_pp": 2.0
+            }
+          ],
+          "observed_exchanges": [
+            {
+              "start": 50.933319091796875,
+              "end": 53.466644287109375,
+              "dealt": 44,
+              "received": 53,
+              "own_actions": {
+                "Обычная атака": 44
+              },
+              "enemy_actions": {
+                "Обычная атака": 53
+              }
+            },
+            {
+              "start": 71.79998779296875,
+              "end": 74.66665649414062,
+              "dealt": 8,
+              "received": 135,
+              "own_actions": {
+                "Deploy Turrets": 8
+              },
+              "enemy_actions": {
+                "Обычная атака": 99,
+                "Flux": 36
+              }
+            },
+            {
+              "start": 112.0333251953125,
+              "end": 114.93331909179688,
+              "dealt": 136,
+              "received": 55,
+              "own_actions": {
+                "Обычная атака": 49,
+                "Deploy Turrets": 87
+              },
+              "enemy_actions": {
+                "Обычная атака": 55
+              }
+            }
+          ]
+        },
+        {
+          "slot": 132,
+          "hero": "Arc Warden",
+          "opponent": "Tinker",
+          "seconds_sampled": 601,
+          "decisions": [
+            {
+              "second": 49,
+              "choice": "creep",
+              "our_level": 1,
+              "enemy_level": 2,
+              "hero_option": {
+                "button": "attack",
+                "damage": [
+                  46,
+                  50
+                ]
+              },
+              "enemy_option": {
+                "button": "attack",
+                "damage": [
+                  47,
+                  52
+                ]
+              },
+              "blocked_replies": [
+                {
+                  "spell": "Deploy Turrets",
+                  "cooldown": 20.0
+                },
+                {
+                  "spell": "Laser",
+                  "cooldown": 8.8
+                }
+              ],
+              "health_margin_pp": -0.6,
+              "creep_option": {
+                "button": "attack",
+                "damage": [
+                  62,
+                  68
+                ],
+                "hp": 45,
+                "same_area": false
+              }
+            },
+            {
+              "second": 67,
+              "choice": "uncertain",
+              "our_level": 2,
+              "enemy_level": 2,
+              "hero_option": {
+                "button": "attack",
+                "damage": [
+                  48,
+                  53
+                ]
+              },
+              "blocked_replies": [
+                {
+                  "spell": "Laser",
+                  "cooldown": 18.8
+                },
+                {
+                  "spell": "Deploy Turrets",
+                  "cooldown": 2.1
+                }
+              ],
+              "health_margin_pp": 7.4
+            }
+          ],
+          "observed_exchanges": [
+            {
+              "start": 50.933319091796875,
+              "end": 53.466644287109375,
+              "dealt": 53,
+              "received": 44,
+              "own_actions": {
+                "Обычная атака": 53
+              },
+              "enemy_actions": {
+                "Обычная атака": 44
+              }
+            },
+            {
+              "start": 71.79998779296875,
+              "end": 74.66665649414062,
+              "dealt": 135,
+              "received": 8,
+              "own_actions": {
+                "Обычная атака": 99,
+                "Flux": 36
+              },
+              "enemy_actions": {
+                "Deploy Turrets": 8
+              }
+            },
+            {
+              "start": 112.0333251953125,
+              "end": 114.93331909179688,
+              "dealt": 55,
+              "received": 136,
+              "own_actions": {
+                "Обычная атака": 55
+              },
+              "enemy_actions": {
+                "Обычная атака": 49,
+                "Deploy Turrets": 87
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

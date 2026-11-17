@@ -199,6 +199,10 @@ public final class Decoder {
         // Non-consumables can report zero here even when ready to cast.
         if (isItem && key.equals("smoke_of_deceit"))
             copyNumber(entity, "m_iCurrentCharges", b, "charges");
+        if (!isItem && key.equals("sniper_shrapnel"))
+            copyNumber(entity, "m_nAbilityCurrentCharges", b, "charges");
+        if (!isItem && key.equals("pudge_rot"))
+            copyBool(entity, "m_bToggleState", b, "toggled");
         copyNumber(entity, "m_iLevel", b, "level");
         copyNumber(entity, "m_iManaCost", b, "mana_cost");
         copyBool(entity, "m_bInAbilityPhase", b, "in_phase");
@@ -264,6 +268,15 @@ public final class Decoder {
         Number life = number(hero, "m_lifeState"), hp = number(hero, "m_iHealth");
         if (life != null && hp != null) result.addProperty("alive", life.intValue() == 0 && hp.intValue() > 0);
         copyNumber(hero, "m_flMana", result, "mana");
+        if (now - horn < 601) {
+            copyNumber(hero, "m_flMaxMana", result, "max_mana");
+            copyNumber(hero, "m_flAgilityTotal", result, "agility_total");
+            copyNumber(hero, "m_flIntellectTotal", result, "intellect_total");
+            copyNumber(hero, "m_flStrengthTotal", result, "strength_total");
+            Number lastAttack = number(hero, "m_flLastAttackTime");
+            if (lastAttack != null && lastAttack.doubleValue() > 0 && lastAttack.doubleValue() <= now)
+                result.addProperty("last_attack_time", lastAttack.doubleValue() - horn);
+        }
         copyNumber(hero, "m_iCurrentLevel", result, "level");
         copyNumber(hero, "m_iDamageMin", result, "attack_min");
         copyNumber(hero, "m_iDamageMax", result, "attack_max");
@@ -347,6 +360,14 @@ public final class Decoder {
         }
         if (kind.equals("spell_damage") && (when > 600 || log.isTargetIllusion()
                 || target == null && !ordinaryRanged(victim) || !log.hasValue() || log.getValue() <= 0)) return;
+        if (kind.equals("spell_damage") && !log.hasInflictorName()) {
+            // The log classifies ordinary direct hits under damage category 1.
+            // Reject unattributed damage, illusions and proxy attackers.
+            if (target == null || !log.hasDamageCategory() || log.getDamageCategory() != 1 ||
+                    !log.hasDamageType() || log.getDamageType() != 1 || !log.hasDamageSourceName() ||
+                    !source.equals(log.getDamageSourceName())) return;
+            kind = "attack_damage";
+        }
         JsonObject e = new JsonObject();
         e.addProperty("kind", kind);
         e.addProperty("time", (int) Math.floor(when));
@@ -360,8 +381,10 @@ public final class Decoder {
             if (button == null || button.isBlank() || button.equals("dota_unknown")) return;
             e.addProperty("button_key", button.startsWith("item_") ? button.substring(5) : button);
         }
-        if (kind.equals("spell_damage")) {
+        if (kind.equals("spell_damage") || kind.equals("attack_damage")) {
             e.addProperty("target_name", victim);
+            if (log.hasDamageSourceName())
+                e.addProperty("direct_hero_source", source.equals(log.getDamageSourceName()));
             e.addProperty("damage", log.getValue());
             if (log.hasHealth()) e.addProperty("hp_after", log.getHealth());
             if (log.hasDamageType()) e.addProperty("damage_type", log.getDamageType());

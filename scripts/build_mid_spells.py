@@ -38,6 +38,7 @@ class Impact:
     speed: str | None = None
     delay: str | None = None
     target: str = "both"
+    partial: bool = False
 
 
 # Every listed value is the first independently deliverable damage component
@@ -103,6 +104,110 @@ IMPACTS = {
     "snapfire_scatterblast": Impact("line", "damage", speed="blast_speed"),
     "muerta_dead_shot": Impact("unit", "damage", speed="speed"),
     "largo_catchy_lick": Impact("unit", "damage"),
+    "axe_culling_blade": Impact("unit", "damage"),
+    "juggernaut_blade_fury": Impact("self_radius", "blade_fury_damage", "blade_fury_radius", delay="blade_fury_damage_tick", partial=True),
+    "mirana_starfall": Impact("self_radius", "damage", "starfall_radius", partial=True),
+    "razor_plasma_field": Impact("self_radius", "damage_min", "radius", partial=True),
+    "tiny_avalanche": Impact("point", "avalanche_damage", speed="projectile_speed", partial=True),
+    "puck_dream_coil": Impact("point", "coil_initial_damage", target="hero", partial=True),
+    "kunkka_ghostship": Impact("point", "damages", delay="tooltip_delay"),
+    "lion_impale": Impact("line", "damage", speed="speed"),
+    "lion_finger_of_death": Impact("unit", "damage", delay="damage_delay", partial=True),
+    "witch_doctor_paralyzing_cask": Impact("unit", "base_damage", speed="speed", partial=True),
+    "lich_frost_nova": Impact("unit", "damage"),
+    "lich_chain_frost": Impact("unit", "damage", speed="initial_projectile_speed", partial=True),
+    "enigma_malefice": Impact("unit", "damage", partial=True),
+    "sniper_shrapnel": Impact("point", "shrapnel_damage", delay="damage_delay", partial=True),
+    "sniper_assassinate": Impact("unit", "damage", speed="projectile_speed", partial=True),
+    "venomancer_noxious_plague": Impact("unit", "impact_damage", speed="projectile_speed", partial=True),
+    "furion_sprout": Impact("unit", "sprout_damage"),
+    "jakiro_ice_path": Impact("line", "damage", delay="path_delay"),
+    "batrider_flamebreak": Impact("point", "damage_impact", speed="speed", partial=True),
+    "spectre_spectral_dagger": Impact("line", "damage", speed="speed"),
+    "gyrocopter_call_down": Impact("point", "damage", delay="missile_delay_tooltip", partial=True),
+    "alchemist_acid_spray": Impact("point", "damage", delay="tick_rate", partial=True),
+    "invoker_cold_snap": Impact("unit", "freeze_damage", partial=True),
+    "invoker_tornado": Impact("line", "wex_damage", "travel_distance", speed="travel_speed", delay="lift_duration"),
+    "invoker_deafening_blast": Impact("line", "damage", "travel_distance", speed="travel_speed"),
+    "silencer_curse_of_the_silent": Impact("point", "application_damage", partial=True),
+    "meepo_poof": Impact("self_radius", "poof_damage", "radius", partial=True),
+    "undying_decay": Impact("point", "decay_damage", partial=True),
+    "disruptor_thunder_strike": Impact("unit", "strike_damage", partial=True),
+    "nyx_assassin_impale": Impact("line", "impale_damage", "length", speed="speed"),
+    "visage_soul_assumption": Impact("unit", "soul_base_damage", speed="bolt_speed", partial=True),
+    "troll_warlord_whirling_axes_ranged": Impact("line", "axe_damage", "axe_range", speed="axe_speed"),
+    "shredder_whirling_death": Impact("self_radius", "whirling_damage", "whirling_radius", partial=True),
+    "shredder_chakram": Impact("line", "pass_damage", speed="speed", partial=True),
+    "ember_spirit_flame_guard": Impact("self_radius", "damage_per_second", "radius", delay="tick_interval", partial=True),
+    "abyssal_underlord_firestorm": Impact("point", "wave_damage", delay="wave_interval", partial=True),
+    "void_spirit_dissimilate": Impact("self_radius", "damages", "damage_radius", delay="phase_duration"),
+    "dawnbreaker_celestial_hammer": Impact("line", "hammer_damage", "range", speed="projectile_speed", partial=True),
+    "marci_grapple": Impact("unit", "impact_damage", delay="air_duration"),
+    "brewmaster_cinder_brew": Impact("line", "barrel_impact_damage", speed="projectile_speed", partial=True),
+    "ursa_earthshock": Impact("forward_circle", "damages", "shock_radius", delay="hop_duration"),
+    "pangolier_shield_crash": Impact("forward_circle", "damage", "radius", delay="jump_duration", partial=True),
+    "rattletrap_rocket_flare": Impact("point", "damage", "speed", speed="speed"),
+    "warlock_shadow_word": Impact("unit", "damage", delay="tick_interval", partial=True),
+    "weaver_shukuchi": Impact("self_radius", "damage", "radius"),
+    "tusk_snowball": Impact("unit", "snowball_damage", speed="snowball_speed", delay="snowball_windup", partial=True),
+    "elder_titan_echo_stomp": Impact("self_radius", "stomp_damage", "radius", delay="cast_time", partial=True),
+    "ringmaster_tame_the_beasts": Impact("point", "damage_min", delay="crack_duration", partial=True),
+    "pudge_rot": Impact("self_radius", "rot_damage", "rot_radius", delay="rot_tick", partial=True),
+    "earth_spirit_magnetize": Impact("self_radius", "damage_per_second", "cast_radius", delay="damage_interval", partial=True),
+    "primal_beast_pulverize": Impact("unit", "damage", delay="interval", partial=True),
+    "phoenix_supernova": Impact("self_radius", "damage_per_sec", "aura_radius", delay="tick_interval", target="hero", partial=True),
+    "antimage_mana_void": Impact("unit", "mana_void_damage_per_mana", target="hero", partial=True),
+    "necrolyte_reapers_scythe": Impact("unit", "damage_per_health", delay="stun_duration", target="hero", partial=True),
+}
+
+# One observed, active Invoked button is required in addition to the level of
+# each orb used by the effect. Each field is resolved from its own Valve series.
+ORB_FIELDS = {
+    "invoker_cold_snap": {"damage": ("invoker_quas", "freeze_damage")},
+    "invoker_tornado": {"damage": ("invoker_wex", "wex_damage"), "reach": ("invoker_wex", "travel_distance"),
+                        "delay": ("invoker_quas", "lift_duration")},
+    "invoker_deafening_blast": {"damage": ("invoker_exort", "damage")},
+}
+
+FORWARD_OFFSET = {**{key: "shadowraze_range" for key, *_ in SHADOWRAZES},
+                  "ursa_earthshock": "hop_distance", "pangolier_shield_crash": "jump_horizontal_distance"}
+
+# Components which omit repeat hits, stacks, attribute multipliers or a second spell effect.
+PARTIAL = {
+    "chaos_knight_chaos_bolt", "queenofpain_shadow_strike", "bristleback_quill_spray",
+    "skywrath_mage_arcane_bolt", "legion_commander_overwhelming_odds", "grimstroke_dark_artistry",
+    "snapfire_scatterblast", "venomancer_venomous_gale", "shadow_demon_shadow_poison",
+    "medusa_mystic_snake", "largo_catchy_lick", "obsidian_destroyer_astral_imprisonment",
+    *(key for key, *_ in SHADOWRAZES),
+}
+INSTRUCTIONS = {
+    "razor_plasma_field": "Считается минимум первого прохождения волны. Дистанция влияет на урон, обратная волна может задеть цель ещё раз.",
+    "tiny_avalanche": "Считается один из пяти импульсов Avalanche. Полный урон зависит от времени в области и попадания Toss.",
+    "ember_spirit_flame_guard": "Подойди в радиус активного Flame Guard. Оценён один тик, пока щит не сбит.",
+    "sniper_shrapnel": "Считается первое попадание Shrapnel после задержки; нужен подтверждённый заряд.",
+    "mirana_starfall": "Считается первая звезда. Второе попадание зависит от ближайшей подходящей цели.",
+    "meepo_poof": "Примени Poof на себя. Считается одна область в исходной точке, без урона других Meepo.",
+    "void_spirit_dissimilate": "Для этого попадания выйди через центральный портал Dissimilate.",
+    "visage_soul_assumption": "Показан базовый урон без зарядов Soul Assumption.",
+    "shredder_whirling_death": "Показан базовый чистый урон без срубленных деревьев и потери атрибута.",
+    "undying_decay": "Показан общий базовый урон. Урон обычному крипу выше, к потере здоровья героя добавляется кража силы.",
+    "sniper_assassinate": "Показан компонент заклинания. Дополнительно срабатывает атака Sniper.",
+    "gyrocopter_call_down": "Наведи первый удар Call Down на цель. Следующие взрывы смещены.",
+    "spectre_spectral_dagger": "Направь кинжал через позицию цели.",
+    "pangolier_shield_crash": "Проверь зону приземления перед героем в обычной форме. Попадание по герою также даёт барьер.",
+    "ursa_earthshock": "Проверь зону приземления перед Ursa.",
+    "rattletrap_rocket_flare": "Rocket Flare действует по всей карте. Для сравнения на линии рассматривается полёт до одной секунды.",
+    "warlock_shadow_word": "Учтён один тик Shadow Word на выбранном враге. Последующие тики требуют, чтобы эффект сохранился.",
+    "weaver_shukuchi": "Цель уже находится в радиусе Shukuchi. Учтено одно касание.",
+    "tusk_snowball": "При автоматическом запуске учитываются подготовка и полёт. Дополнительные союзники увеличивают урон.",
+    "elder_titan_echo_stomp": "Оценивается физический удар самого героя после подготовки. Попадание духа требует отдельной проверки.",
+    "ringmaster_tame_the_beasts": "Прицелься в точку и отпусти кнут в начале замаха. Показан минимальный урон.",
+    "pudge_rot": "В этом кадре Rot выключен. Учтён первый тик по цели и базовый урон того же тика самому Pudge до его защиты. Дольше держать Rot дороже.",
+    "earth_spirit_magnetize": "Считается первый интервал Magnetize по цели внутри начального радиуса. Обновления от каменных копий продлевают эффект.",
+    "primal_beast_pulverize": "Считается первое опускание захваченной цели, если канал сохранится. Следующие удары усиливаются.",
+    "phoenix_supernova": "Показан один тик солнца по герою. Phoenix превращается в яйцо, которое могут уничтожить атаками.",
+    "antimage_mana_void": "Оценка по недостающей мане основной видимой цели в этом кадре. Запас маны к моменту попадания может измениться.",
+    "necrolyte_reapers_scythe": "Оценка по недостающему здоровью цели в этом кадре. Урон в конце оглушения зависит от здоровья к тому моменту.",
 }
 
 NOTES = {
@@ -248,18 +353,60 @@ def parse_proof(a, specials):
     rule = IMPACTS.get(a["name"])
     if not rule:
         return None
+    orb_fields = ORB_FIELDS.get(a["name"], {})
     def values(field):
         seq = a[field] if field in ("damages", "cast_ranges") else specials[field]["values_float"]
+        if any(field == value_field for _, value_field in orb_fields.values()):
+            if len(seq) != 9 or any(v <= 0 for v in seq):
+                raise ValueError(f"Invalid orb progression {a['name']}.{field}: {seq}")
+            return [seq[0]]  # Replaced with the observed orb rank by resolved_impact.
         if not seq or len(seq) not in (1, a["max_level"]) or any(v <= 0 for v in seq):
             raise ValueError(f"Invalid impact field {a['name']}.{field}: {seq}")
         return rank_series(seq)
-    if rule.shape == "unit" and not (a["target_type"] & 1 and a["target_type"] & 2 and a["target_team"] & 2):
+    target_mask = {"hero": 1, "creep": 2, "both": 3}[rule.target]
+    if rule.shape == "unit" and not (a["target_type"] & target_mask == target_mask and a["target_team"] & 2):
         raise ValueError("Target filter changed for " + a["name"])
     result = {"shape": rule.shape, "target": rule.target, "damage": values(rule.damage),
             "damage_type": {1:"physical",2:"magical",4:"pure"}[a["damage"]], "reach": values(rule.reach),
             "speed": values(rule.speed) if rule.speed else None, "delay": values(rule.delay) if rule.delay else [0]}
     if rule.shape == "forward_circle":
-        result.update(radius=result["reach"], offset=values("shadowraze_range"))
+        result.update(radius=result["reach"], offset=values(FORWARD_OFFSET[a["name"]]))
+    key = a["name"]
+    if key in ("juggernaut_blade_fury", "ember_spirit_flame_guard", "warlock_shadow_word", "earth_spirit_magnetize",
+               "phoenix_supernova", "pudge_rot"):
+        interval, = values(rule.delay)
+        result["damage"] = [v * interval for v in result["damage"]]
+    if key == "tiny_avalanche":
+        ticks, = values("tick_count")
+        result["damage"] = [v / ticks for v in result["damage"]]
+    if key == "lich_frost_nova":
+        result["damage"] = [v + splash for v, splash in zip(result["damage"], values("aoe_damage"), strict=True)]
+    if orb_fields:
+        result["orb_scaling"] = {field: {"orb": orb, "values": specials[source]["values_float"]}
+                                 for field, (orb, source) in orb_fields.items()}
+        if key == "invoker_tornado":
+            base, = values("base_damage")
+            damage = result["orb_scaling"]["damage"]
+            damage["values"] = [base + bonus for bonus in damage["values"]]
+            result["damage"] = damage["values"][:1]
+    if key in ("ursa_earthshock", "pangolier_shield_crash", "void_spirit_dissimilate", "meepo_poof", "tusk_snowball"):
+        result["requires_unrooted"] = True
+    if key == "pangolier_shield_crash":
+        result["inactive_buttons"] = ["pangolier_gyroshell_stop", "pangolier_rollup_stop"]
+    if key == "sniper_shrapnel":
+        result["requires_charge"] = True
+    if key == "pudge_rot":
+        result["requires_off"] = True
+    if key in ("antimage_mana_void", "necrolyte_reapers_scythe"):
+        result["missing_pool"] = "mana" if key == "antimage_mana_void" else "hp"
+    # The hero feed defines the damage, but does not specify the exact time of
+    # first impact after release. A missing delay must not be read as zero.
+    if key in ("lion_impale", "nyx_assassin_impale", "mirana_starfall", "razor_plasma_field", "tiny_avalanche", "weaver_shukuchi"):
+        result["delay"] = None
+    if rule.partial or key in PARTIAL:
+        result["partial"] = True
+    if key in INSTRUCTIONS:
+        result["instruction"] = INSTRUCTIONS[key]
     if a["name"] == "puck_illusory_orb":
         result["instruction"] = "Выпусти Illusory Orb по прямой альтернативным применением."
     if a["name"] == "storm_spirit_static_remnant":
@@ -326,6 +473,8 @@ def compact_spell(a):
         parameters.insert(0, {"field": "AbilityDamage", "label": "Урон из таблицы способности",
                               "values": rank_series(a["damages"])})
     health_cost = specials.get("health_cost", {}).get("values_float") or a["health_costs"]
+    if a["name"] == "pudge_rot":
+        health_cost = proof["damage"]
     return {"key": a["name"], "id": a["id"], "name": a["name_loc"], "max_rank": a["max_level"],
             "ultimate": a["type"] == 1, "innate": a["ability_is_innate"], "mechanic": kind,
             "rank_gates": rank_gates(a, specials),

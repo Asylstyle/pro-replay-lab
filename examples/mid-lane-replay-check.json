@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "patch": "7.41f",
-  "reader_sha256": "a98b9b89bf49bdc57e2d6721072bf5c1ccd5bb733f5d2f3e116f50b107fa17a6",
+  "reader_sha256": "4a30ae5234793bd9ca3f94d91f729c415f32a71ecee03b0561ab348930d3e50f",
   "sources": {
     "metadata": "https://api.opendota.com/api/matches/{match_id}",
     "events_and_frames": "Valve Source 2 .dem referenced by OpenDota",
@@ -21,8 +21,8 @@
     "examples": "One example per nonempty category per player. Times are seconds from the horn; event and frame game times are rounded to milliseconds. Opponent is the other mid player in the same match."
   },
   "totals": {
-    "spell_trades": 13,
-    "ranged_spell_finishes": 17,
+    "spell_trades": 22,
+    "ranged_spell_finishes": 21,
     "ranged_finishes_with_opponent_in_area": 3,
     "basic_attack_windows": 4,
     "observed_opponent_hit_examples": 36,
@@ -71,7 +71,7 @@
               "hero_level": 2,
               "target_hp": 450,
               "distance": 493,
-              "estimated_damage": 63,
+              "estimated_damage": 61,
               "opponent_level": 1,
               "health_pct_hero_opponent": [61, 63]
             },
@@ -96,7 +96,7 @@
               "hero_level": 4,
               "target_hp": 364,
               "distance": 445,
-              "estimated_damage": 60,
+              "estimated_damage": 56,
               "opponent_level": 4,
               "health_pct_hero_opponent": [100, 45]
             },
@@ -126,7 +126,7 @@
               "hero_level": 3,
               "target_hp": 549,
               "distance": 561,
-              "estimated_damage": 131,
+              "estimated_damage": 126,
               "opponent_level": 3,
               "health_pct_hero_opponent": [100, 70]
             },
@@ -137,13 +137,25 @@
           "slot": 131,
           "hero": "Ember Spirit",
           "hero_id": 106,
-          "counts": {"spell_trades": 0, "ranged_spell_finishes": 0, "ranged_finishes_with_opponent_in_area": 0, "basic_attack_windows": 0, "observed_opponent_hit_examples": 3, "credited_ranged_spell_kills": 7},
+          "counts": {"spell_trades": 3, "ranged_spell_finishes": 0, "ranged_finishes_with_opponent_in_area": 0, "basic_attack_windows": 0, "observed_opponent_hit_examples": 3, "credited_ranged_spell_kills": 7},
           "observed_examples": {
             "hit_on_mid_opponent": {"time_s": 31.867, "tick": 7216, "ability": "ember_spirit_immolation", "damage": 2},
             "ranged_last_hit": {"time_s": 97.133, "tick": 9174, "ability": "ember_spirit_flame_guard"},
             "first_level_lead": {"from_s": 51, "through_s": 59, "hero_level": 2, "opponent_level": 1, "opponent_visible_samples": 9}
           },
-          "estimated_examples": {}
+          "estimated_examples": {
+            "spell_trade": {
+              "frame_s": 56.033,
+              "ability": "ember_spirit_flame_guard",
+              "rank": 1,
+              "hero_level": 2,
+              "target_hp": 441,
+              "distance": 495,
+              "estimated_damage": 2,
+              "opponent_level": 1,
+              "health_pct_hero_opponent": [77, 73]
+            }
+          }
         }
       ]
     },
@@ -182,7 +194,7 @@
               "hero_level": 2,
               "target_hp": 419,
               "distance": 758,
-              "estimated_damage": 63,
+              "estimated_damage": 60,
               "opponent_level": 2,
               "health_pct_hero_opponent": [79, 59]
             },
@@ -226,7 +238,7 @@
               "hero_level": 1,
               "target_hp": 251,
               "distance": 311,
-              "estimated_damage": 75,
+              "estimated_damage": 73,
               "opponent_level": 1,
               "health_pct_hero_opponent": [59, 33]
             },
@@ -268,13 +280,26 @@
           "slot": 130,
           "hero": "Pangolier",
           "hero_id": 120,
-          "counts": {"spell_trades": 0, "ranged_spell_finishes": 0, "ranged_finishes_with_opponent_in_area": 0, "basic_attack_windows": 0, "observed_opponent_hit_examples": 3, "credited_ranged_spell_kills": 13},
+          "counts": {"spell_trades": 3, "ranged_spell_finishes": 3, "ranged_finishes_with_opponent_in_area": 0, "basic_attack_windows": 0, "observed_opponent_hit_examples": 3, "credited_ranged_spell_kills": 13},
           "observed_examples": {
             "hit_on_mid_opponent": {"time_s": 26.433, "tick": 7854, "ability": "pangolier_shield_crash", "damage": 46},
             "ranged_last_hit": {"time_s": 63.467, "tick": 8966, "ability": "pangolier_swashbuckle"},
             "first_level_lead": {"from_s": 104, "through_s": 109, "hero_level": 3, "opponent_level": 2, "opponent_visible_samples": 6}
           },
-          "estimated_examples": {}
+          "estimated_examples": {
+            "spell_trade": {
+              "frame_s": 162.033,
+              "ability": "pangolier_shield_crash",
+              "rank": 2,
+              "hero_level": 4,
+              "target_hp": 527,
+              "distance": 572,
+              "estimated_damage": 89,
+              "opponent_level": 3,
+              "health_pct_hero_opponent": [77, 76]
+            },
+            "ranged_last_hit": {"frame_s": 182.033, "ability": "pangolier_shield_crash", "rank": 2, "hero_level": 4, "target_hp": 114, "distance": 534, "estimated_damage": 120, "opponent_in_same_cast_area": false, "nominal_impact_delay_s": 0.4, "same_creep_seen_alive_after_delay": true}
+          }
         }
       ]
     },
@@ -286,12 +311,25 @@
           "slot": 0,
           "hero": "Invoker",
           "hero_id": 74,
-          "counts": {"spell_trades": 0, "ranged_spell_finishes": 0, "ranged_finishes_with_opponent_in_area": 0, "basic_attack_windows": 0, "observed_opponent_hit_examples": 3, "credited_ranged_spell_kills": 0},
+          "counts": {"spell_trades": 3, "ranged_spell_finishes": 1, "ranged_finishes_with_opponent_in_area": 0, "basic_attack_windows": 0, "observed_opponent_hit_examples": 3, "credited_ranged_spell_kills": 0},
           "observed_examples": {
             "hit_on_mid_opponent": {"time_s": 65.6, "tick": 8182, "ability": "invoker_cold_snap", "damage": 21},
             "first_level_lead": {"from_s": 41, "through_s": 51, "hero_level": 2, "opponent_level": 1, "opponent_visible_samples": 10}
           },
-          "estimated_examples": {}
+          "estimated_examples": {
+            "spell_trade": {
+              "frame_s": 50.033,
+              "ability": "invoker_cold_snap",
+              "rank": 1,
+              "hero_level": 2,
+              "target_hp": 365,
+              "distance": 680,
+              "estimated_damage": 20,
+              "opponent_level": 1,
+              "health_pct_hero_opponent": [65, 65]
+            },
+            "ranged_last_hit": {"frame_s": 280.033, "ability": "invoker_cold_snap", "rank": 1, "hero_level": 5, "target_hp": 3, "distance": 629, "estimated_damage": 36, "opponent_in_same_cast_area": false, "nominal_impact_delay_s": 0.05, "same_creep_seen_alive_after_delay": true}
+          }
         },
         {
           "slot": 130,
@@ -312,7 +350,7 @@
               "hero_level": 2,
               "target_hp": 464,
               "distance": 668,
-              "estimated_damage": 52,
+              "estimated_damage": 50,
               "opponent_level": 2,
               "health_pct_hero_opponent": [81, 65]
             },

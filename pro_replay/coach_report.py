@@ -349,6 +349,7 @@ def render_session(session, *, home_url=None, detail_url=None):
               f'K/D/A {number(row["kills"])} / {number(row["deaths"])} / {number(row["assists"])}</p></header>')
     parts = [header]
     sections = [(key, label) for key, label, present in (
+        ("mid-exchanges", "Размен или дальний крип", (session.get("mid_windows") or {}).get("exchange_decisions")),
         ("mid-windows", "Размены и дальние крипы", session.get("mid_windows")),
         ("mid-levels", "Преимущество по уровню", session.get("mid_levels")),
         ("accept-review", "Разбор решения", session.get("accept_moments")),

@@ -5,7 +5,11 @@ from functools import lru_cache
 from bisect import bisect_right
 from math import cos, floor, hypot, radians, sin
 
-from .mid_spells import rank_value, spell_catalog, spell_specs
+from .mid_spells import impact_damage, rank_value, resolved_impact, spell_catalog, spell_specs
+from .mid_conditional import after_defense, attack_option
+from .mid_exchange import MOVES_CASTER, exchange_card, response_profile, select_decisions, render_exchange_decisions
+from .mid_observed import observed_exchanges, render_observed_exchanges
+from .mid_prior_hits import annotate_prior_hits, lane_sample
 from .replay_verification import DISABLED, _bits, _control, _distance, _num, _ready, _recipient
 from .report import _clock
 
@@ -66,10 +70,13 @@ def _target(target, ability, team, axis):
 
 
 def _amount(proof, rank, target):
-    raw = _rank(proof["damage"], rank)
+    raw = impact_damage(proof, rank, target)
     if raw is None or raw <= 0:
         return None
     kind = proof["damage_type"]
+    adjusted = after_defense(raw, kind, target)
+    if adjusted is not None:
+        return adjusted
     if kind == "magical":
         mr = target.get("magic_resist_pct")
         if not _num(mr) or not -100 <= mr <= 100:
@@ -143,13 +150,12 @@ def _recent_cast(casts, slot, key, frame):
                  and frame["tick"] <= c["tick"] and 0 <= c["time"]-frame["time"] <= 2), None)
 
 
-def _spell_windows(frame, actor, rival, axis, specs, ctx):
+def _spell_windows(frame, actor, rival, axis, specs, ctx, *, include_creeps=True):
     slot, team, clean_range, casts = ctx
     if (not _mid(actor, axis) or actor.get("alive") is not True or type(actor.get("level")) is not int
             or not 1 <= actor["level"] <= 30 or _control(actor, False, True)["state"] != "yes"):
         return
-    creeps = [c for c in frame.get("ranged_creeps") or [] if isinstance(c, dict) and type(c.get("id")) is int
-              and c.get("team") == 5-team and c.get("name") == RANGED[5-team]]
+    creeps = (_enemy_creeps(frame, team) if include_creeps else ())
     for key, spec in specs.items():
         proof = spec.get("proof")
         button = (actor.get("buttons") or {}).get(key)
@@ -158,6 +164,10 @@ def _spell_windows(frame, actor, rival, axis, specs, ctx):
         rank = button.get("level")
         if type(rank) is not int or not 1 <= rank <= spec["max_rank"] or any(check["state"] != "yes" for check in _ready(actor, button, False)):
             continue
+        spec = resolved_impact(spec, actor, rank)
+        if spec is None:
+            continue
+        proof = spec["proof"]
         health_cost = _rank(spec.get("health_cost") or [0], rank)
         if (health_cost is None or health_cost > 0 and (not _num(actor.get("hp")) or actor["hp"] <= health_cost)
                 or key in ("sandking_burrowstrike","morphling_waveform","puck_waning_rift") and _bits(actor, (0,)) is not False):
@@ -165,6 +175,7 @@ def _spell_windows(frame, actor, rival, axis, specs, ctx):
         base = {"time": frame["time"], "game_time": frame.get("game_time", frame["time"]),
                 "spell": spec["name"], "key": key, "rank": rank, "level": actor["level"],
                 "mana": actor["mana"], "cost": button["mana_cost"], "health_cost":health_cost,
+                "partial":bool(proof.get("partial")), "damage_type":proof["damage_type"], "ultimate":bool(spec.get("ultimate")),
                 "recorded_cast": _recent_cast(casts, slot, key, frame)}
         enemy_hit = None
         if proof["target"] in ("both", "hero") and _target(rival, key, team, axis):
@@ -174,8 +185,10 @@ def _spell_windows(frame, actor, rival, axis, specs, ctx):
             if type(their_level) is int and 1 <= their_level <= 30 and _num(ours) and _num(actor.get("max_hp")) and actor["max_hp"] >= ours > 0:
                 level_lead = actor["level"] - their_level
                 hp_lead = ours / actor["max_hp"] - rival["hp"] / rival["max_hp"]
-                if enemy_hit and (level_lead > 0 or hp_lead >= .15):
-                    yield {**base, **enemy_hit, "kind":"trade", "opponent_level":their_level,
+                if enemy_hit:
+                    complete_defense = after_defense(100, proof["damage_type"], rival) is not None
+                    yield {**base, **enemy_hit, "kind":"hero", "defense_known":complete_defense,
+                           "advantage":level_lead > 0 or hp_lead >= .15, "opponent_level":their_level,
                            "hp_pct":round(100*ours/actor["max_hp"]),
                            "opponent_hp_pct":round(100*rival["hp"]/rival["max_hp"])}
         if proof["target"] not in ("both", "creep"):
@@ -187,8 +200,61 @@ def _spell_windows(frame, actor, rival, axis, specs, ctx):
             if hit and hit["damage"] >= c["hp"]:
                 # Self-centered and forward circles share a single fixed area at this frame.
                 # Unit-target spells with uncertain bounce choices are excluded from this cue.
-                joint = enemy_hit is not None and proof["shape"] in ("self_radius","forward_circle")
+                joint = (enemy_hit is not None and proof["shape"] in ("self_radius","forward_circle")
+                         and key not in MOVES_CASTER)
                 yield {**base, **hit, "kind":"creep", "id":c["id"], "joint_hero":joint}
+
+
+def _enemy_creeps(frame, team):
+    return [c for c in frame["ranged_creeps"] if isinstance(c, dict) and type(c.get("id")) is int
+            and c.get("team") == 5-team and c.get("name") == RANGED[5-team]]
+
+
+def _physical_options(actor, target, *, hero, clean_range):
+    options = []
+    for include_orb in (True, False):
+        hit = attack_option(actor, target, actor["hero_id"], target_is_hero=hero, include_orb=include_orb,
+                            clean_range=clean_range)
+        if hit and not any(o["key"] == hit["key"] for o in options):
+            options.append(dict(hit, spell=hit["name"]))
+    return options
+
+
+def _exchange_frame(frame, actor, rival, axis, own_rows, own_specs, enemy_specs, our_team, clean_range, enemy_clean_range):
+    if (not rival or not _mid(actor, axis) or not _target(rival, "", our_team, axis)
+            or actor.get("alive") is not True):
+        return None
+    heroes = [row for row in own_rows if row["kind"] == "hero"]
+    heroes.extend(_physical_options(actor, rival, hero=True, clean_range=clean_range))
+    # An ultimate can be mechanically capable of killing a ranged creep; that
+    # alone is insufficient reason to spend it for this ordinary last hit.
+    creeps = [row for row in own_rows if row["kind"] == "creep" and not row["ultimate"]]
+    for creep in _enemy_creeps(frame, our_team):
+        target = dict(creep, alive=True)
+        if _target(target, "", our_team, axis):
+            for hit in _physical_options(actor, target, hero=False, clean_range=clean_range):
+                if hit["damage_min"] >= creep["hp"] and not own_specs.get(hit["key"], {}).get("ultimate"):
+                    creeps.append(dict(hit, id=creep["id"], hp=creep["hp"], joint_hero=False,
+                                       game_time=frame.get("game_time",frame["time"])))
+    if not heroes and not creeps:
+        return None
+    their_team = 5 - our_team
+    if not _target(actor, "", their_team, axis):
+        return None
+    enemy_spells = list(_spell_windows(frame, rival, actor, axis, enemy_specs,
+                                       (None, their_team, enemy_clean_range, ()), include_creeps=False))
+    attacks = _physical_options(rival, actor, hero=True, clean_range=enemy_clean_range)
+    reply = response_profile(rival, actor, enemy_specs, enemy_spells, attacks)
+    danger = any(t.get("team") == their_team and _xy(t) and _distance(t, actor) <= 850
+                 for t in frame.get("mid_towers") or () if isinstance(t, dict))
+    extra_hero = any(isinstance(s, str) and s.isdigit() and (2 if int(s) < 128 else 3) == their_team
+                     and isinstance(other, dict) and other is not rival and other.get("alive") is True
+                     and _xy(other) and isinstance(other.get("visible_to"), dict)
+                     and other["visible_to"].get(str(our_team)) is True and _distance(other, actor) <= 850
+                     for s, other in frame["heroes"].items())
+    return {"time":frame["time"], "own_hp":actor.get("hp"), "own_max":actor.get("max_hp"),
+            "enemy_hp":rival["hp"], "enemy_max":rival["max_hp"], "hero":heroes, "creeps":creeps,
+            "reply":reply, "tower_nearby":danger, "extra_hero":extra_hero, "tick":frame["tick"]}
 
 
 def _shortlist(rows, kind):
@@ -220,6 +286,17 @@ def mid_decision_windows(raw, slot, matchup, timeline, *, catalog=None):
         return missing
     if catalog is None:
         catalog = spell_specs(ours["id"])
+    enemy_specs = spell_specs(theirs["id"])
+    dot_keys = {"huskar_burning_spear", "viper_poison_attack"} & enemy_specs.keys()
+    dot_duration = {k:max(p["values"]) for k in dot_keys for p in enemy_specs[k]["parameters"]
+                    if p["field"] == "duration" and p["values"]}
+    if "pudge_rot" in enemy_specs:
+        dot_duration["pudge_rot"] = 1  # a recent tick in this or the preceding sampled second
+    dot_events = sorted((e["tick"], e["time"], e["button_key"]) for e in timeline.get("events") or ()
+                        if isinstance(e, dict) and e.get("kind") == "spell_damage" and e.get("actor_slot") == enemy
+                        and e.get("target_slot") == slot and type(e.get("button_key")) is str and e["button_key"] in dot_duration
+                        and type(e.get("tick")) is int and type(e.get("time")) is int)
+    dot_ticks = [e[0] for e in dot_events]
     names = _known_spells() | {key:s["name"] for key,s in catalog.items()}
     team = 2 if slot < 128 else 3
     events = [e for e in timeline.get("events") or () if isinstance(e, dict) and type(e.get("time")) is int
@@ -232,12 +309,16 @@ def mid_decision_windows(raw, slot, matchup, timeline, *, catalog=None):
     enemy_bane = any(p.get("hero_id") == 3 and type(p.get("player_slot")) is int
                      and (p["player_slot"] < 128) != (slot < 128) for p in raw.get("players") or () if isinstance(p,dict))
     clean_range = len(roster) == len(set(roster)) == 10 and not enemy_bane
+    enemy_clean_range = len(roster) == len(set(roster)) == 10 and not any(
+        p.get("hero_id") == 3 and type(p.get("player_slot")) is int and (p["player_slot"] < 128) == (slot < 128)
+        for p in raw.get("players") or () if isinstance(p, dict))
     end = raw.get("duration")
     if type(end) is not int or end <= 0:
         return missing
     rows, longevity, mid_frames, sampled, axis = [], {}, {}, 0, None
-    creep_frames = {}
-    attacks = []
+    creep_frames, lane_samples = {}, {}
+    kits = {slot:catalog, enemy:enemy_specs}
+    attacks, exchanges = [], []
     for f in _frames(timeline, min(end, 600)):
         if type(f.get("tick")) is not int or type(f.get("time")) is not int:
             continue
@@ -252,6 +333,9 @@ def mid_decision_windows(raw, slot, matchup, timeline, *, catalog=None):
             rival = None
         if rival and _mid(actor, axis) and _mid(rival, axis):
             mid_frames[f["time"]] = f["tick"]
+            sample = lane_sample(f,{slot:actor,enemy:rival},kits,team)
+            if sample:
+                lane_samples[f["time"]] = sample
         if len(attacks) < 2 and (not attacks or f["time"] - attacks[-1]["time"] >= 45):
             attack = _attack_window(f, actor, rival, axis, team)
             if attack and all(x["level"] != attack["level"] for x in attacks):
@@ -266,7 +350,20 @@ def mid_decision_windows(raw, slot, matchup, timeline, *, catalog=None):
                 if _num(when):
                     creep_frames[when].add(c["id"])
                     longevity[c["id"]] = when
-        rows.extend(_spell_windows(f, actor, rival, axis, catalog, (slot,team,clean_range,casts)))
+        own_rows = list(_spell_windows(f, actor, rival, axis, catalog, (slot,team,clean_range,casts)))
+        for row in own_rows:
+            if row["kind"] == "creep":
+                rows.append(row)
+            elif row["advantage"]:
+                rows.append(dict(row, kind="trade"))
+        pair = _exchange_frame(f, actor, rival, axis, own_rows, catalog, enemy_specs, team, clean_range, enemy_clean_range)
+        if pair:
+            prior = bisect_right(dot_ticks, f["tick"])
+            if prior:
+                _, when, key = dot_events[prior-1]
+                if 0 <= f["time"] - when <= dot_duration[key]:
+                    pair["reply"]["unknown"].append(enemy_specs[key]["name"] + " недавно наносил периодический урон. Проверь, продолжал ли действовать эффект")
+            exchanges.append(pair)
     if not sampled and not last_hits:
         return missing
     sample_times = sorted(creep_frames)
@@ -280,6 +377,15 @@ def mid_decision_windows(raw, slot, matchup, timeline, *, catalog=None):
             stop = row["game_time"] + (row["cast_point"] or 0)
             start_idx, end_idx = bisect_right(sample_times, row["game_time"]), bisect_right(sample_times, stop)
             row["lost_before_release"] = any(row["id"] not in creep_frames[t] for t in sample_times[start_idx:end_idx])
+    for pair in exchanges:
+        for target in pair["creeps"]:
+            if "alive_after_estimate" in target or target.get("arrival") is None:
+                continue
+            arrival = target["game_time"] + target["arrival"]
+            target["alive_after_estimate"] = longevity.get(target["id"], -1) >= arrival
+            lo = bisect_right(sample_times, target["game_time"])
+            hi = bisect_right(sample_times, arrival)
+            target["lost_before_release"] = any(target["id"] not in creep_frames[t] for t in sample_times[lo:hi])
     # Prefer time windows where the ranged creep was still alive after the
     # nominal delay. This is explicitly described as an after-the-fact check.
     creeps = sorted((r for r in rows if r["kind"] == "creep" and not r["lost_before_release"]),
@@ -293,7 +399,11 @@ def mid_decision_windows(raw, slot, matchup, timeline, *, catalog=None):
             hits.append({"time":e["time"], "spell":names[e["button_key"]], "damage":e["damage"]})
             if len(hits) == 3:
                 break
+    choices = select_decisions(c for pair in exchanges if (c := exchange_card(pair)) is not None)
+    annotate_prior_hits(choices, timeline.get("events") or (), lane_samples, slot, enemy, kits)
     return {"seconds":sampled, "enemy":theirs["name"], "trades":_shortlist(rows,"trade"), "hero_hits":hits, "attacks":attacks,
+            "exchange_decisions":choices,
+            "observed_exchanges":observed_exchanges(timeline.get("events") or (), slot, enemy, mid_frames, names),
             "creeps":sorted(_shortlist(creeps,"creep"), key=lambda r:r["time"]),
             "last_hits":last_hits, "reviewable_spells":sum(bool(s.get("proof")) for s in catalog.values())}
 
@@ -307,10 +417,11 @@ def render_mid_windows(review):
     parts.append("<p>Первые десять минут, вблизи линии между средними T1. "
                  "Прогноз урона учитывает один описанный эффект и базовую защиту из кадра. "
                  "Барьер, усиление урона, поворот, движение цели и летящие атаки могут изменить результат.</p>")
+    parts.append(render_exchange_decisions(review.get("exchange_decisions", []), review["enemy"]))
     if not review["reviewable_spells"]:
         parts.append("<p>Для этого героя в справочнике пока нет численно проверенного отдельного попадания. "
                      "По повтору доступны отмеченные в журнале попадания и добивания.</p>")
-    for kind, title in (("trades","Когда предложить размен"),("creeps","Дальний крип под нюк")):
+    for kind, title in (("trades","Доступные нюки при перевесе по здоровью или уровню"),("creeps","Дальний крип под нюк")):
         parts.append(f"<h3>{title}</h3>")
         if not review[kind]:
             parts.append("<p>Подходящее сочетание состояния кнопки, видимости, дистанции и цели не подтверждено.</p>")
@@ -352,4 +463,5 @@ def render_mid_windows(review):
         parts.append(f"<h3>Фактические добивания способностью</h3><p>{hits}.</p>"
                      "<p>Журнал смерти назвал героя и способность для вражеского дальнего крипа "
                      "в первые десять минут. В этой записи указано имя типа крипа, без его координат.</p>")
+    parts.append(render_observed_exchanges(review.get("observed_exchanges"), review["enemy"]))
     return "".join([*parts,"</section>"])

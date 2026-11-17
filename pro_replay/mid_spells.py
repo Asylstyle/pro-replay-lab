@@ -3,6 +3,7 @@
 from functools import lru_cache
 from html import escape
 import json
+from math import isfinite
 from pathlib import Path
 
 
@@ -30,6 +31,60 @@ def rank_value(values, rank):
     if len(values) == 1:
         return values[0]
     return values[rank - 1] if rank <= len(values) else None
+
+
+def impact_damage(proof, rank, target):
+    """Raw single impact, using the measured target pools for a missing-resource spell."""
+    base = rank_value(proof.get("damage"), rank)
+    pool = proof.get("missing_pool")
+    if base is None or not pool:
+        return base
+    current, cap = target.get(pool), target.get("max_" + pool)
+    if (not all(type(n) in (int, float) and isfinite(n) for n in (current, cap))
+            or not 0 <= current <= cap or cap <= 0):
+        return None
+    return base * (cap - current)
+
+
+def resolved_impact(spec, actor, rank):
+    """Resolve a learned button's frame-specific conditions before either side's damage is priced."""
+    proof = spec.get("proof")
+    if not proof or type(rank) is not int or not 1 <= rank <= spec["max_rank"]:
+        return None
+    buttons = actor.get("buttons") or {}
+    if proof.get("requires_unrooted"):
+        state = actor.get("unit_state")
+        if type(state) is not int or state < 0 or state & 1:
+            return None
+    for name in proof.get("inactive_buttons", ()):
+        stop = buttons.get(name)
+        if not isinstance(stop, dict) or stop.get("active") is not False:
+            return None
+    if proof.get("requires_charge"):
+        button = buttons.get(spec["key"]) or {}
+        if type(button.get("charges")) is not int or button["charges"] < 1:
+            return None
+    if proof.get("requires_off"):
+        button = buttons.get(spec["key"]) or {}
+        if button.get("toggled") is not False:
+            return None
+    scaling = proof.get("orb_scaling")
+    if not scaling:
+        return spec
+    invoked = buttons.get(spec["key"]) or {}
+    if (actor.get("hero_id") != 74 or invoked.get("active") is not True or invoked.get("slot") not in (3, 4)
+            or invoked.get("kind") != "ability" or invoked.get("level") != rank):
+        return None
+    observed = dict(proof)
+    for field, curve in scaling.items():
+        orb = buttons.get(curve["orb"]) or {}
+        if orb.get("kind") != "ability":
+            return None
+        value = rank_value(curve["values"], orb.get("level"))
+        if value is None:
+            return None
+        observed[field] = [value]
+    return {**spec, "proof": observed}
 
 
 DAMAGE_NAMES = {"physical": "физический", "magical": "магический", "pure": "чистый"}
@@ -62,8 +117,14 @@ def render_spellbook(hero_id, *, learned=None):
         if note:
             parts.append(f"<p>{escape(note)}</p>")
         if proof:
-            parts.append(f"<p>Базовый {DAMAGE_NAMES[proof['damage_type']]} урон одного попадания по рангам — "
-                         f"{_numbers(proof['damage'])}.</p>")
+            curve = proof.get("orb_scaling", {}).get("damage")
+            series = curve["values"] if curve else proof["damage"]
+            by_rank = "по уровням " + curve["orb"].removeprefix("invoker_").title() if curve else "по рангам"
+            unit = {"mana": "за единицу недостающей маны", "hp": "за единицу недостающего здоровья"}.get(
+                proof.get("missing_pool"), "одного попадания")
+            parts.append(f"<p>Базовый {DAMAGE_NAMES[proof['damage_type']]} урон {unit} {by_rank} — {_numbers(series)}.</p>")
+            if proof.get("instruction"):
+                parts.append(f"<p>{escape(proof['instruction'])}</p>")
         if spell["rank_gates"]:
             parts.append(f"<p>Ранги доступны с уровней героя {_numbers(spell['rank_gates'])}. "
                          "Момент прокачки зависит от потраченных очков.</p>")
