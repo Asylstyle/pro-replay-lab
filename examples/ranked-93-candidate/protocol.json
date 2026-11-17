@@ -1,0 +1,40 @@
+{
+  "format": "ranked-93-comparison-protocol-v1",
+  "source_commit": "99e05527d16155bae0411f57ee097eca2578db63",
+  "patch": "7.41f",
+  "patch_start": 1789455600,
+  "min_avg_mmr": 7300,
+  "frozen_at": 1794956300,
+  "latest_training_end": 1794954864,
+  "models": {
+    "old": {
+      "path": "examples/patch-cohort-model.json",
+      "canonical_sha256": "7affeba6620b3e5b051f69fe95583c319500397f69f095a7c5d10946e5417c49",
+      "file_sha256": "ee722ffdb5d81cabcaa8c71febe5bf1823952616a1467c140f1d0307d4d561e1",
+      "ranked_ids_sha256": "026dc801ab89fe183991f686fa4a34e2cdcb90be6f3dda5a9caa3d93fbc4c1d7",
+      "ranked_count": 53,
+      "ranked_recipe": "ridge_legacy"
+    },
+    "new": {
+      "path": "examples/ranked-93-candidate/model.json",
+      "canonical_sha256": "3245ecc27c9f10ac9d96234e8c4d6978886ff478fd373d9a1512979aa5cac593",
+      "file_sha256": "a9e86cfca899e88220a15f2aede73470b8ac6d885a0d39b77c5df6b9844cb37d",
+      "ranked_ids_sha256": "1613783dd24a4f9926d6eec57bfac863a08a7170c02d1ca143e46e66e64b5d8e",
+      "ranked_count": 93,
+      "ranked_recipe": "ridge_rich_10"
+    }
+  },
+  "training_snapshot_sha256": "d70d0abfd38eda63f1cef81480d3c5edbeec03b7c8f6bd63c0e9fabe57e63642",
+  "training_manifest_sha256": "de3481aefabb270571dd46f489884c9e7412b2c17ea245ec00cf8f048185eb46",
+  "primary_metrics": [
+    "gold",
+    "xp"
+  ],
+  "metric": "Mean absolute error of cumulative resources at minute 20, using features through minute 10. Score each frozen model on the same ten players in each complete match. Paired 95% bootstrap intervals resample whole matches. A negative new-minus-old difference favors the candidate.",
+  "eligibility": "OpenDota Live ranked All Pick with numeric lobby average >= 7300 and both teams verified in the completed match, complete minute-10 and minute-20 trajectories, same Valve patch. Exclude all prior training and study matches. Primary test requires start strictly after the last training match end. Report the subset starting after this protocol's freeze separately.",
+  "collection": {
+    "deadline_utc_epoch": 1794958199,
+    "target_primary_matches": 12,
+    "rule": "Keep every eligible match in each completed round. Stop at the first completed round reaching the target, or the deadline, whichever comes first. Selection uses verified matches and elapsed time only. No tuning on this batch."
+  }
+}
