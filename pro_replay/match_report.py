@@ -1,6 +1,9 @@
 """One self-contained match review. Every number links back to a match or a definition."""
 
 from .analysis import CORE_ITEMS
+from .build_review import render_build
+from .fight_review import render_fights
+from .hero_review import render_hero_review
 from .impact import prior_maps, observations
 from .report import _clock, _date, _h, _item
 
@@ -19,6 +22,7 @@ a,time,.selected{color:var(--lime)}a:focus-visible,select:focus-visible,summary:
 nav{padding:12px 0;border-bottom:1px solid var(--line);display:flex;gap:8px 18px;flex-wrap:wrap}a{text-underline-offset:.2em}
 .scroll{overflow-x:auto}table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;font-size:.94rem}
 td,th{text-align:right;padding:7px 9px;border-bottom:1px solid var(--line);white-space:nowrap}
+thead th{white-space:normal;vertical-align:bottom}section{min-width:0}
 th{color:var(--soft);font-size:.8rem}td:first-child,th:first-child{text-align:left;white-space:normal}
 .fact{padding:9px 0;border-bottom:1px solid var(--line)}.fact p{margin:0}.fact small{display:block}
 .bar{display:block;height:6px;background:#30454d;border-radius:4px;min-width:65px}.bar i{display:block;background:var(--lime);height:100%;border-radius:4px}
@@ -136,18 +140,20 @@ def timeline_section(row):
             f'<ul class="events" id="events">{entries}</ul>')
 
 
-def render_match(row, archive):
+def render_match(row, archive, references=None):
     detail = row.get("detail") or {}
-    impact = detail.get("impact") or {}
     hero = row.get("hero_name") or f'Герой #{row.get("hero_id")}'
-    player = row.get("player_name") or row.get("account_id")
+    player = row.get("player_name") or ("Игрок " + str(row.get("side") or "").title()).strip()
     mid = int(row["match_id"])
-    subtitle = " · ".join(str(v) for v in (row.get("team_name"), row.get("opponent"), row.get("league_name"),
+    game_label = "Рейтинговый матч" if row.get("lobby_type") == 7 and not row.get("league_id") else None
+    subtitle = " · ".join(str(v) for v in (row.get("team_name"), row.get("opponent"), row.get("league_name") or game_label,
                            _date(row.get("start_time")), row.get("patch_version") or
                            (f'ID патча {row["patch"]}' if row.get("patch") else None)) if v)
     outcome = {True: "Победа", False: "Поражение"}.get(row.get("win"), "Итог неизвестен")
-    cards = [("Индекс вклада", pct(impact.get("score"))), ("Участие в убийствах", pct(row.get("kill_participation"))),
-             ("K / D / A", " / ".join(num(row.get(k)) for k in ("kills", "deaths", "assists"))),
+    review = detail.get("fight_review") or {}
+    cards = [("K / D / A", " / ".join(num(row.get(k)) for k in ("kills", "deaths", "assists"))),
+             ("Участие в убийствах", pct(row.get("kill_participation"))),
+             ("Драки в журнале", num(review.get("recorded")) if review.get("available") else "—"),
              (outcome, _clock(row.get("duration")))]
     metrics = "".join(f'<div class="card"><small>{label}</small><b>{value}</b></div>' for label, value in cards)
     checkpoints = detail.get("checkpoints", [])
@@ -160,9 +166,14 @@ def render_match(row, archive):
                      ("kills", "deaths", "damage", "healing", "gold"))) for f in fights]) if fights else (
                      "<p>Нет зарегистрированных интервалов с показателями игрока.</p>" if detail.get("fights_available")
                      else "<p>Журнал командных драк отсутствует.</p>")
-    blocks = [("impact", "Вклад в команду", impact_section(detail)),
+    if "fight_review" in detail:
+        combat = render_fights(review)
+    blocks = [("hero", "Герой и позиция", render_hero_review(row, references if references is not None else archive)),
+              ("fights", "Что сделал в драках", combat),
+              ("build", "Предметы против драфта", render_build(detail.get("build"), patch_version=row.get("patch_version"))),
               ("standout", "Чем выделился игрок", standout_section(row, prior_maps(row, archive))),
-              ("economy", "Экономика по ходу карты", economy), ("fights", "Командные драки", combat),
+              ("impact", "Доли внутри команды", impact_section(detail)),
+              ("economy", "Экономика по ходу карты", economy),
               ("timeline", "Таймлайн действий", timeline_section(row))]
     nav = " ".join(f'<a href="#{key}">{label}</a>' for key, label, _ in blocks)
     sections = "".join(f'<section id="{key}"><h2>{label}</h2>{content}</section>' for key, label, content in blocks)

@@ -133,7 +133,7 @@ def _match(row, anchor, demo):
         body.append('<p class="meta">' + _h(" · ".join(meta)) + '</p>')
     impact = (row.get("detail") or {}).get("impact") or {}
     if impact.get("score") is not None:
-        body.append(f'<p><b>{impact["score"]:.1%}</b> — индекс вклада в команде '
+        body.append(f'<p><b>{impact["score"]:.1%}</b> — взвешенная доля командных действий '
                     f'по {impact["available"]} из 6 показателей.</p>')
     if row.get("_match_page"):
         body.append(f'<p><a href="{_h(row["_match_page"])}">Открыть полный разбор карты →</a></p>')

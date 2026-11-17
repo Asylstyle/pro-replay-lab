@@ -17,6 +17,7 @@ from .learning import train_model, predict
 from .patterns import find_order
 from .report import render_report
 from .match_report import render_match
+from .impact import SLOTS
 from .source import OpenDota, SourceError, valve_patches
 
 
@@ -44,14 +45,14 @@ def mmss(value):
     return f"{'-' if value < 0 else ''}{minutes:02}:{seconds:02}"
 
 
-def report(player, rows, dest, case=False, *, detailed=False, archive_rows=None):
+def report(player, rows, dest, case=False, *, detailed=False, archive_rows=None, references=None):
     if detailed:
         dest = Path(dest)
         folder = dest.parent / (dest.stem + "-matches")
         enriched = []
         for row in rows:
             name = f'{int(row["match_id"])}.html'
-            save_text(folder / name, render_match(row, archive_rows if archive_rows is not None else rows))
+            save_text(folder / name, render_match(row, archive_rows if archive_rows is not None else rows, references))
             enriched.append({**row, "_match_page": quote(folder.name) + "/" + name})
         rows = enriched
     stats = summarize(rows)
@@ -85,8 +86,8 @@ def parser():
     demo = sub.add_parser("demo", help="Офлайн-разбор двух реальных карт Yatoro")
     demo.add_argument("--out", default="yatoro.html")
     sub.add_parser("patches", help="Обновить локальный календарь патчей Valve")
-    match = sub.add_parser("match", help="Процент вклада и подробный разбор одной турнирной карты")
-    match.add_argument("player", help="Ник игрока или числовой account ID")
+    match = sub.add_parser("match", help="Разбор игрока в турнирной или рейтинговой игре")
+    match.add_argument("player", help="Ник про-игрока, account ID или слот этой карты, например slot:130")
     match.add_argument("match_id", type=positive)
     match.add_argument("--out", type=Path, help="Путь для автономного HTML-отчёта")
     fetch = sub.add_parser("sync", help="Собрать матчи игрока из OpenDota")
@@ -127,6 +128,40 @@ def print_json(value):
     print(json.dumps(value, ensure_ascii=False, indent=2))
 
 
+def review_one(archive, args):
+    api = OpenDota()
+    slot = None
+    account = None
+    if args.player.startswith("slot:"):
+        token = args.player[5:]
+        if not token.isascii() or not token.isdecimal() or int(token) not in SLOTS:
+            raise ValueError("Слот Radiant от 0 до 4, слот Dire от 128 до 132.")
+        slot = int(token)
+    else:
+        account, _ = archive.match_player(args.player, api)
+    row = archive.cached_match(args.match_id, account, slot)
+    if not row or row.get("review_version") != 2:
+        try:
+            raw = api.match(args.match_id)
+            try:
+                heroes = archive.hero_names(api)
+            except SourceError:
+                heroes = {}
+            fresh = normalize(raw, account, heroes, slot=slot)
+            if not fresh:
+                raise ValueError("В этой карте не найден указанный игрок или слот.")
+            archive.save(fresh)
+            row = archive.with_patch_versions([fresh])[0]
+        except SourceError:
+            if not row:
+                raise
+            print("Источник недоступен. Показаны ранее сохранённые данные карты.")
+    identifier = account if slot is None else f"slot-{slot}"
+    path = args.out or Path(f"match-{args.match_id}-{identifier}.html")
+    save_text(path, render_match(row, archive.personal_history(row), archive.references()))
+    print(f"Разбор карты: {path.resolve()}")
+
+
 def main(argv=None):
     args = parser().parse_args(argv)
     try:
@@ -152,24 +187,7 @@ def main(argv=None):
                 print(f"Обновлён календарь Valve. Версий: {len(entries)}.")
                 return 0
             if args.cmd == "match":
-                api = OpenDota()
-                account, _ = archive.match_player(args.player, api)
-                rows = archive.rows(account)
-                selected = next((r for r in rows if r["match_id"] == args.match_id), None)
-                if not selected or "detail" not in selected:
-                    try:
-                        sync(archive, api, account, [args.match_id], refresh=True)
-                    except SourceError:
-                        if not selected:
-                            raise
-                        print("Источник недоступен. Показаны ранее сохранённые данные карты.")
-                    rows = archive.rows(account)
-                    selected = next((r for r in rows if r["match_id"] == args.match_id), None)
-                if not selected:
-                    raise ValueError("Карта недоступна, не является турнирной или в ней нет выбранного игрока.")
-                dest = args.out or Path(f"match-{args.match_id}-{account}.html")
-                save_text(dest, render_match(selected, rows))
-                print(f"Разбор карты: {dest.resolve()}")
+                review_one(archive, args)
                 return 0
             if args.cmd == "sync":
                 api = OpenDota()
@@ -221,7 +239,8 @@ def main(argv=None):
             if not rows:
                 raise ValueError("Нет подходящих матчей. Загрузи матчи через sync/import или проверь фильтры.")
             if args.cmd == "report":
-                report(rows[0].get("player_name") or player, rows, args.out, detailed=args.details, archive_rows=all_rows)
+                report(rows[0].get("player_name") or player, rows, args.out, detailed=args.details, archive_rows=all_rows,
+                       references=archive.references() if args.details else None)
             elif args.cmd == "find":
                 result = find_order(rows, args.before, args.after, args.within)
                 print(f'Найдено: {len(result["found"])} / {len(rows)}. Без совпадения при доступных журналах: '

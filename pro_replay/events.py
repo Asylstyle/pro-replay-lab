@@ -1,6 +1,7 @@
 """Timestamped player actions recorded in OpenDota logs."""
 
 import re
+from .analysis import select_player
 from statistics import median
 
 
@@ -57,18 +58,14 @@ def _towers(match, player, hero_unit):
     return timeline, complete
 
 
-def event_data(match: dict, account_id: int, hero_unit: str | None = None) -> dict:
+def event_data(match: dict, account_id: int | None, hero_unit: str | None = None, *, player=None) -> dict:
     """Return timestamped actions and separate per-kind completeness indicators.
 
     A missing/non-list log has unknown coverage. An empty list is an available
     log with no recorded actions. Preserve pre-horn times (negative seconds).
     """
-    players = match.get("players") or []
-    player = next(
-        (p for p in players if isinstance(p, dict)
-         and str(p.get("account_id")) == str(account_id)),
-        {},
-    )
+    if player is None:
+        player = select_player(match, account_id) or {}
     coverage = {}
     timeline = []
     for kind, field in _LOG_FIELDS.items():

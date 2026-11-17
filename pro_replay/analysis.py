@@ -102,15 +102,28 @@ def _purchases(raw_log):
     return sorted(purchases, key=lambda event: event["time"])
 
 
-def extract_match(match: dict, account_id: int) -> dict | None:
-    """Extract a single observed player's match, retaining absent values as None."""
-    target = _int(account_id)
-    if target is None or not isinstance(match.get("players"), list):
+def select_player(match, account_id, slot=None):
+    """An anonymous slot identifies a player only within this match."""
+    players = match.get("players")
+    field, value = ("player_slot", slot) if slot is not None else ("account_id", account_id)
+    if not isinstance(players, list) or _int(value) is None:
         return None
-    players = [p for p in match["players"] if isinstance(p, dict)]
-    player = next((p for p in players if _int(p.get("account_id")) == target), None)
+    if field == "account_id" and not 0 < _int(value) < 2**32 - 1:
+        return None
+    hits = [p for p in players if isinstance(p, dict) and _int(p.get(field)) == _int(value)]
+    return hits[0] if len(hits) == 1 else None
+
+
+def extract_match(match: dict, account_id: int | None, *, player=None) -> dict | None:
+    """Extract a single observed player's match, retaining absent values as None."""
+    if player is None:
+        player = select_player(match, account_id)
     if player is None:
         return None
+    target = _int(player.get("account_id"))
+    if target is not None and not 0 < target < 2**32 - 1:
+        target = None
+    players = [p for p in match["players"] if isinstance(p, dict)]
 
     side = _side(player)
     radiant_win = match.get("radiant_win")
@@ -145,6 +158,9 @@ def extract_match(match: dict, account_id: int) -> dict | None:
         "start_time": _int(match.get("start_time")),
         "duration": duration,
         "league_id": _int(match.get("leagueid")),
+        "lobby_type": _int(match.get("lobby_type")),
+        "game_mode": _int(match.get("game_mode")),
+        "player_slot": _int(player.get("player_slot")),
         "side": side,
         "win": win,
         "kills": kills,

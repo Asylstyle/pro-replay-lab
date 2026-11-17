@@ -5,6 +5,7 @@ from statistics import median
 
 from .analysis import _int, extract_match
 from .events import event_data
+from .fight_review import extract_fights
 from .patterns import find_order
 
 
@@ -70,9 +71,8 @@ def contribution(players, slot, heroes):
             "weight_sum": weight_sum, "available": count}
 
 
-def match_detail(raw, account, heroes):
+def match_detail(raw, player, heroes):
     players = [p for p in raw.get("players", []) if isinstance(p, dict)]
-    player = next(p for p in players if _int(p.get("account_id")) == _int(account))
     slot = player.get("player_slot")
     side = "radiant" if slot in SLOTS[:5] else "dire" if slot in SLOTS[5:] else None
     opponents = {"radiant": "dire", "dire": "radiant"}
@@ -90,36 +90,20 @@ def match_detail(raw, account, heroes):
                 values = player.get(field)
                 point[key] = amount(values[i]) if isinstance(values, list) and i < len(values) else None
             checkpoints.append(point)
-    fights = []
-    original_fights = raw.get("teamfights")
-    for fight in original_fights if isinstance(original_fights, list) else []:
-        if not isinstance(fight, dict) or slot not in SLOTS:
-            continue
-        parts = fight.get("players")
-        if not isinstance(parts, list) or len(parts) != 10:
-            continue
-        entry = parts[SLOTS.index(slot)]
-        if not isinstance(entry, dict) or any(type(fight.get(k)) is not int for k in ("start", "end")):
-            continue
-        victims = entry.get("killed")
-        kills = None
-        if isinstance(victims, dict):
-            kills = _total(victims, [k for k in victims if k.startswith("npc_dota_hero_")])
-        fights.append({"start": fight["start"], "end": fight["end"], "kills": kills,
-                       "deaths": amount(entry.get("deaths")), "damage": amount(entry.get("damage")),
-                       "healing": amount(entry.get("healing")), "gold": _int(entry.get("gold_delta"))})
+    review = extract_fights(raw, slot, heroes)
+    fights = [{"start": f["start"], "end": f["end"], "deaths": f["deaths"], "damage": f["damage"],
+               "healing": f["healing"], "gold": f["gold_delta"],
+               "kills": sum(f["kills"].values()) if f["kills"] is not None else None} for f in review["intervals"]]
     teammate_rows = []
     slots = SLOTS[:5] if side == "radiant" else SLOTS[5:]
     for ally in players:
         if side is None or ally.get("player_slot") not in slots or ally["player_slot"] == slot:
             continue
         ally_id = ally.get("account_id")
-        if not ally_id or sum(p.get("account_id") == ally_id for p in players) != 1:
-            continue
-        ally_row = extract_match(raw, ally_id)
+        ally_row = extract_match(raw, ally_id, player=ally)
         if ally_row:
             unit = heroes.get(ally.get("hero_id"), {}).get("name")
-            ally_row.update(event_data(raw, ally_id, unit))
+            ally_row.update(event_data(raw, ally_id, unit, player=ally))
             teammate_rows.append(ally_row)
     ally_sequences = {}
     team_slots = [p["player_slot"] for p in players if p.get("player_slot") in slots]
@@ -128,7 +112,7 @@ def match_detail(raw, account, heroes):
             result = find_order(teammate_rows, before, after, limit)
             ally_sequences[label] = {"found": len(result["found"]), "known": len(result["found"]) + len(result["absent"])}
     return {"slot": slot, "impact": contribution(players, slot, heroes), "checkpoints": checkpoints,
-            "teamfights": fights, "fights_available": isinstance(original_fights, list),
+            "teamfights": fights, "fights_available": review["available"], "fight_review": review,
             "ally_sequences": ally_sequences,
             "player_name": player.get("name"),
             "team_name": (raw.get(f"{side}_team") or {}).get("name"),
