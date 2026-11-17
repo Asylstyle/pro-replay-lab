@@ -1,0 +1,412 @@
+{
+  "format": "ranked-cohort-collection-score-1",
+  "model_commit": "66e994d1b491dced075957ce9860d0557cdd5eeb",
+  "model_commit_time_utc_epoch": 1794954779,
+  "model_sha256_canonical_json": "7affeba6620b3e5b051f69fe95583c319500397f69f095a7c5d10946e5417c49",
+  "last_ranked_training_match_end": 1794942773,
+  "ranked_training_matches": 53,
+  "capture_snapshot_sha256": "d70d0abfd38eda63f1cef81480d3c5edbeec03b7c8f6bd63c0e9fabe57e63642",
+  "capture_manifest_sha256": "db6f1e131f5695aea9f333b80cb122823cac610cf40fbb537da92c00887ea619",
+  "policy": {
+    "format": "opendota-patch-references-v1",
+    "calendar_source": "https://www.dota2.com/datafeed/patchnoteslist?language=english",
+    "patch": "7.41f",
+    "patch_start": 1789455600,
+    "as_of": 1794955425,
+    "minimum_avg_mmr": 7300
+  },
+  "excluded": {
+    "in_current_reference": 53
+  },
+  "known_match_ids_count": 964,
+  "known_match_ids_sha256": "0c0c49485570074853dc13d0b55e1aab501bd634709e97082deaadf3dfc943bf",
+  "evaluation": {
+    "unseen": {
+      "matches": 40,
+      "players": 400,
+      "match_ids": [
+        9094544345,
+        9094555998,
+        9094562700,
+        9094566033,
+        9094566803,
+        9094574420,
+        9094575326,
+        9094578368,
+        9094584093,
+        9094633791,
+        9094634175,
+        9094640263,
+        9094642220,
+        9094646166,
+        9094649830,
+        9094652893,
+        9094660604,
+        9094670676,
+        9094675000,
+        9094678609,
+        9094679220,
+        9094683599,
+        9094690046,
+        9094693057,
+        9094696383,
+        9094697324,
+        9094698707,
+        9094704319,
+        9094709237,
+        9094711355,
+        9094713978,
+        9094714695,
+        9094718103,
+        9094725363,
+        9094728022,
+        9094731082,
+        9094737059,
+        9094740235,
+        9094749107,
+        9094754412
+      ],
+      "metrics": {
+        "ranked_model": {
+          "lh": {
+            "mae": 17.414590544715498,
+            "rmse": 24.024604111432083,
+            "bias": -1.284191397173783,
+            "n": 400
+          },
+          "gold": {
+            "mae": 705.080863151126,
+            "rmse": 904.1429725196502,
+            "bias": -15.925576339280646,
+            "n": 400
+          },
+          "xp": {
+            "mae": 1182.5415619376522,
+            "rmse": 1526.4522547677698,
+            "bias": -97.38270990921372,
+            "n": 400
+          }
+        },
+        "rank_median": {
+          "lh": {
+            "mae": 21.935,
+            "rmse": 31.442566689123836,
+            "bias": -5.9,
+            "n": 400
+          },
+          "gold": {
+            "mae": 780.94,
+            "rmse": 1012.1298619742429,
+            "bias": 14.98,
+            "n": 400
+          },
+          "xp": {
+            "mae": 1326.2625,
+            "rmse": 1699.4245732011761,
+            "bias": -234.5425,
+            "n": 400
+          }
+        }
+      },
+      "model_minus_median": {
+        "unit": "whole match",
+        "games": 40,
+        "repetitions": 2000,
+        "confidence": 0.95,
+        "seed": 20261117,
+        "interpretation": "Negative delta means lower MAE than the reference.",
+        "targets": {
+          "lh": {
+            "mae_delta": -4.520409455284501,
+            "ci95": [
+              -6.3013450674899625,
+              -2.8299203058056737
+            ]
+          },
+          "gold": {
+            "mae_delta": -75.859136848874,
+            "ci95": [
+              -137.82958005176087,
+              -15.104889794505459
+            ]
+          },
+          "xp": {
+            "mae_delta": -143.72093806234778,
+            "ci95": [
+              -205.88342904942465,
+              -77.40246786700256
+            ]
+          }
+        }
+      }
+    },
+    "through_training_end": {
+      "matches": 8,
+      "players": 80,
+      "match_ids": [
+        9094544345,
+        9094555998,
+        9094562700,
+        9094566033,
+        9094566803,
+        9094574420,
+        9094575326,
+        9094578368
+      ],
+      "metrics": {
+        "ranked_model": {
+          "lh": {
+            "mae": 15.207941854924417,
+            "rmse": 20.00140380362651,
+            "bias": -4.261368012727931,
+            "n": 80
+          },
+          "gold": {
+            "mae": 680.2050098902782,
+            "rmse": 835.1031326772558,
+            "bias": 30.962380496372184,
+            "n": 80
+          },
+          "xp": {
+            "mae": 1099.0001755821936,
+            "rmse": 1338.0647799739254,
+            "bias": 32.2527327187403,
+            "n": 80
+          }
+        },
+        "rank_median": {
+          "lh": {
+            "mae": 19.1625,
+            "rmse": 27.83725022339671,
+            "bias": -8.25,
+            "n": 80
+          },
+          "gold": {
+            "mae": 760.9375,
+            "rmse": 925.2742026015856,
+            "bias": 64.7625,
+            "n": 80
+          },
+          "xp": {
+            "mae": 1259.8625,
+            "rmse": 1477.2027196698496,
+            "bias": -80.4125,
+            "n": 80
+          }
+        }
+      },
+      "model_minus_median": {
+        "unit": "whole match",
+        "games": 8,
+        "repetitions": 2000,
+        "confidence": 0.95,
+        "seed": 20261117,
+        "interpretation": "Negative delta means lower MAE than the reference.",
+        "targets": {
+          "lh": {
+            "mae_delta": -3.9545581450755813,
+            "ci95": [
+              -9.1315004421249,
+              0.4091106281663823
+            ]
+          },
+          "gold": {
+            "mae_delta": -80.73249010972172,
+            "ci95": [
+              -268.5147347258264,
+              68.61770762053405
+            ]
+          },
+          "xp": {
+            "mae_delta": -160.86232441780635,
+            "ci95": [
+              -329.4362165555763,
+              -5.466848560423748
+            ]
+          }
+        }
+      }
+    },
+    "after_training_through_release": {
+      "matches": 32,
+      "players": 320,
+      "match_ids": [
+        9094584093,
+        9094633791,
+        9094634175,
+        9094640263,
+        9094642220,
+        9094646166,
+        9094649830,
+        9094652893,
+        9094660604,
+        9094670676,
+        9094675000,
+        9094678609,
+        9094679220,
+        9094683599,
+        9094690046,
+        9094693057,
+        9094696383,
+        9094697324,
+        9094698707,
+        9094704319,
+        9094709237,
+        9094711355,
+        9094713978,
+        9094714695,
+        9094718103,
+        9094725363,
+        9094728022,
+        9094731082,
+        9094737059,
+        9094740235,
+        9094749107,
+        9094754412
+      ],
+      "metrics": {
+        "ranked_model": {
+          "lh": {
+            "mae": 17.96625271716327,
+            "rmse": 24.929158928047855,
+            "bias": -0.539897243285246,
+            "n": 320
+          },
+          "gold": {
+            "mae": 711.2998264663379,
+            "rmse": 920.5942824578016,
+            "bias": -27.647565548193853,
+            "n": 320
+          },
+          "xp": {
+            "mae": 1203.4269085265169,
+            "rmse": 1570.021104557306,
+            "bias": -129.7915705662022,
+            "n": 320
+          }
+        },
+        "rank_median": {
+          "lh": {
+            "mae": 22.628125,
+            "rmse": 32.281041262635874,
+            "bias": -5.3125,
+            "n": 320
+          },
+          "gold": {
+            "mae": 785.940625,
+            "rmse": 1032.702999112039,
+            "bias": 2.534375,
+            "n": 320
+          },
+          "xp": {
+            "mae": 1342.8625,
+            "rmse": 1750.577870661571,
+            "bias": -273.075,
+            "n": 320
+          }
+        }
+      },
+      "model_minus_median": {
+        "unit": "whole match",
+        "games": 32,
+        "repetitions": 2000,
+        "confidence": 0.95,
+        "seed": 20261117,
+        "interpretation": "Negative delta means lower MAE than the reference.",
+        "targets": {
+          "lh": {
+            "mae_delta": -4.66187228283673,
+            "ci95": [
+              -6.436250813575621,
+              -2.846833013685012
+            ]
+          },
+          "gold": {
+            "mae_delta": -74.64079853366206,
+            "ci95": [
+              -133.4844986706853,
+              -13.891724337886869
+            ]
+          },
+          "xp": {
+            "mae_delta": -139.43559147348313,
+            "ci95": [
+              -205.85313803472408,
+              -69.43881723005815
+            ]
+          }
+        }
+      }
+    },
+    "after_release": {
+      "matches": 0,
+      "players": 0,
+      "match_ids": [],
+      "metrics": {
+        "ranked_model": {
+          "lh": {
+            "mae": null,
+            "rmse": null,
+            "bias": null,
+            "n": 0
+          },
+          "gold": {
+            "mae": null,
+            "rmse": null,
+            "bias": null,
+            "n": 0
+          },
+          "xp": {
+            "mae": null,
+            "rmse": null,
+            "bias": null,
+            "n": 0
+          }
+        },
+        "rank_median": {
+          "lh": {
+            "mae": null,
+            "rmse": null,
+            "bias": null,
+            "n": 0
+          },
+          "gold": {
+            "mae": null,
+            "rmse": null,
+            "bias": null,
+            "n": 0
+          },
+          "xp": {
+            "mae": null,
+            "rmse": null,
+            "bias": null,
+            "n": 0
+          }
+        }
+      },
+      "model_minus_median": {
+        "unit": "whole match",
+        "games": 0,
+        "repetitions": 2000,
+        "confidence": 0.95,
+        "seed": 20261117,
+        "interpretation": "Negative delta means lower MAE than the reference.",
+        "targets": {
+          "lh": {
+            "mae_delta": null,
+            "ci95": null
+          },
+          "gold": {
+            "mae_delta": null,
+            "ci95": null
+          },
+          "xp": {
+            "mae_delta": null,
+            "ci95": null
+          }
+        }
+      }
+    }
+  },
+  "interpretation": "All unseen matches are split by start time into three disjoint groups. Only after_release started after publication. Predictions use minute 10 to estimate totals at minute 20. The median comparator uses resource gains by minute-10 farm rank from the same frozen ranked training games. Paired differences resample whole matches. Small samples only describe this collection."
+}

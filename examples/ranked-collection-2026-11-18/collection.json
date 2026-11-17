@@ -1,0 +1,117 @@
+{
+  "previous_training_commit": "66e994d1b491dced075957ce9860d0557cdd5eeb",
+  "patch": "7.41f",
+  "previous_training_matches": 53,
+  "complete_matches": 93,
+  "new_matches": 40,
+  "new_match_ids": [
+    9094544345,
+    9094555998,
+    9094562700,
+    9094566033,
+    9094566803,
+    9094574420,
+    9094575326,
+    9094578368,
+    9094584093,
+    9094633791,
+    9094634175,
+    9094640263,
+    9094642220,
+    9094646166,
+    9094649830,
+    9094652893,
+    9094660604,
+    9094670676,
+    9094675000,
+    9094678609,
+    9094679220,
+    9094683599,
+    9094690046,
+    9094693057,
+    9094696383,
+    9094697324,
+    9094698707,
+    9094704319,
+    9094709237,
+    9094711355,
+    9094713978,
+    9094714695,
+    9094718103,
+    9094725363,
+    9094728022,
+    9094731082,
+    9094737059,
+    9094740235,
+    9094749107,
+    9094754412
+  ],
+  "new_player_performances": 400,
+  "new_match_mmr_range": [
+    7501,
+    8269
+  ],
+  "candidate_status_counts": {
+    "included": 93,
+    "ended_before_minute_20": 6,
+    "awaiting_postgame": 11,
+    "incomplete_roster_or_snapshots": 2
+  },
+  "cumulative_fight_maps": 93,
+  "cumulative_fight_intervals": 873,
+  "new_fight_maps": 40,
+  "new_fight_intervals": 394,
+  "live_captures": [
+    {
+      "utc": "2026-11-17T22:36:08.242660+00:00",
+      "eligible_in_response": 42
+    },
+    {
+      "utc": "2026-11-17T22:40:06.563869+00:00",
+      "eligible_in_response": 40
+    },
+    {
+      "utc": "2026-11-17T22:43:44.999401+00:00",
+      "eligible_in_response": 43
+    }
+  ],
+  "source_cutoff_unix": 1794955425,
+  "public_parse_requests": [
+    {
+      "match_id": 9094649830,
+      "submitted_utc": "2026-11-17T22:41:33.042540+00:00",
+      "http_status": 200,
+      "job": 647220715
+    },
+    {
+      "match_id": 9094679220,
+      "submitted_utc": "2026-11-17T22:41:45.560577+00:00",
+      "http_status": 200,
+      "job": 647220918
+    },
+    {
+      "match_id": 9094714695,
+      "submitted_utc": "2026-11-17T22:41:57.914775+00:00",
+      "http_status": 200,
+      "job": 647221120
+    },
+    {
+      "match_id": 9094740235,
+      "submitted_utc": "2026-11-17T22:42:10.361471+00:00",
+      "http_status": 200,
+      "job": 647221274
+    },
+    {
+      "match_id": 9094749107,
+      "submitted_utc": "2026-11-17T22:42:22.721779+00:00",
+      "http_status": 200,
+      "job": 647221445
+    },
+    {
+      "match_id": 9094754412,
+      "submitted_utc": "2026-11-17T22:42:35.070668+00:00",
+      "http_status": 200,
+      "job": 647221655
+    }
+  ]
+}

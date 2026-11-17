@@ -22,13 +22,17 @@ from scripts import collect_patch_pro, collect_patch_ranked
 from scripts.evaluate_fresh_ranked import read_capture
 
 
-def packaged_inputs(examples):
+LATEST_RANKED_CAPTURE = "ranked-collection-2026-11-18"
+
+
+def packaged_inputs(examples, ranked_manifest=None):
     pros, pro_manifest = _snapshot(examples, "pro")
-    fresh = examples / "fresh-ranked-2026-11-17"
-    pubs, pub_manifest = read_capture(fresh / "matches.json.gz", fresh / "manifest.json")
+    ranked_manifest = ranked_manifest or examples / "fresh-ranked-2026-11-17" / "manifest.json"
+    pubs, pub_manifest = read_capture(ranked_manifest.with_name("matches.json.gz"), ranked_manifest)
     policy = pub_manifest["policy"]
     previous = pro_manifest["reference_policy"]
-    if any(previous[k] != policy[k] for k in ("patch", "patch_start")) or previous["as_of"] > policy["as_of"]:
+    if (any(previous[k] != policy[k] for k in ("format", "calendar_source", "patch", "patch_start", "minimum_avg_mmr"))
+            or previous["as_of"] > policy["as_of"]):
         raise ValueError("Packaged source snapshots must cover the same patch and precede the training cutoff.")
     return pros + pubs, policy
 
@@ -95,7 +99,8 @@ def refresh(data_dir, pro_limit, ranked_limit):
     with closing(sqlite3.connect(data_dir / "patch-refresh-lock.sqlite", timeout=1)) as lock:
         lock.execute("BEGIN IMMEDIATE")
         examples = REPO / "examples"
-        _restore_ranked_cache(ranked_cache, [output, examples / "fresh-ranked-2026-11-17", examples])
+        _restore_ranked_cache(ranked_cache, [output, examples / LATEST_RANKED_CAPTURE,
+                                             examples / "fresh-ranked-2026-11-17", examples])
         collect_patch_pro.collect([], output, pro_limit, data_dir / "open-dota-raw", allow_empty=True)
         subprocess.run([sys.executable, str(REPO / "scripts/collect_patch_ranked.py"),
                         "--cache", str(ranked_cache), "--out", str(output), "--limit", str(ranked_limit)],

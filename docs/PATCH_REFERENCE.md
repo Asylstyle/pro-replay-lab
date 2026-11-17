@@ -50,6 +50,12 @@
 Запускай из корня репозитория в окружении Python 3.14 с зависимостями из `requirements-ml.txt`.
 
 ```powershell
+# Обучить отдельного кандидата по накопленному снимку 18 ноября без сети
+.\.venv\Scripts\python -m pro_replay train-reference --frozen-policy examples/ranked-collection-2026-11-18/manifest.json --out data/next-reference.json
+
+# Повторить проверку опубликованных весов на добавленных пабах без обучения
+.\.venv\Scripts\python scripts/score_ranked_collection.py --capture examples/ranked-collection-2026-11-18 --out data/ranked-collection-score.json
+
 # Обновить выборки и активные планки с использованием OpenDota и Valve
 .\.venv\Scripts\python scripts/refresh_patch_reference.py
 
@@ -62,6 +68,10 @@
 # Использовать опубликованные раздельные ориентиры, даже если есть локальная модель
 py -m pro_replay school --reference examples/patch-cohort-model.json
 ```
+
+Для офлайн-обучения первая команда читает завершённые пабы из соседнего `matches.json.gz` и опубликованные про-карты того же патча. Она сверяет SHA-256, ID, календарь патча и время среза. Пабы, для которых ещё ожидается карточка OpenDota, остаются в журнале. Позже серверный сборщик подхватит их при запуске `refresh_patch_reference.py`. Файл кандидата можно открыть командой `python -m pro_replay school --reference data/next-reference.json`. Команда `--rebuild-packaged` воспроизводит ранее опубликованные модели по исходным 53 пабам и 307 турнирным матчам.
+
+Обычный `train-reference` при пустой папке локальных сборов проверяет версию патча по календарю Valve и использует последний поставленный снимок. При смене патча команда предлагает собрать новые матчи.
 
 Сборщик накапливает наблюдения Live между запусками. Для включения нового паба нужен опубликованный OpenDota числовой средний рейтинг. На новом патче каждая группа набирается заново. Пока в группе мало матчей для временной проверки, тренер показывает только средние и число выступлений.
 

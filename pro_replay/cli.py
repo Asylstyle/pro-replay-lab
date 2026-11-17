@@ -93,8 +93,8 @@ def parser():
     sub = p.add_subparsers(dest="cmd", required=True)
     reference = sub.add_parser("train-reference", help="Обучить планки экономики текущего патча по про-играм и лобби 7 300+")
     reference.add_argument("--replays", type=Path, nargs="+", help="Снимки OpenDota в JSON или JSON.GZ")
-    reference.add_argument("--out", type=Path, default=Path("data/patch-reference.json"))
-    reference.add_argument("--frozen-policy", type=Path, help="Повторить исторический эксперимент по сохранённой политике")
+    reference.add_argument("--out", type=Path, help="Файл весов. Для манифеста пабов по умолчанию data/next-reference.json, иначе data/patch-reference.json")
+    reference.add_argument("--frozen-policy", type=Path, help="Файл политики или manifest.json сохранённых пабов. Без --replays манифест загружает соседний matches.json.gz и опубликованные про-карты того же патча")
     experiment = sub.add_parser("benchmark-coach", help="Сравнить модели на фиксированных временных выборках")
     experiment.add_argument("--stage", choices=("select", "evaluate", "ranked-select", "ranked-evaluate"), required=True,
                             help="Сначала выбрать модель на обучении, затем открыть отложенную проверку")
@@ -250,32 +250,52 @@ def review_one(archive, args):
     print(f"Разбор карты: {path.resolve()}")
 
 
+def reference_training_inputs(args):
+    from .reference_policy import make_policy
+    from scripts.refresh_patch_reference import LATEST_RANKED_CAPTURE, packaged_inputs, read_capture
+
+    policy = json_file(args.frozen_policy) if args.frozen_policy else make_policy(valve_patches(), as_of=int(time.time()))
+    target = args.out or Path("data/patch-reference.json")
+    if args.frozen_policy and isinstance(policy, dict) and "policy" in policy:
+        target = args.out or Path("data/next-reference.json")
+        if not args.replays:
+            cards, policy = packaged_inputs(EXAMPLES, args.frozen_policy)
+            return cards, policy, target
+        _, receipt = read_capture(args.frozen_policy.with_name("matches.json.gz"), args.frozen_policy)
+        policy = receipt["policy"]
+
+    collected = Path("data/patch-references")
+    paths = args.replays or [collected / n for n in ("patch-reference-pro.json.gz", "patch-reference-ranked.json.gz")]
+    if not args.replays and not any(path.exists() for path in paths):
+        if not args.frozen_policy:
+            latest = EXAMPLES / LATEST_RANKED_CAPTURE / "manifest.json"
+            cards, stored = packaged_inputs(EXAMPLES, latest if latest.is_file() else None)
+            if any(policy[k] != stored[k] for k in ("patch", "patch_start")) or policy["as_of"] < stored["as_of"]:
+                raise ValueError("В поставке нет подходящей выборки для текущего патча и даты. "
+                                 "Собери актуальные матчи с помощью scripts/refresh_patch_reference.py.")
+            return cards, policy, target
+        paths = [EXAMPLES / "patch-reference-pro.json.gz", EXAMPLES / "fresh-ranked-2026-11-17/matches.json.gz"]
+    cards = []
+    for path in paths:
+        for file in (sorted((*path.glob("*.json"), *path.glob("*.json.gz"))) if path.is_dir() else [path]):
+            data = json_file(file)
+            if isinstance(data, dict) and "matches" in data:
+                data = data["matches"]
+            cards.extend(data if isinstance(data, list) else [data])
+    return cards, policy, target
+
+
 def main(argv=None):
     args = parser().parse_args(argv)
     try:
         if args.cmd == "train-reference":
             from .patch_reference import train_reference
-            from .reference_policy import make_policy
-            if args.frozen_policy:
-                policy = json_file(args.frozen_policy)
-            else:
-                policy = make_policy(valve_patches(), as_of=int(time.time()))
-            cards = []
-            collected = Path("data/patch-references")
-            paths = args.replays or [collected / n for n in ("patch-reference-pro.json.gz", "patch-reference-ranked.json.gz")]
-            if not args.replays and not any(path.exists() for path in paths):
-                paths = [EXAMPLES / "patch-reference-pro.json.gz", EXAMPLES / "fresh-ranked-2026-11-17/matches.json.gz"]
-            for path in paths:
-                for file in (sorted((*path.glob("*.json"), *path.glob("*.json.gz"))) if path.is_dir() else [path]):
-                    data = json_file(file)
-                    if isinstance(data, dict) and "matches" in data:
-                        data = data["matches"]
-                    cards.extend(data if isinstance(data, list) else [data])
+            cards, policy, target = reference_training_inputs(args)
             model = train_reference(cards, policy)
-            save_coach_model(model, args.out)
+            save_coach_model(model, target)
             print_json({"patch": policy["patch"], "counts": model["counts"], "excluded": model["excluded"],
                         "winners": {name: row["validation"]["winner"] for name, row in model["cohorts"].items()},
-                        "file": str(args.out)})
+                        "file": str(target)})
             return 0
         if args.cmd == "benchmark-coach":
             from .ml_benchmark import run_evaluation, run_selection, run_ranked_selection, run_ranked_evaluation
