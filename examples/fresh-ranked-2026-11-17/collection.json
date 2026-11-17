@@ -1,0 +1,223 @@
+{
+  "protocol_commit": "0feba27f2d163c94ae846858a01d44d478f15cf5",
+  "patch": "7.41f",
+  "first_live_observation_in_this_collection_utc": "2026-11-17T18:30:49.617156+00:00",
+  "last_complete_round_utc": "2026-11-17T19:30:24.990718+00:00",
+  "snapshot_sha256": "62b5bdba1475a99b7b7c903d113cf9bc94574b8d41dd4950d4579cd7c7a37eb6",
+  "stop_reason": "user_requested_stop_before_sample_target",
+  "frozen_at_utc": "2026-11-17T19:32:19.481606+00:00",
+  "candidate_status_at_close": {
+    "included": 53,
+    "ended_before_minute_20": 3,
+    "awaiting_postgame": 11
+  },
+  "known_matches_excluded": 30,
+  "new_matches": 23,
+  "matches_after_release": 4,
+  "requested_parse_match_ids": [
+    9094420856,
+    9094426614,
+    9094451725,
+    9094453676,
+    9094472357,
+    9094484703,
+    9094485294,
+    9094486875,
+    9094493150,
+    9094496738,
+    9094506271,
+    9094508560,
+    9094511762,
+    9094517102,
+    9094520890,
+    9094527408,
+    9094539515,
+    9094548660
+  ],
+  "rounds": [
+    {
+      "ended_utc": "2026-11-17T18:35:29.669270+00:00",
+      "observed_at_utc": "2026-11-17T18:35:11.923818+00:00",
+      "live_rows": 100,
+      "possible_in_response": 47,
+      "new_complete": 5,
+      "after_release": 0
+    },
+    {
+      "ended_utc": "2026-11-17T18:37:55.183084+00:00",
+      "observed_at_utc": "2026-11-17T18:37:42.183938+00:00",
+      "live_rows": 100,
+      "possible_in_response": 48,
+      "new_complete": 5,
+      "after_release": 0
+    },
+    {
+      "ended_utc": "2026-11-17T18:40:29.439928+00:00",
+      "observed_at_utc": "2026-11-17T18:40:12.029249+00:00",
+      "live_rows": 100,
+      "possible_in_response": 49,
+      "new_complete": 5,
+      "after_release": 0
+    },
+    {
+      "ended_utc": "2026-11-17T18:43:18.936132+00:00",
+      "observed_at_utc": "2026-11-17T18:43:03.459714+00:00",
+      "live_rows": 100,
+      "possible_in_response": 50,
+      "new_complete": 6,
+      "after_release": 0
+    },
+    {
+      "ended_utc": "2026-11-17T18:45:15.708428+00:00",
+      "observed_at_utc": "2026-11-17T18:45:11.856924+00:00",
+      "live_rows": 100,
+      "possible_in_response": 50,
+      "new_complete": 7,
+      "after_release": 0
+    },
+    {
+      "ended_utc": "2026-11-17T18:47:59.801175+00:00",
+      "observed_at_utc": "2026-11-17T18:47:42.087673+00:00",
+      "live_rows": 100,
+      "possible_in_response": 49,
+      "new_complete": 10,
+      "after_release": 0
+    },
+    {
+      "ended_utc": "2026-11-17T18:50:24.332951+00:00",
+      "observed_at_utc": "2026-11-17T18:50:12.202504+00:00",
+      "live_rows": 100,
+      "possible_in_response": 48,
+      "new_complete": 12,
+      "after_release": 0
+    },
+    {
+      "ended_utc": "2026-11-17T18:52:54.305566+00:00",
+      "observed_at_utc": "2026-11-17T18:52:42.095511+00:00",
+      "live_rows": 100,
+      "possible_in_response": 39,
+      "new_complete": 13,
+      "after_release": 0
+    },
+    {
+      "ended_utc": "2026-11-17T18:55:24.307504+00:00",
+      "observed_at_utc": "2026-11-17T18:55:12.267673+00:00",
+      "live_rows": 100,
+      "possible_in_response": 47,
+      "new_complete": 14,
+      "after_release": 0
+    },
+    {
+      "ended_utc": "2026-11-17T18:57:55.180770+00:00",
+      "observed_at_utc": "2026-11-17T18:57:42.640766+00:00",
+      "live_rows": 100,
+      "possible_in_response": 47,
+      "new_complete": 14,
+      "after_release": 0
+    },
+    {
+      "ended_utc": "2026-11-17T19:00:25.128882+00:00",
+      "observed_at_utc": "2026-11-17T19:00:11.898345+00:00",
+      "live_rows": 100,
+      "possible_in_response": 46,
+      "new_complete": 14,
+      "after_release": 0
+    },
+    {
+      "ended_utc": "2026-11-17T19:02:56.087821+00:00",
+      "observed_at_utc": "2026-11-17T19:02:41.829643+00:00",
+      "live_rows": 100,
+      "possible_in_response": 44,
+      "new_complete": 15,
+      "after_release": 0
+    },
+    {
+      "ended_utc": "2026-11-17T19:05:25.303823+00:00",
+      "observed_at_utc": "2026-11-17T19:05:12.008715+00:00",
+      "live_rows": 100,
+      "possible_in_response": 48,
+      "new_complete": 15,
+      "after_release": 0
+    },
+    {
+      "ended_utc": "2026-11-17T19:07:57.227872+00:00",
+      "observed_at_utc": "2026-11-17T19:07:41.864183+00:00",
+      "live_rows": 100,
+      "possible_in_response": 48,
+      "new_complete": 15,
+      "after_release": 0
+    },
+    {
+      "ended_utc": "2026-11-17T19:10:27.404502+00:00",
+      "observed_at_utc": "2026-11-17T19:10:11.907499+00:00",
+      "live_rows": 100,
+      "possible_in_response": 47,
+      "new_complete": 16,
+      "after_release": 0
+    },
+    {
+      "ended_utc": "2026-11-17T19:13:00.662586+00:00",
+      "observed_at_utc": "2026-11-17T19:12:42.000085+00:00",
+      "live_rows": 100,
+      "possible_in_response": 49,
+      "new_complete": 17,
+      "after_release": 0
+    },
+    {
+      "ended_utc": "2026-11-17T19:15:26.744091+00:00",
+      "observed_at_utc": "2026-11-17T19:15:12.013100+00:00",
+      "live_rows": 100,
+      "possible_in_response": 48,
+      "new_complete": 19,
+      "after_release": 1
+    },
+    {
+      "ended_utc": "2026-11-17T19:17:58.901423+00:00",
+      "observed_at_utc": "2026-11-17T19:17:41.893203+00:00",
+      "live_rows": 100,
+      "possible_in_response": 44,
+      "new_complete": 22,
+      "after_release": 3
+    },
+    {
+      "ended_utc": "2026-11-17T19:20:35.528904+00:00",
+      "observed_at_utc": "2026-11-17T19:20:11.818544+00:00",
+      "live_rows": 100,
+      "possible_in_response": 48,
+      "new_complete": 22,
+      "after_release": 3
+    },
+    {
+      "ended_utc": "2026-11-17T19:22:49.632700+00:00",
+      "observed_at_utc": "2026-11-17T19:22:41.994963+00:00",
+      "live_rows": 100,
+      "possible_in_response": 48,
+      "new_complete": 22,
+      "after_release": 3
+    },
+    {
+      "ended_utc": "2026-11-17T19:25:28.315262+00:00",
+      "observed_at_utc": "2026-11-17T19:25:14.289816+00:00",
+      "live_rows": 100,
+      "possible_in_response": 48,
+      "new_complete": 22,
+      "after_release": 3
+    },
+    {
+      "ended_utc": "2026-11-17T19:27:54.561627+00:00",
+      "observed_at_utc": "2026-11-17T19:27:43.587662+00:00",
+      "live_rows": 100,
+      "possible_in_response": 48,
+      "new_complete": 22,
+      "after_release": 3
+    },
+    {
+      "ended_utc": "2026-11-17T19:30:24.990718+00:00",
+      "observed_at_utc": "2026-11-17T19:30:11.914704+00:00",
+      "live_rows": 100,
+      "possible_in_response": 47,
+      "new_complete": 23,
+      "after_release": 4
+    }
+  ]
+}
