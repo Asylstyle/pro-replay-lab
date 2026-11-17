@@ -1,5 +1,5 @@
 {
-  "reader_sha256": "f7af6f604b9602bab9e0dcc702e0c05a639a66c3e90a39ce41fcfcfcd226bac7",
+  "reader_sha256": "d3422153ba718bb983786421236ce5fc2135479af1f2620729c6c1db619fe05d",
   "libraries": [
     {
       "path": "com/skadistats/clarity/5.0.1/clarity-5.0.1.jar",

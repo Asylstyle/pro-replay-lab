@@ -142,6 +142,9 @@ public final class Decoder {
         JsonObject b = new JsonObject();
         b.addProperty("kind", isItem ? "item" : "ability");
         b.addProperty("slot", index);
+        // Non-consumables can report zero here even when ready to cast.
+        if (isItem && key.equals("smoke_of_deceit"))
+            copyNumber(entity, "m_iCurrentCharges", b, "charges");
         copyNumber(entity, "m_iLevel", b, "level");
         copyNumber(entity, "m_iManaCost", b, "mana_cost");
         copyBool(entity, "m_bInAbilityPhase", b, "in_phase");
@@ -254,6 +257,7 @@ public final class Decoder {
         frame.addProperty("game_time", elapsed);
         frame.addProperty("tick", ctx.getTick());
         frame.add("heroes", heroes);
+        if (second <= 480) frame.add("wave_units", WaveTracker.sample(entities, tables));
         if (lastSecond >= 0) out.write(",\n");
         out.write(JSON.toJson(frame));
         lastSecond = second;

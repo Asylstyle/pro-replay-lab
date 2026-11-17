@@ -329,6 +329,10 @@ def progress_section(history):
 
 
 def render_session(session, *, home_url=None, detail_url=None):
+    from .accept_review import render_review
+    from .macro_review import render_macro, render_power_items
+    from .mid_matchup import render_mid_matchup
+    from .support_waves import render_support_waves
     row, cards = session["row"], session["cards"]
     hero = row.get("hero_name") or f'Герой #{row["hero_id"]}'
     pos = session["position"]
@@ -340,6 +344,14 @@ def render_session(session, *, home_url=None, detail_url=None):
               f'<h1>{h(hero)}</h1><p class="meta">{role}{result} · {h(_date(row.get("start_time")))} · '
               f'K/D/A {number(row["kills"])} / {number(row["deaths"])} / {number(row["assists"])}</p></header>')
     parts = [header]
+    sections = [(key, label) for key, label, present in (
+        ("accept-review", "Разбор решения", session.get("accept_moments")),
+        ("macro", "Объекты и смоки", session.get("macro")),
+        ("power-items", "Предметные тайминги", (session.get("macro") or {}).get("power_items")),
+        ("mid-matchup", "Матчап в миде", session.get("mid_matchup")),
+        ("support-waves", "Отводы и перетяжки", session.get("support_waves"))) if present]
+    if sections:
+        parts.append('<nav aria-label="Разделы матча">' + " · ".join(f'<a href="#{key}">{label}</a>' for key,label in sections) + '</nav>')
     auto = session["focus"] == "auto" and session["at"] is None
     has_ranked_fights = auto and bool(session.get("mistakes"))
     if auto:
@@ -396,6 +408,9 @@ def render_session(session, *, home_url=None, detail_url=None):
         parts.append('<section class="panel"><h2>Нужен разобранный повтор</h2><p>Карточка матча получена, но в ней пока нет '
                      'событий или снимков, на которых можно построить упражнение. После разбора повтора в OpenDota обнови карточку.</p></section>')
     parts.append(battle_timeline(session))
+    parts.extend((render_review(session.get("accept_moments")), render_mid_matchup(session.get("mid_matchup")),
+                  render_support_waves(session.get("support_waves")), render_power_items(session.get("macro")),
+                  render_macro(session.get("macro"))))
     if "patch_reference" in session:
         parts.append('<section><h2>Планки экономики на патче</h2>' + patch_benchmarks(session["patch_reference"]) + '</section>')
     parts.append('<details><summary>Прогноз экономики для твоего матча</summary>' + pro_section(session["assessment"]) + '</details>')

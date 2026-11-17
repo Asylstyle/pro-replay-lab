@@ -19,6 +19,10 @@ Each hero contains the canonical `name`, `hero_id`, world coordinates `x` and `y
 
 Events have `kind` equal to `cast` or `death`, `time`, `game_time`, `tick` and the unambiguous real `actor_slot`. Hero-targeted casts and hero deaths include `target_slot`. Casts include `button_key`. The combat log supplies their actual fractional timestamps. OpenDota's rounded display can differ by one second.
 
+When Valve transmits `m_iCurrentCharges` for Smoke of Deceit, its button record includes the integer `charges`. A consumer checking whether smoke was usable can require a positive charge count alongside the inventory slot, activation state and cooldown. An omitted count is unknown. Other items retain their existing readiness rules.
+
+From 0:00 through 8:00 inclusive, each frame also records `wave_units`. Every row gives an active, living unit's `id` (entity handle with serial), `kind` (`lane`, `neutral` or `tower`), `team`, and rounded world coordinates `x` and `y`. The tower rows include the internal `name` of a top or bottom tier-one or tier-two tower. The neutral rows require team 4. A sample exceeding the 256-unit cap is unavailable. The positions support replaying movement and measuring separation. Identifying a player's attack command or a creep's aggro target requires separate evidence.
+
 ## Evidence interpretation
 
 - The engine clock uses `m_fGameTime` where available. Current Source 2 replays use the server tick, `m_nTotalPausedTicks`, `m_nPauseStartTick` and the recorded tick interval. Subtracting `m_flGameStartTime` gives the match clock.
@@ -35,5 +39,7 @@ The underlying APIs and state definitions are available in the upstream projects
 Match `9088199723` yielded 2,917 frames with all ten heroes, 4,230 casts and 102 hero-versus-hero deaths. Match `9093297478` yielded 2,791 complete frames, 3,578 casts and 72 hero-versus-hero deaths.
 
 In the first match, Pudge cast Dismember at 471.700 seconds. The frame at 471 seconds shows 310 mana and zero cooldown. At 472 seconds it shows 212 mana and 29.70 seconds remaining, then 28.70 seconds at 473. Pudge's Glimmer cast at 1710.667 seconds similarly changes mana from 562 to 439 and cooldown from zero to 14.70, then 13.70 seconds.
+
+In that same match, the frame immediately before Pudge's recorded Smoke of Deceit use at 680.433 seconds shows one charge in inventory slot 1, an active button and zero cooldown. The stack disappears by the next sampled frame. Hoodwink's recorded smoke use at 1069.733 seconds takes a stack from two charges to one, confirming the counter on a stack that survived activation. The neighbouring samples place that stack in the backpack, so its availability between the one-second samples is unknown.
 
 During Rubick's Black Hole at approximately 967 seconds, Pudge has sufficient mana and Dismember ready, and Dire can see Rubick. The measured center distance is approximately 5,168 units, which rules out an immediate Dismember at that sampled position. [Pudge match](https://www.opendota.com/matches/9088199723), [Rubick match](https://www.opendota.com/matches/9093297478)

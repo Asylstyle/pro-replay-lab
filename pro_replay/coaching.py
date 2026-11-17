@@ -7,6 +7,10 @@ from pathlib import Path
 from urllib.parse import urlsplit
 
 from .analysis import select_player
+from .accept_review import review_moments
+from .macro_review import macro_review
+from .mid_matchup import mid_matchup_review
+from .support_waves import support_wave_review
 from .archive import normalize
 from .coach_lessons import retrieve_lessons
 from .coach_model import assess_player
@@ -322,6 +326,10 @@ def make_session(archive, raw, slot, model, lesson_model, focus="auto", *, at=No
         hits = retrieve_lessons(lesson_model, card["query"], position=position, limit=2, topic=card["topic"])
         card["lessons"] = [h for h in hits if urlsplit(h["url"]).scheme == "https"]
     return {"row": row, "assessment": assessment, "patch_reference": reference, "cards": ordered, "focus": focus, "mistakes": mistakes,
+            "accept_moments": review_moments(raw, slot, mistakes, at=at, position=position),
+            "macro": macro_review(raw, slot, heroes, timeline),
+            "mid_matchup": mid_matchup_review(raw, slot, position, patch=row.get("patch_version")),
+            "support_waves": support_wave_review(raw, slot, position, timeline),
             "replay_checked": timeline is not None, "replay_message": replay_message, "excluded": excluded,
             "fights": fights, "selected_fight": selected, "at": at, "position": position, "role_override": role_override,
             "requested_available": focus == "auto" or focus in cards,

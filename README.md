@@ -4,6 +4,8 @@
 
 ## Разобрать свою игру
 
+В отчёте есть учебные паузы по разборам Accept, хронология объектов и смоки, а также разбор линии по позиции героя. Готовые примеры — [Pudge и командный смок](examples/coach-macro-smoke.html), [матчап Huskar против Necrophos](examples/coach-mid-matchup.html) и [отвод Snapfire](examples/coach-support-waves.html). [Как тренер проверяет решения](docs/ACCEPT_AND_MACRO.md)
+
 Для полного разбора нужны **Python 3.10+ и Java 21+**. На Windows открой [start-coach.cmd](start-coach.cmd). На других системах запусти `python -m pro_replay school` из папки проекта. При первом разборе программа автоматически загрузит закреплённые библиотеки Clarity и проверит их SHA-256. Для повторов со сжатием Zstandard в Python 3.10–3.13 установи `py -m pip install backports.zstd`. Python 3.14 уже содержит этот модуль. [Java Temurin](https://adoptium.net/temurin/releases/?version=21)
 
 1. Введи ID, например **9093297478**, и нажми **«Открыть состав»**.

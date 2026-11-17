@@ -1,0 +1,2982 @@
+{
+  "patch": "7.41f",
+  "patch_start": 1789455600,
+  "checked_through": 1794944685,
+  "heroes": {
+    "1": {
+      "name_loc": "Anti-Mage",
+      "primary_attr": 1,
+      "damage_min": 54,
+      "damage_max": 58,
+      "attack_range": 150,
+      "attack_rate": 1.4,
+      "attributes": [
+        21,
+        25,
+        12
+      ],
+      "gains": [
+        1.6,
+        2.8,
+        1.8
+      ],
+      "nukes": []
+    },
+    "2": {
+      "name_loc": "Axe",
+      "primary_attr": 0,
+      "damage_min": 56,
+      "damage_max": 60,
+      "attack_range": 150,
+      "attack_rate": 1.7,
+      "attributes": [
+        25,
+        18,
+        18
+      ],
+      "gains": [
+        2.7,
+        1.7,
+        1.6
+      ],
+      "nukes": []
+    },
+    "3": {
+      "name_loc": "Bane",
+      "primary_attr": 3,
+      "damage_min": 24,
+      "damage_max": 30,
+      "attack_range": 425,
+      "attack_rate": 1.7,
+      "attributes": [
+        23,
+        23,
+        23
+      ],
+      "gains": [
+        2.5,
+        2.5,
+        2.5
+      ],
+      "nukes": []
+    },
+    "4": {
+      "name_loc": "Bloodseeker",
+      "primary_attr": 1,
+      "damage_min": 59,
+      "damage_max": 65,
+      "attack_range": 150,
+      "attack_rate": 1.7,
+      "attributes": [
+        24,
+        24,
+        17
+      ],
+      "gains": [
+        2.7,
+        3.1,
+        2
+      ],
+      "nukes": []
+    },
+    "5": {
+      "name_loc": "Crystal Maiden",
+      "primary_attr": 2,
+      "damage_min": 48,
+      "damage_max": 54,
+      "attack_range": 600,
+      "attack_rate": 1.7,
+      "attributes": [
+        17,
+        16,
+        20
+      ],
+      "gains": [
+        2.2,
+        1.8,
+        3.3
+      ],
+      "nukes": []
+    },
+    "6": {
+      "name_loc": "Drow Ranger",
+      "primary_attr": 1,
+      "damage_min": 51,
+      "damage_max": 58,
+      "attack_range": 625,
+      "attack_rate": 1.7,
+      "attributes": [
+        16,
+        24,
+        15
+      ],
+      "gains": [
+        1.9,
+        2.8,
+        1.4
+      ],
+      "nukes": []
+    },
+    "7": {
+      "name_loc": "Earthshaker",
+      "primary_attr": 0,
+      "damage_min": 49,
+      "damage_max": 59,
+      "attack_range": 150,
+      "attack_rate": 1.7,
+      "attributes": [
+        22,
+        12,
+        18
+      ],
+      "gains": [
+        3.7,
+        1.4,
+        2.1
+      ],
+      "nukes": [
+        {
+          "id": 5023,
+          "name": "Fissure",
+          "damage": [
+            100,
+            160,
+            220,
+            280
+          ],
+          "damage_type": 2,
+          "mana": [
+            115,
+            120,
+            125,
+            130
+          ],
+          "cooldown": [
+            18,
+            17,
+            16,
+            15
+          ],
+          "note": "Попадание линией Fissure может одновременно добить крипа и перекрыть проход."
+        }
+      ],
+      "ultimate": {
+        "id": 5026,
+        "name": "Echo Slam"
+      }
+    },
+    "8": {
+      "name_loc": "Juggernaut",
+      "primary_attr": 1,
+      "damage_min": 54,
+      "damage_max": 56,
+      "attack_range": 150,
+      "attack_rate": 1.4,
+      "attributes": [
+        20,
+        32,
+        14
+      ],
+      "gains": [
+        2,
+        2.8,
+        1.4
+      ],
+      "nukes": []
+    },
+    "9": {
+      "name_loc": "Mirana",
+      "primary_attr": 1,
+      "damage_min": 48,
+      "damage_max": 54,
+      "attack_range": 630,
+      "attack_rate": 1.7,
+      "attributes": [
+        20,
+        26,
+        22
+      ],
+      "gains": [
+        2.2,
+        3.1,
+        1.9
+      ],
+      "nukes": []
+    },
+    "10": {
+      "name_loc": "Morphling",
+      "primary_attr": 1,
+      "damage_min": 45,
+      "damage_max": 54,
+      "attack_range": 350,
+      "attack_rate": 1.5,
+      "attributes": [
+        16,
+        33,
+        19
+      ],
+      "gains": [
+        2.6,
+        4.2,
+        1.8
+      ],
+      "nukes": []
+    },
+    "11": {
+      "name_loc": "Shadow Fiend",
+      "primary_attr": 1,
+      "damage_min": 41,
+      "damage_max": 47,
+      "attack_range": 525,
+      "attack_rate": 1.6,
+      "attributes": [
+        19,
+        25,
+        16
+      ],
+      "gains": [
+        2.7,
+        3.6,
+        2.2
+      ],
+      "nukes": [
+        {
+          "id": 5059,
+          "name": "Shadowraze",
+          "damage": [
+            85,
+            150,
+            215,
+            280
+          ],
+          "damage_type": 2,
+          "mana": [
+            75
+          ],
+          "cooldown": [
+            9
+          ],
+          "note": "Базовый урон ближнего койла. Дистанция, накопленные попадания и души меняют результат."
+        }
+      ],
+      "ultimate": {
+        "id": 5064,
+        "name": "Requiem of Souls"
+      }
+    },
+    "12": {
+      "name_loc": "Phantom Lancer",
+      "primary_attr": 1,
+      "damage_min": 52,
+      "damage_max": 62,
+      "attack_range": 225,
+      "attack_rate": 1.7,
+      "attributes": [
+        21,
+        26,
+        21
+      ],
+      "gains": [
+        2.2,
+        3.4,
+        1.8
+      ],
+      "nukes": []
+    },
+    "13": {
+      "name_loc": "Puck",
+      "primary_attr": 2,
+      "damage_min": 45,
+      "damage_max": 53,
+      "attack_range": 550,
+      "attack_rate": 1.7,
+      "attributes": [
+        17,
+        14,
+        23
+      ],
+      "gains": [
+        2.4,
+        2.1,
+        3.8
+      ],
+      "nukes": [
+        {
+          "id": 5069,
+          "name": "Illusory Orb",
+          "damage": [
+            70,
+            140,
+            210,
+            280
+          ],
+          "damage_type": 2,
+          "mana": [
+            90,
+            100,
+            110,
+            120
+          ],
+          "cooldown": [
+            12,
+            11,
+            10,
+            9
+          ],
+          "note": "Урон при попадании сферой. Дополнительный периодический урон здесь опущен. Проверь траекторию через крипа."
+        }
+      ],
+      "ultimate": {
+        "id": 5073,
+        "name": "Dream Coil"
+      }
+    },
+    "14": {
+      "name_loc": "Pudge",
+      "primary_attr": 0,
+      "damage_min": 70,
+      "damage_max": 76,
+      "attack_range": 175,
+      "attack_rate": 1.7,
+      "attributes": [
+        25,
+        13,
+        16
+      ],
+      "gains": [
+        3,
+        1.4,
+        1.8
+      ],
+      "nukes": []
+    },
+    "15": {
+      "name_loc": "Razor",
+      "primary_attr": 1,
+      "damage_min": 47,
+      "damage_max": 49,
+      "attack_range": 475,
+      "attack_rate": 1.7,
+      "attributes": [
+        22,
+        24,
+        21
+      ],
+      "gains": [
+        2.8,
+        2.8,
+        2.2
+      ],
+      "nukes": []
+    },
+    "16": {
+      "name_loc": "Sand King",
+      "primary_attr": 3,
+      "damage_min": 19,
+      "damage_max": 29,
+      "attack_range": 150,
+      "attack_rate": 1.7,
+      "attributes": [
+        23,
+        19,
+        17
+      ],
+      "gains": [
+        2.5,
+        2,
+        2
+      ],
+      "nukes": []
+    },
+    "17": {
+      "name_loc": "Storm Spirit",
+      "primary_attr": 2,
+      "damage_min": 47,
+      "damage_max": 57,
+      "attack_range": 480,
+      "attack_rate": 1.6,
+      "attributes": [
+        21,
+        22,
+        23
+      ],
+      "gains": [
+        2,
+        2.6,
+        3.7
+      ],
+      "nukes": [
+        {
+          "id": 5098,
+          "name": "Static Remnant",
+          "damage": [
+            100,
+            160,
+            220,
+            280
+          ],
+          "damage_type": 2,
+          "mana": [
+            70,
+            80,
+            90,
+            100
+          ],
+          "cooldown": [
+            3.5
+          ],
+          "note": "Взрыв ремнанта требует срабатывания рядом с целью. Overload считается отдельно."
+        }
+      ],
+      "ultimate": {
+        "id": 5101,
+        "name": "Ball Lightning"
+      }
+    },
+    "18": {
+      "name_loc": "Sven",
+      "primary_attr": 0,
+      "damage_min": 61,
+      "damage_max": 63,
+      "attack_range": 150,
+      "attack_rate": 1.9,
+      "attributes": [
+        24,
+        18,
+        16
+      ],
+      "gains": [
+        3.5,
+        2.2,
+        1.5
+      ],
+      "nukes": []
+    },
+    "19": {
+      "name_loc": "Tiny",
+      "primary_attr": 0,
+      "damage_min": 61,
+      "damage_max": 67,
+      "attack_range": 150,
+      "attack_rate": 1.7,
+      "attributes": [
+        30,
+        0,
+        17
+      ],
+      "gains": [
+        4.2,
+        0,
+        2.4
+      ],
+      "nukes": [],
+      "ultimate": {
+        "id": 5109,
+        "name": "Grow"
+      }
+    },
+    "20": {
+      "name_loc": "Vengeful Spirit",
+      "primary_attr": 1,
+      "damage_min": 51,
+      "damage_max": 57,
+      "attack_range": 400,
+      "attack_rate": 1.5,
+      "attributes": [
+        20,
+        23,
+        19
+      ],
+      "gains": [
+        2.6,
+        3,
+        1.5
+      ],
+      "nukes": []
+    },
+    "21": {
+      "name_loc": "Windranger",
+      "primary_attr": 3,
+      "damage_min": 24,
+      "damage_max": 36,
+      "attack_range": 600,
+      "attack_rate": 1.5,
+      "attributes": [
+        18,
+        20,
+        18
+      ],
+      "gains": [
+        2.6,
+        2.1,
+        3.2
+      ],
+      "nukes": [],
+      "ultimate": {
+        "id": 5133,
+        "name": "Focus Fire"
+      }
+    },
+    "22": {
+      "name_loc": "Zeus",
+      "primary_attr": 2,
+      "damage_min": 53,
+      "damage_max": 63,
+      "attack_range": 380,
+      "attack_rate": 1.7,
+      "attributes": [
+        21,
+        11,
+        23
+      ],
+      "gains": [
+        2.1,
+        1.2,
+        3.3
+      ],
+      "nukes": [
+        {
+          "id": 5110,
+          "name": "Arc Lightning",
+          "damage": [
+            105,
+            130,
+            155,
+            180
+          ],
+          "damage_type": 2,
+          "mana": [
+            85,
+            90,
+            95,
+            100
+          ],
+          "cooldown": [
+            1.6
+          ],
+          "note": "Базовый урон одного попадания цепи. Отскок через крипа может достать героя и пропушить волну."
+        }
+      ],
+      "ultimate": {
+        "id": 5113,
+        "name": "Thundergod's Wrath"
+      }
+    },
+    "23": {
+      "name_loc": "Kunkka",
+      "primary_attr": 0,
+      "damage_min": 54,
+      "damage_max": 60,
+      "attack_range": 150,
+      "attack_rate": 1.7,
+      "attributes": [
+        24,
+        14,
+        18
+      ],
+      "gains": [
+        3.6,
+        1.6,
+        1.8
+      ],
+      "nukes": [],
+      "ultimate": {
+        "id": 5035,
+        "name": "Ghostship"
+      }
+    },
+    "25": {
+      "name_loc": "Lina",
+      "primary_attr": 2,
+      "damage_min": 49,
+      "damage_max": 57,
+      "attack_range": 670,
+      "attack_rate": 1.6,
+      "attributes": [
+        20,
+        21,
+        28
+      ],
+      "gains": [
+        2.4,
+        2.4,
+        4
+      ],
+      "nukes": [
+        {
+          "id": 5040,
+          "name": "Dragon Slave",
+          "damage": [
+            65,
+            125,
+            185,
+            245
+          ],
+          "damage_type": 2,
+          "mana": [
+            90,
+            100,
+            110,
+            120
+          ],
+          "cooldown": [
+            11,
+            10,
+            9,
+            8
+          ],
+          "note": "Урон из описания Dragon Slave. У Lina есть отдельное горение Slow Burn, поэтому итоговый урон приходит частями."
+        }
+      ],
+      "ultimate": {
+        "id": 5043,
+        "name": "Laguna Blade"
+      }
+    },
+    "26": {
+      "name_loc": "Lion",
+      "primary_attr": 2,
+      "damage_min": 48,
+      "damage_max": 54,
+      "attack_range": 600,
+      "attack_rate": 1.7,
+      "attributes": [
+        18,
+        15,
+        19
+      ],
+      "gains": [
+        2.4,
+        1.7,
+        3.5
+      ],
+      "nukes": []
+    },
+    "27": {
+      "name_loc": "Shadow Shaman",
+      "primary_attr": 2,
+      "damage_min": 63,
+      "damage_max": 70,
+      "attack_range": 400,
+      "attack_rate": 1.7,
+      "attributes": [
+        20,
+        16,
+        23
+      ],
+      "gains": [
+        2.3,
+        1.6,
+        3.3
+      ],
+      "nukes": []
+    },
+    "28": {
+      "name_loc": "Slardar",
+      "primary_attr": 0,
+      "damage_min": 51,
+      "damage_max": 59,
+      "attack_range": 150,
+      "attack_rate": 1.7,
+      "attributes": [
+        21,
+        17,
+        15
+      ],
+      "gains": [
+        3.4,
+        2.1,
+        1.5
+      ],
+      "nukes": []
+    },
+    "29": {
+      "name_loc": "Tidehunter",
+      "primary_attr": 0,
+      "damage_min": 50,
+      "damage_max": 56,
+      "attack_range": 150,
+      "attack_rate": 1.7,
+      "attributes": [
+        25,
+        15,
+        20
+      ],
+      "gains": [
+        3.7,
+        1.5,
+        1.7
+      ],
+      "nukes": []
+    },
+    "30": {
+      "name_loc": "Witch Doctor",
+      "primary_attr": 2,
+      "damage_min": 48,
+      "damage_max": 58,
+      "attack_range": 550,
+      "attack_rate": 1.7,
+      "attributes": [
+        20,
+        13,
+        22
+      ],
+      "gains": [
+        2.1,
+        1.4,
+        3.1
+      ],
+      "nukes": []
+    },
+    "31": {
+      "name_loc": "Lich",
+      "primary_attr": 2,
+      "damage_min": 52,
+      "damage_max": 61,
+      "attack_range": 550,
+      "attack_rate": 1.7,
+      "attributes": [
+        20,
+        17,
+        28
+      ],
+      "gains": [
+        2.1,
+        1.7,
+        3.4
+      ],
+      "nukes": []
+    },
+    "32": {
+      "name_loc": "Riki",
+      "primary_attr": 1,
+      "damage_min": 52,
+      "damage_max": 56,
+      "attack_range": 150,
+      "attack_rate": 1.7,
+      "attributes": [
+        18,
+        30,
+        14
+      ],
+      "gains": [
+        2,
+        2.4,
+        1.3
+      ],
+      "nukes": []
+    },
+    "33": {
+      "name_loc": "Enigma",
+      "primary_attr": 3,
+      "damage_min": 19,
+      "damage_max": 25,
+      "attack_range": 500,
+      "attack_rate": 1.7,
+      "attributes": [
+        21,
+        14,
+        19
+      ],
+      "gains": [
+        2.5,
+        1,
+        3.6
+      ],
+      "nukes": []
+    },
+    "34": {
+      "name_loc": "Tinker",
+      "primary_attr": 2,
+      "damage_min": 52,
+      "damage_max": 58,
+      "attack_range": 500,
+      "attack_rate": 1.7,
+      "attributes": [
+        19,
+        17,
+        30
+      ],
+      "gains": [
+        2.3,
+        1.4,
+        3.3
+      ],
+      "nukes": [
+        {
+          "id": 5150,
+          "name": "Laser",
+          "damage": [
+            75,
+            150,
+            225,
+            300
+          ],
+          "damage_type": 4,
+          "mana": [
+            95,
+            105,
+            115,
+            125
+          ],
+          "cooldown": [
+            19,
+            18,
+            17,
+            16
+          ],
+          "note": "Laser наносит чистый урон одной цели. Ослепление соперника также меняет следующий размен автоатаками."
+        }
+      ],
+      "ultimate": {
+        "id": 5153,
+        "name": "Rearm"
+      }
+    },
+    "35": {
+      "name_loc": "Sniper",
+      "primary_attr": 1,
+      "damage_min": 40,
+      "damage_max": 46,
+      "attack_range": 550,
+      "attack_rate": 1.7,
+      "attributes": [
+        19,
+        27,
+        15
+      ],
+      "gains": [
+        2,
+        3.2,
+        2.6
+      ],
+      "nukes": [],
+      "ultimate": {
+        "id": 5157,
+        "name": "Assassinate"
+      }
+    },
+    "36": {
+      "name_loc": "Necrophos",
+      "primary_attr": 2,
+      "damage_min": 49,
+      "damage_max": 53,
+      "attack_range": 500,
+      "attack_rate": 1.7,
+      "attributes": [
+        18,
+        12,
+        23
+      ],
+      "gains": [
+        2.3,
+        1.3,
+        2.7
+      ],
+      "nukes": [
+        {
+          "id": 5158,
+          "name": "Death Pulse",
+          "damage": [
+            100,
+            160,
+            220,
+            280
+          ],
+          "damage_type": 2,
+          "mana": [
+            115,
+            130,
+            145,
+            160
+          ],
+          "cooldown": [
+            8,
+            7,
+            6,
+            5
+          ],
+          "note": "Урон одного импульса. Проверь, попадает ли цель в радиус и подлечится ли при этом союзная волна."
+        }
+      ],
+      "ultimate": {
+        "id": 5161,
+        "name": "Reaper's Scythe"
+      }
+    },
+    "37": {
+      "name_loc": "Warlock",
+      "primary_attr": 2,
+      "damage_min": 52,
+      "damage_max": 62,
+      "attack_range": 600,
+      "attack_rate": 1.7,
+      "attributes": [
+        22,
+        10,
+        25
+      ],
+      "gains": [
+        2.4,
+        1,
+        3.1
+      ],
+      "nukes": []
+    },
+    "38": {
+      "name_loc": "Beastmaster",
+      "primary_attr": 3,
+      "damage_min": 23,
+      "damage_max": 27,
+      "attack_range": 150,
+      "attack_rate": 1.7,
+      "attributes": [
+        24,
+        19,
+        16
+      ],
+      "gains": [
+        2.9,
+        2,
+        1.9
+      ],
+      "nukes": []
+    },
+    "39": {
+      "name_loc": "Queen of Pain",
+      "primary_attr": 2,
+      "damage_min": 51,
+      "damage_max": 57,
+      "attack_range": 550,
+      "attack_rate": 1.5,
+      "attributes": [
+        20,
+        20,
+        25
+      ],
+      "gains": [
+        2.4,
+        2.5,
+        3.4
+      ],
+      "nukes": [
+        {
+          "id": 5175,
+          "name": "Scream Of Pain",
+          "damage": [
+            90,
+            175,
+            260,
+            345
+          ],
+          "damage_type": 2,
+          "mana": [
+            120
+          ],
+          "cooldown": [
+            7.5,
+            7,
+            6.5,
+            6
+          ],
+          "note": "Базовый урон крика по целям в радиусе. Перед подходом проверь, сколько ответных ударов получишь."
+        }
+      ],
+      "ultimate": {
+        "id": 5176,
+        "name": "Sonic Wave"
+      }
+    },
+    "40": {
+      "name_loc": "Venomancer",
+      "primary_attr": 3,
+      "damage_min": 18,
+      "damage_max": 21,
+      "attack_range": 450,
+      "attack_rate": 1.7,
+      "attributes": [
+        19,
+        25,
+        19
+      ],
+      "gains": [
+        2.1,
+        2.8,
+        1.9
+      ],
+      "nukes": []
+    },
+    "41": {
+      "name_loc": "Faceless Void",
+      "primary_attr": 1,
+      "damage_min": 58,
+      "damage_max": 64,
+      "attack_range": 150,
+      "attack_rate": 1.7,
+      "attributes": [
+        20,
+        24,
+        15
+      ],
+      "gains": [
+        2.6,
+        3.3,
+        1.5
+      ],
+      "nukes": []
+    },
+    "42": {
+      "name_loc": "Wraith King",
+      "primary_attr": 0,
+      "damage_min": 62,
+      "damage_max": 64,
+      "attack_range": 150,
+      "attack_rate": 1.8,
+      "attributes": [
+        22,
+        16,
+        16
+      ],
+      "gains": [
+        2.8,
+        1.7,
+        1.4
+      ],
+      "nukes": []
+    },
+    "43": {
+      "name_loc": "Death Prophet",
+      "primary_attr": 3,
+      "damage_min": 22,
+      "damage_max": 32,
+      "attack_range": 600,
+      "attack_rate": 1.7,
+      "attributes": [
+        21,
+        17,
+        24
+      ],
+      "gains": [
+        2.9,
+        2.3,
+        3
+      ],
+      "nukes": [
+        {
+          "id": 5090,
+          "name": "Crypt Swarm",
+          "damage": [
+            100,
+            175,
+            250,
+            325
+          ],
+          "damage_type": 2,
+          "mana": [
+            80,
+            90,
+            100,
+            110
+          ],
+          "cooldown": [
+            9,
+            8,
+            7,
+            6
+          ],
+          "note": "Если герой стоит за крипами, направление стаи может дать одновременно добивание и размен."
+        }
+      ],
+      "ultimate": {
+        "id": 5093,
+        "name": "Exorcism"
+      }
+    },
+    "44": {
+      "name_loc": "Phantom Assassin",
+      "primary_attr": 1,
+      "damage_min": 57,
+      "damage_max": 59,
+      "attack_range": 150,
+      "attack_rate": 1.7,
+      "attributes": [
+        19,
+        22,
+        15
+      ],
+      "gains": [
+        2.2,
+        3.4,
+        1.7
+      ],
+      "nukes": []
+    },
+    "45": {
+      "name_loc": "Pugna",
+      "primary_attr": 2,
+      "damage_min": 48,
+      "damage_max": 55,
+      "attack_range": 630,
+      "attack_rate": 1.7,
+      "attributes": [
+        19,
+        21,
+        27
+      ],
+      "gains": [
+        2,
+        1.3,
+        5.2
+      ],
+      "nukes": [
+        {
+          "id": 5186,
+          "name": "Nether Blast",
+          "damage": [
+            95,
+            170,
+            245,
+            320
+          ],
+          "damage_type": 2,
+          "mana": [
+            100,
+            115,
+            130,
+            145
+          ],
+          "cooldown": [
+            5
+          ],
+          "note": "Взрыв с задержкой. Для добивания оцени здоровье крипа на момент взрыва."
+        }
+      ],
+      "ultimate": {
+        "id": 5189,
+        "name": "Life Drain"
+      }
+    },
+    "46": {
+      "name_loc": "Templar Assassin",
+      "primary_attr": 1,
+      "damage_min": 51,
+      "damage_max": 56,
+      "attack_range": 250,
+      "attack_rate": 1.6,
+      "attributes": [
+        21,
+        23,
+        20
+      ],
+      "gains": [
+        2.4,
+        3.4,
+        2
+      ],
+      "nukes": [],
+      "ultimate": {
+        "id": 5197,
+        "name": "Psionic Trap"
+      }
+    },
+    "47": {
+      "name_loc": "Viper",
+      "primary_attr": 1,
+      "damage_min": 48,
+      "damage_max": 50,
+      "attack_range": 575,
+      "attack_rate": 1.7,
+      "attributes": [
+        21,
+        21,
+        17
+      ],
+      "gains": [
+        2.4,
+        2.9,
+        2
+      ],
+      "nukes": []
+    },
+    "48": {
+      "name_loc": "Luna",
+      "primary_attr": 1,
+      "damage_min": 50,
+      "damage_max": 56,
+      "attack_range": 330,
+      "attack_rate": 1.7,
+      "attributes": [
+        21,
+        24,
+        23
+      ],
+      "gains": [
+        2.2,
+        3.4,
+        1.9
+      ],
+      "nukes": []
+    },
+    "49": {
+      "name_loc": "Dragon Knight",
+      "primary_attr": 0,
+      "damage_min": 55,
+      "damage_max": 61,
+      "attack_range": 150,
+      "attack_rate": 1.6,
+      "attributes": [
+        21,
+        14,
+        18
+      ],
+      "gains": [
+        3.2,
+        2,
+        1.7
+      ],
+      "nukes": []
+    },
+    "50": {
+      "name_loc": "Dazzle",
+      "primary_attr": 3,
+      "damage_min": 19,
+      "damage_max": 25,
+      "attack_range": 575,
+      "attack_rate": 1.7,
+      "attributes": [
+        19,
+        20,
+        25
+      ],
+      "gains": [
+        2.3,
+        1.7,
+        3.5
+      ],
+      "nukes": []
+    },
+    "51": {
+      "name_loc": "Clockwerk",
+      "primary_attr": 0,
+      "damage_min": 50,
+      "damage_max": 52,
+      "attack_range": 150,
+      "attack_rate": 1.7,
+      "attributes": [
+        26,
+        13,
+        18
+      ],
+      "gains": [
+        3.2,
+        2.3,
+        1.7
+      ],
+      "nukes": []
+    },
+    "52": {
+      "name_loc": "Leshrac",
+      "primary_attr": 2,
+      "damage_min": 49,
+      "damage_max": 53,
+      "attack_range": 575,
+      "attack_rate": 1.7,
+      "attributes": [
+        20,
+        17,
+        22
+      ],
+      "gains": [
+        2.5,
+        2.5,
+        3.5
+      ],
+      "nukes": [
+        {
+          "id": 5241,
+          "name": "Split Earth",
+          "damage": [
+            115,
+            170,
+            225,
+            280
+          ],
+          "damage_type": 2,
+          "mana": [
+            80,
+            100,
+            120,
+            140
+          ],
+          "cooldown": [
+            11
+          ],
+          "note": "Урон при попадании. Задержка Split Earth даёт сопернику время выйти из области."
+        }
+      ],
+      "ultimate": {
+        "id": 5244,
+        "name": "Pulse Nova"
+      }
+    },
+    "53": {
+      "name_loc": "Nature's Prophet",
+      "primary_attr": 3,
+      "damage_min": 20,
+      "damage_max": 26,
+      "attack_range": 600,
+      "attack_rate": 1.5,
+      "attributes": [
+        19,
+        14,
+        22
+      ],
+      "gains": [
+        2.6,
+        2.6,
+        3.5
+      ],
+      "nukes": []
+    },
+    "54": {
+      "name_loc": "Lifestealer",
+      "primary_attr": 0,
+      "damage_min": 46,
+      "damage_max": 52,
+      "attack_range": 150,
+      "attack_rate": 1.7,
+      "attributes": [
+        23,
+        15,
+        15
+      ],
+      "gains": [
+        2.4,
+        1.9,
+        1.8
+      ],
+      "nukes": []
+    },
+    "55": {
+      "name_loc": "Dark Seer",
+      "primary_attr": 2,
+      "damage_min": 54,
+      "damage_max": 60,
+      "attack_range": 150,
+      "attack_rate": 1.7,
+      "attributes": [
+        20,
+        19,
+        23
+      ],
+      "gains": [
+        2.6,
+        1.5,
+        2.7
+      ],
+      "nukes": []
+    },
+    "56": {
+      "name_loc": "Clinkz",
+      "primary_attr": 1,
+      "damage_min": 44,
+      "damage_max": 50,
+      "attack_range": 600,
+      "attack_rate": 1.7,
+      "attributes": [
+        18,
+        25,
+        21
+      ],
+      "gains": [
+        2,
+        2.7,
+        2.2
+      ],
+      "nukes": []
+    },
+    "57": {
+      "name_loc": "Omniknight",
+      "primary_attr": 0,
+      "damage_min": 53,
+      "damage_max": 63,
+      "attack_range": 150,
+      "attack_rate": 1.7,
+      "attributes": [
+        22,
+        15,
+        18
+      ],
+      "gains": [
+        3.1,
+        1.7,
+        2.1
+      ],
+      "nukes": []
+    },
+    "58": {
+      "name_loc": "Enchantress",
+      "primary_attr": 2,
+      "damage_min": 43,
+      "damage_max": 53,
+      "attack_range": 575,
+      "attack_rate": 1.7,
+      "attributes": [
+        17,
+        19,
+        22
+      ],
+      "gains": [
+        2,
+        2.1,
+        4
+      ],
+      "nukes": []
+    },
+    "59": {
+      "name_loc": "Huskar",
+      "primary_attr": 0,
+      "damage_min": 43,
+      "damage_max": 48,
+      "attack_range": 400,
+      "attack_rate": 1.6,
+      "attributes": [
+        22,
+        10,
+        18
+      ],
+      "gains": [
+        3.4,
+        1.5,
+        0
+      ],
+      "nukes": [
+        {
+          "id": 7300,
+          "name": "Inner Fire",
+          "damage": [
+            110,
+            180,
+            250,
+            320
+          ],
+          "damage_type": 2,
+          "mana": [
+            0
+          ],
+          "cooldown": [
+            17,
+            15,
+            13,
+            11
+          ],
+          "note": "Урон ближней области и отталкивание. Учитывай стоимость здоровьем и положение пачки после нажатия."
+        }
+      ],
+      "ultimate": {
+        "id": 5274,
+        "name": "Life Break"
+      }
+    },
+    "60": {
+      "name_loc": "Night Stalker",
+      "primary_attr": 0,
+      "damage_min": 63,
+      "damage_max": 67,
+      "attack_range": 150,
+      "attack_rate": 1.7,
+      "attributes": [
+        23,
+        18,
+        15
+      ],
+      "gains": [
+        3,
+        2.2,
+        1.6
+      ],
+      "nukes": []
+    },
+    "61": {
+      "name_loc": "Broodmother",
+      "primary_attr": 1,
+      "damage_min": 47,
+      "damage_max": 53,
+      "attack_range": 175,
+      "attack_rate": 1.7,
+      "attributes": [
+        18,
+        20,
+        18
+      ],
+      "gains": [
+        2.9,
+        3.4,
+        2
+      ],
+      "nukes": []
+    },
+    "62": {
+      "name_loc": "Bounty Hunter",
+      "primary_attr": 1,
+      "damage_min": 54,
+      "damage_max": 62,
+      "attack_range": 150,
+      "attack_rate": 1.5,
+      "attributes": [
+        19,
+        21,
+        20
+      ],
+      "gains": [
+        2.5,
+        2.6,
+        1.9
+      ],
+      "nukes": []
+    },
+    "63": {
+      "name_loc": "Weaver",
+      "primary_attr": 1,
+      "damage_min": 54,
+      "damage_max": 60,
+      "attack_range": 425,
+      "attack_rate": 1.8,
+      "attributes": [
+        16,
+        17,
+        20
+      ],
+      "gains": [
+        2,
+        3.3,
+        2
+      ],
+      "nukes": []
+    },
+    "64": {
+      "name_loc": "Jakiro",
+      "primary_attr": 2,
+      "damage_min": 53,
+      "damage_max": 61,
+      "attack_range": 400,
+      "attack_rate": 1.7,
+      "attributes": [
+        25,
+        15,
+        26
+      ],
+      "gains": [
+        2.6,
+        1.2,
+        3.3
+      ],
+      "nukes": []
+    },
+    "65": {
+      "name_loc": "Batrider",
+      "primary_attr": 3,
+      "damage_min": 12,
+      "damage_max": 16,
+      "attack_range": 400,
+      "attack_rate": 1.7,
+      "attributes": [
+        23,
+        13,
+        22
+      ],
+      "gains": [
+        2.9,
+        2,
+        3.2
+      ],
+      "nukes": [
+        {
+          "id": 5321,
+          "name": "Flamebreak",
+          "damage": [
+            25,
+            50,
+            75,
+            100
+          ],
+          "damage_type": 2,
+          "mana": [
+            110
+          ],
+          "cooldown": [
+            22,
+            19,
+            16,
+            13
+          ],
+          "note": "Только начальное попадание. Отталкивание и последующее горение влияют на добивание отдельно."
+        }
+      ],
+      "ultimate": {
+        "id": 5323,
+        "name": "Flaming Lasso"
+      }
+    },
+    "66": {
+      "name_loc": "Chen",
+      "primary_attr": 2,
+      "damage_min": 48,
+      "damage_max": 58,
+      "attack_range": 650,
+      "attack_rate": 1.7,
+      "attributes": [
+        23,
+        15,
+        19
+      ],
+      "gains": [
+        2.2,
+        2.1,
+        3.2
+      ],
+      "nukes": []
+    },
+    "67": {
+      "name_loc": "Spectre",
+      "primary_attr": 1,
+      "damage_min": 52,
+      "damage_max": 56,
+      "attack_range": 150,
+      "attack_rate": 1.8,
+      "attributes": [
+        22,
+        29,
+        16
+      ],
+      "gains": [
+        2.3,
+        2.3,
+        1.7
+      ],
+      "nukes": []
+    },
+    "68": {
+      "name_loc": "Ancient Apparition",
+      "primary_attr": 2,
+      "damage_min": 44,
+      "damage_max": 54,
+      "attack_range": 675,
+      "attack_rate": 1.7,
+      "attributes": [
+        20,
+        20,
+        23
+      ],
+      "gains": [
+        1.9,
+        2,
+        3.1
+      ],
+      "nukes": []
+    },
+    "69": {
+      "name_loc": "Doom",
+      "primary_attr": 0,
+      "damage_min": 56,
+      "damage_max": 66,
+      "attack_range": 175,
+      "attack_rate": 1.9,
+      "attributes": [
+        24,
+        15,
+        15
+      ],
+      "gains": [
+        3.6,
+        1.5,
+        2.1
+      ],
+      "nukes": []
+    },
+    "70": {
+      "name_loc": "Ursa",
+      "primary_attr": 1,
+      "damage_min": 42,
+      "damage_max": 46,
+      "attack_range": 150,
+      "attack_rate": 1.7,
+      "attributes": [
+        25,
+        18,
+        16
+      ],
+      "gains": [
+        2.4,
+        2.8,
+        1.5
+      ],
+      "nukes": []
+    },
+    "71": {
+      "name_loc": "Spirit Breaker",
+      "primary_attr": 0,
+      "damage_min": 62,
+      "damage_max": 72,
+      "attack_range": 170,
+      "attack_rate": 1.9,
+      "attributes": [
+        28,
+        17,
+        14
+      ],
+      "gains": [
+        3.3,
+        1.7,
+        1.8
+      ],
+      "nukes": []
+    },
+    "72": {
+      "name_loc": "Gyrocopter",
+      "primary_attr": 1,
+      "damage_min": 43,
+      "damage_max": 49,
+      "attack_range": 365,
+      "attack_rate": 1.7,
+      "attributes": [
+        22,
+        25,
+        21
+      ],
+      "gains": [
+        2.5,
+        3.4,
+        2.4
+      ],
+      "nukes": []
+    },
+    "73": {
+      "name_loc": "Alchemist",
+      "primary_attr": 0,
+      "damage_min": 50,
+      "damage_max": 56,
+      "attack_range": 150,
+      "attack_rate": 1.7,
+      "attributes": [
+        23,
+        19,
+        25
+      ],
+      "gains": [
+        2.7,
+        1.5,
+        1.8
+      ],
+      "nukes": []
+    },
+    "74": {
+      "name_loc": "Invoker",
+      "primary_attr": 2,
+      "damage_min": 41,
+      "damage_max": 47,
+      "attack_range": 600,
+      "attack_rate": 1.7,
+      "attributes": [
+        19,
+        14,
+        22
+      ],
+      "gains": [
+        2.5,
+        2,
+        4
+      ],
+      "nukes": []
+    },
+    "75": {
+      "name_loc": "Silencer",
+      "primary_attr": 2,
+      "damage_min": 43,
+      "damage_max": 57,
+      "attack_range": 600,
+      "attack_rate": 1.6,
+      "attributes": [
+        18,
+        22,
+        25
+      ],
+      "gains": [
+        2.2,
+        2.2,
+        2.9
+      ],
+      "nukes": []
+    },
+    "76": {
+      "name_loc": "Outworld Destroyer",
+      "primary_attr": 2,
+      "damage_min": 53,
+      "damage_max": 62,
+      "attack_range": 450,
+      "attack_rate": 1.9,
+      "attributes": [
+        21,
+        17,
+        30
+      ],
+      "gains": [
+        2.9,
+        1.6,
+        4.2
+      ],
+      "nukes": [],
+      "ultimate": {
+        "id": 5394,
+        "name": "Sanity's Eclipse"
+      }
+    },
+    "77": {
+      "name_loc": "Lycan",
+      "primary_attr": 0,
+      "damage_min": 52,
+      "damage_max": 57,
+      "attack_range": 150,
+      "attack_rate": 1.7,
+      "attributes": [
+        28,
+        18,
+        23
+      ],
+      "gains": [
+        3.4,
+        1.7,
+        1.7
+      ],
+      "nukes": []
+    },
+    "78": {
+      "name_loc": "Brewmaster",
+      "primary_attr": 3,
+      "damage_min": 26,
+      "damage_max": 33,
+      "attack_range": 150,
+      "attack_rate": 1.7,
+      "attributes": [
+        24,
+        19,
+        17
+      ],
+      "gains": [
+        3.2,
+        2,
+        1.9
+      ],
+      "nukes": []
+    },
+    "79": {
+      "name_loc": "Shadow Demon",
+      "primary_attr": 2,
+      "damage_min": 51,
+      "damage_max": 55,
+      "attack_range": 500,
+      "attack_rate": 1.7,
+      "attributes": [
+        23,
+        18,
+        22
+      ],
+      "gains": [
+        2.6,
+        2.2,
+        3.6
+      ],
+      "nukes": []
+    },
+    "80": {
+      "name_loc": "Lone Druid",
+      "primary_attr": 1,
+      "damage_min": 44,
+      "damage_max": 48,
+      "attack_range": 550,
+      "attack_rate": 1.6,
+      "attributes": [
+        20,
+        22,
+        13
+      ],
+      "gains": [
+        2.5,
+        2.8,
+        1.4
+      ],
+      "nukes": []
+    },
+    "81": {
+      "name_loc": "Chaos Knight",
+      "primary_attr": 0,
+      "damage_min": 56,
+      "damage_max": 76,
+      "attack_range": 150,
+      "attack_rate": 1.7,
+      "attributes": [
+        24,
+        18,
+        18
+      ],
+      "gains": [
+        3.1,
+        1.8,
+        1.2
+      ],
+      "nukes": []
+    },
+    "82": {
+      "name_loc": "Meepo",
+      "primary_attr": 1,
+      "damage_min": 46,
+      "damage_max": 52,
+      "attack_range": 150,
+      "attack_rate": 1.7,
+      "attributes": [
+        24,
+        17,
+        18
+      ],
+      "gains": [
+        2,
+        2.1,
+        1.9
+      ],
+      "nukes": []
+    },
+    "83": {
+      "name_loc": "Treant Protector",
+      "primary_attr": 0,
+      "damage_min": 85,
+      "damage_max": 93,
+      "attack_range": 150,
+      "attack_rate": 1.9,
+      "attributes": [
+        25,
+        15,
+        17
+      ],
+      "gains": [
+        3.4,
+        1.8,
+        1.8
+      ],
+      "nukes": []
+    },
+    "84": {
+      "name_loc": "Ogre Magi",
+      "primary_attr": 0,
+      "damage_min": 71,
+      "damage_max": 77,
+      "attack_range": 150,
+      "attack_rate": 1.7,
+      "attributes": [
+        26,
+        14,
+        0
+      ],
+      "gains": [
+        4,
+        1.5,
+        0
+      ],
+      "nukes": []
+    },
+    "85": {
+      "name_loc": "Undying",
+      "primary_attr": 0,
+      "damage_min": 55,
+      "damage_max": 63,
+      "attack_range": 150,
+      "attack_rate": 1.7,
+      "attributes": [
+        22,
+        13,
+        27
+      ],
+      "gains": [
+        2.4,
+        1.2,
+        2.8
+      ],
+      "nukes": []
+    },
+    "86": {
+      "name_loc": "Rubick",
+      "primary_attr": 2,
+      "damage_min": 49,
+      "damage_max": 55,
+      "attack_range": 550,
+      "attack_rate": 1.7,
+      "attributes": [
+        21,
+        23,
+        24
+      ],
+      "gains": [
+        2,
+        2.2,
+        3.7
+      ],
+      "nukes": []
+    },
+    "87": {
+      "name_loc": "Disruptor",
+      "primary_attr": 2,
+      "damage_min": 48,
+      "damage_max": 52,
+      "attack_range": 625,
+      "attack_rate": 1.7,
+      "attributes": [
+        21,
+        15,
+        21
+      ],
+      "gains": [
+        2.4,
+        1.4,
+        2.9
+      ],
+      "nukes": []
+    },
+    "88": {
+      "name_loc": "Nyx Assassin",
+      "primary_attr": 3,
+      "damage_min": 26,
+      "damage_max": 30,
+      "attack_range": 150,
+      "attack_rate": 1.7,
+      "attributes": [
+        17,
+        18,
+        21
+      ],
+      "gains": [
+        2.7,
+        2.9,
+        2.6
+      ],
+      "nukes": []
+    },
+    "89": {
+      "name_loc": "Naga Siren",
+      "primary_attr": 1,
+      "damage_min": 45,
+      "damage_max": 47,
+      "attack_range": 150,
+      "attack_rate": 1.7,
+      "attributes": [
+        21,
+        22,
+        19
+      ],
+      "gains": [
+        2.4,
+        3.4,
+        2
+      ],
+      "nukes": []
+    },
+    "90": {
+      "name_loc": "Keeper of the Light",
+      "primary_attr": 2,
+      "damage_min": 44,
+      "damage_max": 51,
+      "attack_range": 600,
+      "attack_rate": 1.7,
+      "attributes": [
+        18,
+        15,
+        24
+      ],
+      "gains": [
+        2.3,
+        1.6,
+        3.3
+      ],
+      "nukes": []
+    },
+    "91": {
+      "name_loc": "Io",
+      "primary_attr": 3,
+      "damage_min": 21,
+      "damage_max": 27,
+      "attack_range": 500,
+      "attack_rate": 1.7,
+      "attributes": [
+        19,
+        14,
+        21
+      ],
+      "gains": [
+        3,
+        1.6,
+        1.7
+      ],
+      "nukes": []
+    },
+    "92": {
+      "name_loc": "Visage",
+      "primary_attr": 3,
+      "damage_min": 21,
+      "damage_max": 31,
+      "attack_range": 600,
+      "attack_rate": 1.7,
+      "attributes": [
+        22,
+        11,
+        22
+      ],
+      "gains": [
+        2.8,
+        1.3,
+        2.9
+      ],
+      "nukes": []
+    },
+    "93": {
+      "name_loc": "Slark",
+      "primary_attr": 1,
+      "damage_min": 58,
+      "damage_max": 64,
+      "attack_range": 150,
+      "attack_rate": 1.7,
+      "attributes": [
+        20,
+        21,
+        16
+      ],
+      "gains": [
+        2.1,
+        1.5,
+        1.9
+      ],
+      "nukes": []
+    },
+    "94": {
+      "name_loc": "Medusa",
+      "primary_attr": 1,
+      "damage_min": 48,
+      "damage_max": 54,
+      "attack_range": 600,
+      "attack_rate": 1.7,
+      "attributes": [
+        0,
+        22,
+        25
+      ],
+      "gains": [
+        0,
+        3.6,
+        3.6
+      ],
+      "nukes": []
+    },
+    "95": {
+      "name_loc": "Troll Warlord",
+      "primary_attr": 1,
+      "damage_min": 51,
+      "damage_max": 59,
+      "attack_range": 500,
+      "attack_rate": 1.7,
+      "attributes": [
+        21,
+        24,
+        13
+      ],
+      "gains": [
+        2.5,
+        3.3,
+        1
+      ],
+      "nukes": []
+    },
+    "96": {
+      "name_loc": "Centaur Warrunner",
+      "primary_attr": 0,
+      "damage_min": 62,
+      "damage_max": 64,
+      "attack_range": 150,
+      "attack_rate": 1.7,
+      "attributes": [
+        28,
+        15,
+        15
+      ],
+      "gains": [
+        4.3,
+        1,
+        1.6
+      ],
+      "nukes": []
+    },
+    "97": {
+      "name_loc": "Magnus",
+      "primary_attr": 3,
+      "damage_min": 31,
+      "damage_max": 39,
+      "attack_range": 200,
+      "attack_rate": 1.8,
+      "attributes": [
+        23,
+        14,
+        20
+      ],
+      "gains": [
+        3.1,
+        2.2,
+        2.1
+      ],
+      "nukes": [
+        {
+          "id": 5518,
+          "name": "Shockwave",
+          "damage": [
+            75,
+            150,
+            225,
+            300
+          ],
+          "damage_type": 2,
+          "mana": [
+            85,
+            90,
+            95,
+            100
+          ],
+          "cooldown": [
+            13,
+            12,
+            11,
+            10
+          ],
+          "note": "Базовый урон попадания волной. Проверь, совпадает ли линия к герою с нужным крипом."
+        }
+      ],
+      "ultimate": {
+        "id": 5521,
+        "name": "Reverse Polarity"
+      }
+    },
+    "98": {
+      "name_loc": "Timbersaw",
+      "primary_attr": 0,
+      "damage_min": 48,
+      "damage_max": 52,
+      "attack_range": 150,
+      "attack_rate": 1.7,
+      "attributes": [
+        23,
+        16,
+        24
+      ],
+      "gains": [
+        3.6,
+        1.6,
+        2.7
+      ],
+      "nukes": [
+        {
+          "id": 5524,
+          "name": "Whirling Death",
+          "damage": [
+            60,
+            120,
+            180,
+            240
+          ],
+          "damage_type": 4,
+          "mana": [
+            100
+          ],
+          "cooldown": [
+            7.5,
+            7,
+            6.5,
+            6
+          ],
+          "note": "Показан базовый чистый урон. Каждое срубленное дерево добавляет урон."
+        }
+      ],
+      "ultimate": {
+        "id": 5527,
+        "name": "Chakram"
+      }
+    },
+    "99": {
+      "name_loc": "Bristleback",
+      "primary_attr": 0,
+      "damage_min": 53,
+      "damage_max": 59,
+      "attack_range": 150,
+      "attack_rate": 1.8,
+      "attributes": [
+        22,
+        17,
+        14
+      ],
+      "gains": [
+        2.8,
+        1.8,
+        2.8
+      ],
+      "nukes": []
+    },
+    "100": {
+      "name_loc": "Tusk",
+      "primary_attr": 0,
+      "damage_min": 50,
+      "damage_max": 54,
+      "attack_range": 150,
+      "attack_rate": 1.7,
+      "attributes": [
+        23,
+        23,
+        18
+      ],
+      "gains": [
+        3.9,
+        1.9,
+        1.7
+      ],
+      "nukes": []
+    },
+    "101": {
+      "name_loc": "Skywrath Mage",
+      "primary_attr": 2,
+      "damage_min": 41,
+      "damage_max": 51,
+      "attack_range": 625,
+      "attack_rate": 1.7,
+      "attributes": [
+        22,
+        13,
+        25
+      ],
+      "gains": [
+        2,
+        0.8,
+        4.1
+      ],
+      "nukes": []
+    },
+    "102": {
+      "name_loc": "Abaddon",
+      "primary_attr": 3,
+      "damage_min": 22,
+      "damage_max": 32,
+      "attack_range": 150,
+      "attack_rate": 1.5,
+      "attributes": [
+        21,
+        22,
+        19
+      ],
+      "gains": [
+        2.6,
+        1.5,
+        2
+      ],
+      "nukes": []
+    },
+    "103": {
+      "name_loc": "Elder Titan",
+      "primary_attr": 0,
+      "damage_min": 49,
+      "damage_max": 59,
+      "attack_range": 150,
+      "attack_rate": 1.7,
+      "attributes": [
+        26,
+        16,
+        23
+      ],
+      "gains": [
+        3,
+        1.8,
+        1.6
+      ],
+      "nukes": []
+    },
+    "104": {
+      "name_loc": "Legion Commander",
+      "primary_attr": 0,
+      "damage_min": 58,
+      "damage_max": 62,
+      "attack_range": 150,
+      "attack_rate": 1.7,
+      "attributes": [
+        25,
+        18,
+        20
+      ],
+      "gains": [
+        3,
+        1.7,
+        2.2
+      ],
+      "nukes": []
+    },
+    "105": {
+      "name_loc": "Techies",
+      "primary_attr": 3,
+      "damage_min": 20,
+      "damage_max": 22,
+      "attack_range": 600,
+      "attack_rate": 1.7,
+      "attributes": [
+        19,
+        16,
+        25
+      ],
+      "gains": [
+        2.6,
+        1.8,
+        2.7
+      ],
+      "nukes": []
+    },
+    "106": {
+      "name_loc": "Ember Spirit",
+      "primary_attr": 1,
+      "damage_min": 51,
+      "damage_max": 55,
+      "attack_range": 150,
+      "attack_rate": 1.7,
+      "attributes": [
+        21,
+        21,
+        20
+      ],
+      "gains": [
+        2.5,
+        3.2,
+        2.2
+      ],
+      "nukes": [],
+      "ultimate": {
+        "id": 5606,
+        "name": "Fire Remnant"
+      }
+    },
+    "107": {
+      "name_loc": "Earth Spirit",
+      "primary_attr": 0,
+      "damage_min": 48,
+      "damage_max": 52,
+      "attack_range": 150,
+      "attack_rate": 1.7,
+      "attributes": [
+        23,
+        17,
+        17
+      ],
+      "gains": [
+        3.8,
+        2.4,
+        2.1
+      ],
+      "nukes": [
+        {
+          "id": 5608,
+          "name": "Boulder Smash",
+          "damage": [
+            110,
+            180,
+            250,
+            320
+          ],
+          "damage_type": 2,
+          "mana": [
+            100
+          ],
+          "cooldown": [
+            20,
+            17,
+            14,
+            11
+          ],
+          "note": "Значение для попадания снарядом. Убедись, что есть подходящая цель для удара и траектория."
+        }
+      ],
+      "ultimate": {
+        "id": 5612,
+        "name": "Magnetize"
+      }
+    },
+    "108": {
+      "name_loc": "Underlord",
+      "primary_attr": 0,
+      "damage_min": 62,
+      "damage_max": 68,
+      "attack_range": 200,
+      "attack_rate": 1.7,
+      "attributes": [
+        25,
+        12,
+        18
+      ],
+      "gains": [
+        3.2,
+        1.6,
+        2.3
+      ],
+      "nukes": []
+    },
+    "109": {
+      "name_loc": "Terrorblade",
+      "primary_attr": 1,
+      "damage_min": 49,
+      "damage_max": 55,
+      "attack_range": 150,
+      "attack_rate": 1.5,
+      "attributes": [
+        18,
+        23,
+        19
+      ],
+      "gains": [
+        2,
+        4,
+        1.6
+      ],
+      "nukes": []
+    },
+    "110": {
+      "name_loc": "Phoenix",
+      "primary_attr": 0,
+      "damage_min": 44,
+      "damage_max": 54,
+      "attack_range": 500,
+      "attack_rate": 1.7,
+      "attributes": [
+        23,
+        12,
+        16
+      ],
+      "gains": [
+        3.3,
+        1.5,
+        1.8
+      ],
+      "nukes": []
+    },
+    "111": {
+      "name_loc": "Oracle",
+      "primary_attr": 2,
+      "damage_min": 39,
+      "damage_max": 45,
+      "attack_range": 625,
+      "attack_rate": 1.7,
+      "attributes": [
+        20,
+        15,
+        26
+      ],
+      "gains": [
+        2.2,
+        1.7,
+        3.6
+      ],
+      "nukes": []
+    },
+    "112": {
+      "name_loc": "Winter Wyvern",
+      "primary_attr": 2,
+      "damage_min": 42,
+      "damage_max": 49,
+      "attack_range": 450,
+      "attack_rate": 1.7,
+      "attributes": [
+        22,
+        16,
+        26
+      ],
+      "gains": [
+        2.5,
+        1.7,
+        3.6
+      ],
+      "nukes": []
+    },
+    "113": {
+      "name_loc": "Arc Warden",
+      "primary_attr": 3,
+      "damage_min": 23,
+      "damage_max": 29,
+      "attack_range": 625,
+      "attack_rate": 1.7,
+      "attributes": [
+        20,
+        22,
+        24
+      ],
+      "gains": [
+        2.2,
+        2.7,
+        2.6
+      ],
+      "nukes": []
+    },
+    "114": {
+      "name_loc": "Monkey King",
+      "primary_attr": 1,
+      "damage_min": 52,
+      "damage_max": 56,
+      "attack_range": 300,
+      "attack_rate": 1.6,
+      "attributes": [
+        19,
+        23,
+        20
+      ],
+      "gains": [
+        2.8,
+        3.7,
+        1.8
+      ],
+      "nukes": []
+    },
+    "119": {
+      "name_loc": "Dark Willow",
+      "primary_attr": 2,
+      "damage_min": 49,
+      "damage_max": 57,
+      "attack_range": 475,
+      "attack_rate": 1.5,
+      "attributes": [
+        20,
+        18,
+        22
+      ],
+      "gains": [
+        2,
+        1.6,
+        3.5
+      ],
+      "nukes": []
+    },
+    "120": {
+      "name_loc": "Pangolier",
+      "primary_attr": 3,
+      "damage_min": 26,
+      "damage_max": 32,
+      "attack_range": 150,
+      "attack_rate": 1.7,
+      "attributes": [
+        20,
+        17,
+        16
+      ],
+      "gains": [
+        2.7,
+        3.2,
+        2.5
+      ],
+      "nukes": [
+        {
+          "id": 6461,
+          "name": "Shield Crash",
+          "damage": [
+            60,
+            120,
+            180,
+            240
+          ],
+          "damage_type": 1,
+          "mana": [
+            75
+          ],
+          "cooldown": [
+            15,
+            12,
+            9,
+            6
+          ],
+          "note": "Физический урон в области приземления. Броня цели меняет урон."
+        }
+      ],
+      "ultimate": {
+        "id": 6343,
+        "name": "Rolling Thunder"
+      }
+    },
+    "121": {
+      "name_loc": "Grimstroke",
+      "primary_attr": 2,
+      "damage_min": 47,
+      "damage_max": 51,
+      "attack_range": 600,
+      "attack_rate": 1.7,
+      "attributes": [
+        21,
+        18,
+        25
+      ],
+      "gains": [
+        2.4,
+        1.9,
+        3.8
+      ],
+      "nukes": []
+    },
+    "123": {
+      "name_loc": "Hoodwink",
+      "primary_attr": 1,
+      "damage_min": 47,
+      "damage_max": 54,
+      "attack_range": 575,
+      "attack_rate": 2,
+      "attributes": [
+        16,
+        22,
+        21
+      ],
+      "gains": [
+        2,
+        3.6,
+        2.9
+      ],
+      "nukes": []
+    },
+    "126": {
+      "name_loc": "Void Spirit",
+      "primary_attr": 3,
+      "damage_min": 18,
+      "damage_max": 22,
+      "attack_range": 200,
+      "attack_rate": 1.7,
+      "attributes": [
+        22,
+        21,
+        24
+      ],
+      "gains": [
+        2.6,
+        2.2,
+        3.1
+      ],
+      "nukes": [
+        {
+          "id": 6470,
+          "name": "Dissimilate",
+          "damage": [
+            105,
+            185,
+            265,
+            345
+          ],
+          "damage_type": 2,
+          "mana": [
+            120
+          ],
+          "cooldown": [
+            20,
+            17,
+            14,
+            11
+          ],
+          "note": "Урон при выходе из портала. Промежуток до появления важен для добивания."
+        },
+        {
+          "id": 7710,
+          "name": "Resonant Pulse",
+          "damage": [
+            60,
+            110,
+            160,
+            210
+          ],
+          "damage_type": 2,
+          "mana": [
+            115,
+            120,
+            125,
+            130
+          ],
+          "cooldown": [
+            18
+          ],
+          "note": "Урон одного импульса. Проверь, зацепит ли он героя рядом с крипом для усиления щита."
+        }
+      ],
+      "universal_bonus_pct": 15,
+      "ultimate": {
+        "id": 7705,
+        "name": "Astral Step"
+      }
+    },
+    "128": {
+      "name_loc": "Snapfire",
+      "primary_attr": 3,
+      "damage_min": 27,
+      "damage_max": 33,
+      "attack_range": 400,
+      "attack_rate": 1.8,
+      "attributes": [
+        21,
+        16,
+        21
+      ],
+      "gains": [
+        3.5,
+        1.9,
+        2.2
+      ],
+      "nukes": []
+    },
+    "129": {
+      "name_loc": "Mars",
+      "primary_attr": 0,
+      "damage_min": 49,
+      "damage_max": 57,
+      "attack_range": 250,
+      "attack_rate": 1.8,
+      "attributes": [
+        23,
+        18,
+        21
+      ],
+      "gains": [
+        3.7,
+        1.7,
+        2.4
+      ],
+      "nukes": []
+    },
+    "131": {
+      "name_loc": "Ringmaster",
+      "primary_attr": 2,
+      "damage_min": 48,
+      "damage_max": 58,
+      "attack_range": 575,
+      "attack_rate": 1.7,
+      "attributes": [
+        21,
+        11,
+        25
+      ],
+      "gains": [
+        2.1,
+        1.6,
+        3
+      ],
+      "nukes": []
+    },
+    "135": {
+      "name_loc": "Dawnbreaker",
+      "primary_attr": 0,
+      "damage_min": 55,
+      "damage_max": 59,
+      "attack_range": 150,
+      "attack_rate": 1.7,
+      "attributes": [
+        25,
+        14,
+        20
+      ],
+      "gains": [
+        3.4,
+        1.7,
+        2
+      ],
+      "nukes": []
+    },
+    "136": {
+      "name_loc": "Marci",
+      "primary_attr": 3,
+      "damage_min": 29,
+      "damage_max": 33,
+      "attack_range": 150,
+      "attack_rate": 1.7,
+      "attributes": [
+        23,
+        20,
+        19
+      ],
+      "gains": [
+        3.2,
+        2.2,
+        1.9
+      ],
+      "nukes": []
+    },
+    "137": {
+      "name_loc": "Primal Beast",
+      "primary_attr": 0,
+      "damage_min": 62,
+      "damage_max": 64,
+      "attack_range": 150,
+      "attack_rate": 1.8,
+      "attributes": [
+        26,
+        15,
+        16
+      ],
+      "gains": [
+        4.3,
+        1,
+        1.7
+      ],
+      "nukes": []
+    },
+    "138": {
+      "name_loc": "Muerta",
+      "primary_attr": 2,
+      "damage_min": 47,
+      "damage_max": 55,
+      "attack_range": 575,
+      "attack_rate": 1.7,
+      "attributes": [
+        19,
+        21,
+        23
+      ],
+      "gains": [
+        2,
+        2.7,
+        3.6
+      ],
+      "nukes": []
+    },
+    "145": {
+      "name_loc": "Kez",
+      "primary_attr": 1,
+      "damage_min": 49,
+      "damage_max": 55,
+      "attack_range": 225,
+      "attack_rate": 1.9,
+      "attributes": [
+        20,
+        27,
+        20
+      ],
+      "gains": [
+        2.8,
+        3.5,
+        1.7
+      ],
+      "nukes": []
+    },
+    "155": {
+      "name_loc": "Largo",
+      "primary_attr": 0,
+      "damage_min": 63,
+      "damage_max": 69,
+      "attack_range": 150,
+      "attack_rate": 1.7,
+      "attributes": [
+        24,
+        14,
+        21
+      ],
+      "gains": [
+        3.6,
+        1.3,
+        2.6
+      ],
+      "nukes": []
+    }
+  }
+}

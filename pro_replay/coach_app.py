@@ -52,6 +52,7 @@ def _home():
        placeholder="9086497898" required>
 <button type="submit">Открыть состав</button></div></form>
 <p><a href="/example-decisions">Пример автоматического разбора</a></p>
+<nav><a href="/example-macro#macro">Смоки и объекты Pudge</a> · <a href="/example-mid#mid-matchup">Huskar против Necrophos</a> · <a href="/example-waves#support-waves">Отвод Snapfire</a></nav>
 <details class="resources"><summary>Другие примеры</summary><nav><a href="/example-replay-support">Проверенные сейвы Snapfire</a><a href="/example-fight">Драка Mars</a>
 <a href="/example-economy">Фарм Anti-Mage на фоне игроков 7 300+ и про-сцены</a>
 <a href="/example-support">Выбор предмета на Rubick</a><a href="/example">Посмотреть готовый разбор Kez</a></nav></details></div>
@@ -166,6 +167,10 @@ class CoachHandler(BaseHTTPRequestHandler):
             return self._send(200, (EXAMPLES / "coach-decisions.html").read_bytes())
         if path == "/example-economy":
             return self._send(200, (EXAMPLES / "patch-reference-example.html").read_bytes())
+        samples = {"/example-macro": "coach-macro-smoke.html", "/example-mid": "coach-mid-matchup.html",
+                   "/example-waves": "coach-support-waves.html"}
+        if path in samples:
+            return self._send(200, (EXAMPLES / samples[path]).read_bytes())
         if path == "/example-replay-support":
             return self._send(200, (EXAMPLES / "coach-replay-support.html").read_bytes())
         if path == "/example-fight":
