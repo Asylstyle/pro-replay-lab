@@ -1,5 +1,5 @@
 # These preregistrations are hashed as original bytes in their manifests.
 # Preserve their Windows line endings on every checkout platform.
-examples/coach-ml-holdout-selection.json -text
-examples/coach-ml-ranked-final-selection.json -text
-examples/coach-ml-ranked-retrospective-selection.json -text
+examples/coach-ml-holdout-selection.json -text whitespace=cr-at-eol
+examples/coach-ml-ranked-final-selection.json -text whitespace=cr-at-eol
+examples/coach-ml-ranked-retrospective-selection.json -text whitespace=cr-at-eol
