@@ -1,0 +1,2492 @@
+{
+  "sampling_policy": {
+    "schema": "pro-replay-ml-holdout-selection-v1",
+    "registered_at_utc": "2026-11-17T17:35:27.377723+00:00",
+    "seed": 20261117,
+    "training_id_file": "examples/coach-pro-match-ids.txt",
+    "excluded_previous_ranked_id_file": "examples/coach-ranked-evaluation.json",
+    "strict_start_after": 1794857832,
+    "strict_start_after_utc": "2026-11-16T19:37:12+00:00",
+    "professional": {
+      "candidate_source": "OpenDota /proMatches, descending IDs until start_time <= cutoff",
+      "order": "descending match_id; collect first100 eligible or exhaust future population",
+      "target_count": 100,
+      "tier": [
+        "professional",
+        "premium"
+      ],
+      "requires_team_ids": true
+    },
+    "ranked": {
+      "candidate_source": "OpenDota /parsedMatches, descending pages; intersect public_matches WHERE lobby_type=7 AND game_mode=22 via /explorer",
+      "order": "descending match_id; first100 eligible after cutoff; max12pages",
+      "target_count": 100,
+      "lobby_type": 7,
+      "game_mode": 22,
+      "rank_quotas": null
+    },
+    "eligibility": [
+      "not in original500 pro or original120 ranked IDs",
+      "start_time strictly after latest end_time of any original500pro game",
+      "10 distinct validslots and positive hero IDs",
+      "duration>=1200",
+      "allplayers have finite nonnegative lh/gold/xp at600and1200, nondecreasing",
+      "no recorded nonzero leaver_status",
+      "not synthetic/demo"
+    ],
+    "stop_conditions": [
+      "target attained",
+      "future candidate population exhausted",
+      "12ranked pages exhausted",
+      "API errors3consecutive per cohort"
+    ],
+    "outcomes_unused": "Candidate collection and exclusions use eligibility only, never predictions/errors or match win outcome. Both sealed cohorts remain unused for tuning. Model candidate selection uses original400 temporaldevelopment games only."
+  },
+  "sampling_policy_sha256": "8c467f5929b66bac975db6150031c9682714acb97b295147a94b0372331c655b",
+  "completed_at_utc": "2026-11-17T17:40:11.642043+00:00",
+  "snapshot_file": "coach-ml-holdout-snapshots.json.gz",
+  "snapshot_sha256": "b03da16f4b4adeb288d8f269e43f83f73fe8d5f5fe327e271440fe20132bb97b",
+  "excluded_among_attempted": {
+    "professional": {
+      "incomplete_roster_or_snapshots": 1,
+      "missing_team_identifiers": 4,
+      "nonzero_or_unknown_leaver_status": 5
+    },
+    "ranked": {
+      "nonzero_or_unknown_leaver_status": 37,
+      "ended_before_minute_20": 5,
+      "incomplete_roster_or_snapshots": 1
+    }
+  },
+  "attempts": [
+    {
+      "match_id": 9094375739,
+      "cohort": "professional",
+      "result": "incomplete_roster_or_snapshots"
+    },
+    {
+      "match_id": 9094241558,
+      "cohort": "professional",
+      "result": "included"
+    },
+    {
+      "match_id": 9094204021,
+      "cohort": "professional",
+      "result": "missing_team_identifiers"
+    },
+    {
+      "match_id": 9094196499,
+      "cohort": "professional",
+      "result": "nonzero_or_unknown_leaver_status"
+    },
+    {
+      "match_id": 9094149032,
+      "cohort": "professional",
+      "result": "nonzero_or_unknown_leaver_status"
+    },
+    {
+      "match_id": 9094100803,
+      "cohort": "professional",
+      "result": "included"
+    },
+    {
+      "match_id": 9094077408,
+      "cohort": "professional",
+      "result": "missing_team_identifiers"
+    },
+    {
+      "match_id": 9094062387,
+      "cohort": "professional",
+      "result": "missing_team_identifiers"
+    },
+    {
+      "match_id": 9094055565,
+      "cohort": "professional",
+      "result": "included"
+    },
+    {
+      "match_id": 9093999184,
+      "cohort": "professional",
+      "result": "missing_team_identifiers"
+    },
+    {
+      "match_id": 9093927215,
+      "cohort": "professional",
+      "result": "nonzero_or_unknown_leaver_status"
+    },
+    {
+      "match_id": 9093871938,
+      "cohort": "professional",
+      "result": "included"
+    },
+    {
+      "match_id": 9093458287,
+      "cohort": "professional",
+      "result": "nonzero_or_unknown_leaver_status"
+    },
+    {
+      "match_id": 9093401586,
+      "cohort": "professional",
+      "result": "included"
+    },
+    {
+      "match_id": 9093340128,
+      "cohort": "professional",
+      "result": "nonzero_or_unknown_leaver_status"
+    },
+    {
+      "match_id": 9094409295,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094400691,
+      "cohort": "ranked",
+      "result": "nonzero_or_unknown_leaver_status"
+    },
+    {
+      "match_id": 9094399186,
+      "cohort": "ranked",
+      "result": "ended_before_minute_20"
+    },
+    {
+      "match_id": 9094396590,
+      "cohort": "ranked",
+      "result": "nonzero_or_unknown_leaver_status"
+    },
+    {
+      "match_id": 9094395885,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094394426,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094393553,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094393528,
+      "cohort": "ranked",
+      "result": "ended_before_minute_20"
+    },
+    {
+      "match_id": 9094393345,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094393267,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094388122,
+      "cohort": "ranked",
+      "result": "incomplete_roster_or_snapshots"
+    },
+    {
+      "match_id": 9094387650,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094386540,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094386446,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094386252,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094385905,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094384754,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094384601,
+      "cohort": "ranked",
+      "result": "nonzero_or_unknown_leaver_status"
+    },
+    {
+      "match_id": 9094384442,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094384431,
+      "cohort": "ranked",
+      "result": "nonzero_or_unknown_leaver_status"
+    },
+    {
+      "match_id": 9094384326,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094383888,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094383619,
+      "cohort": "ranked",
+      "result": "nonzero_or_unknown_leaver_status"
+    },
+    {
+      "match_id": 9094383588,
+      "cohort": "ranked",
+      "result": "nonzero_or_unknown_leaver_status"
+    },
+    {
+      "match_id": 9094383460,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094383420,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094382154,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094381737,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094381689,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094380204,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094379816,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094378601,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094377777,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094377319,
+      "cohort": "ranked",
+      "result": "nonzero_or_unknown_leaver_status"
+    },
+    {
+      "match_id": 9094376682,
+      "cohort": "ranked",
+      "result": "ended_before_minute_20"
+    },
+    {
+      "match_id": 9094376388,
+      "cohort": "ranked",
+      "result": "nonzero_or_unknown_leaver_status"
+    },
+    {
+      "match_id": 9094374109,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094373008,
+      "cohort": "ranked",
+      "result": "nonzero_or_unknown_leaver_status"
+    },
+    {
+      "match_id": 9094373001,
+      "cohort": "ranked",
+      "result": "nonzero_or_unknown_leaver_status"
+    },
+    {
+      "match_id": 9094372897,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094371152,
+      "cohort": "ranked",
+      "result": "nonzero_or_unknown_leaver_status"
+    },
+    {
+      "match_id": 9094371099,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094370531,
+      "cohort": "ranked",
+      "result": "ended_before_minute_20"
+    },
+    {
+      "match_id": 9094370204,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094369562,
+      "cohort": "ranked",
+      "result": "nonzero_or_unknown_leaver_status"
+    },
+    {
+      "match_id": 9094369313,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094369143,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094367883,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094367327,
+      "cohort": "ranked",
+      "result": "nonzero_or_unknown_leaver_status"
+    },
+    {
+      "match_id": 9094366247,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094366034,
+      "cohort": "ranked",
+      "result": "nonzero_or_unknown_leaver_status"
+    },
+    {
+      "match_id": 9094365825,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094365765,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094365584,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094365192,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094365123,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094364709,
+      "cohort": "ranked",
+      "result": "nonzero_or_unknown_leaver_status"
+    },
+    {
+      "match_id": 9094364392,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094363770,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094363430,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094363233,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094362796,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094362447,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094362224,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094362170,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094360749,
+      "cohort": "ranked",
+      "result": "nonzero_or_unknown_leaver_status"
+    },
+    {
+      "match_id": 9094359698,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094359696,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094359516,
+      "cohort": "ranked",
+      "result": "nonzero_or_unknown_leaver_status"
+    },
+    {
+      "match_id": 9094359206,
+      "cohort": "ranked",
+      "result": "nonzero_or_unknown_leaver_status"
+    },
+    {
+      "match_id": 9094358998,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094358963,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094358568,
+      "cohort": "ranked",
+      "result": "nonzero_or_unknown_leaver_status"
+    },
+    {
+      "match_id": 9094357481,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094357084,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094356998,
+      "cohort": "ranked",
+      "result": "nonzero_or_unknown_leaver_status"
+    },
+    {
+      "match_id": 9094356849,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094356816,
+      "cohort": "ranked",
+      "result": "nonzero_or_unknown_leaver_status"
+    },
+    {
+      "match_id": 9094356524,
+      "cohort": "ranked",
+      "result": "nonzero_or_unknown_leaver_status"
+    },
+    {
+      "match_id": 9094356073,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094355649,
+      "cohort": "ranked",
+      "result": "nonzero_or_unknown_leaver_status"
+    },
+    {
+      "match_id": 9094355484,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094355197,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094354144,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094353453,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094353311,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094353049,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094352769,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094352225,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094351842,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094351730,
+      "cohort": "ranked",
+      "result": "nonzero_or_unknown_leaver_status"
+    },
+    {
+      "match_id": 9094351645,
+      "cohort": "ranked",
+      "result": "nonzero_or_unknown_leaver_status"
+    },
+    {
+      "match_id": 9094351419,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094350962,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094350943,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094350619,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094350150,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094350145,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094349807,
+      "cohort": "ranked",
+      "result": "nonzero_or_unknown_leaver_status"
+    },
+    {
+      "match_id": 9094349219,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094348833,
+      "cohort": "ranked",
+      "result": "nonzero_or_unknown_leaver_status"
+    },
+    {
+      "match_id": 9094348598,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094347775,
+      "cohort": "ranked",
+      "result": "nonzero_or_unknown_leaver_status"
+    },
+    {
+      "match_id": 9094347773,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094346832,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094346296,
+      "cohort": "ranked",
+      "result": "nonzero_or_unknown_leaver_status"
+    },
+    {
+      "match_id": 9094345693,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094345462,
+      "cohort": "ranked",
+      "result": "nonzero_or_unknown_leaver_status"
+    },
+    {
+      "match_id": 9094345355,
+      "cohort": "ranked",
+      "result": "nonzero_or_unknown_leaver_status"
+    },
+    {
+      "match_id": 9094345330,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094345176,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094344970,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094344617,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094343675,
+      "cohort": "ranked",
+      "result": "nonzero_or_unknown_leaver_status"
+    },
+    {
+      "match_id": 9094343301,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094343238,
+      "cohort": "ranked",
+      "result": "ended_before_minute_20"
+    },
+    {
+      "match_id": 9094343007,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094342279,
+      "cohort": "ranked",
+      "result": "nonzero_or_unknown_leaver_status"
+    },
+    {
+      "match_id": 9094342044,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094341839,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094341789,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094341600,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094341547,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094341301,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094341262,
+      "cohort": "ranked",
+      "result": "nonzero_or_unknown_leaver_status"
+    },
+    {
+      "match_id": 9094341107,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094341105,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094340973,
+      "cohort": "ranked",
+      "result": "nonzero_or_unknown_leaver_status"
+    },
+    {
+      "match_id": 9094340583,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094340193,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094339367,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094338980,
+      "cohort": "ranked",
+      "result": "nonzero_or_unknown_leaver_status"
+    },
+    {
+      "match_id": 9094338965,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094338900,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094338604,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094338555,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094338353,
+      "cohort": "ranked",
+      "result": "nonzero_or_unknown_leaver_status"
+    },
+    {
+      "match_id": 9094338267,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094338207,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094338182,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094338011,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094337975,
+      "cohort": "ranked",
+      "result": "included"
+    },
+    {
+      "match_id": 9094337785,
+      "cohort": "ranked",
+      "result": "included"
+    }
+  ],
+  "candidate_pages": [
+    {
+      "cohort": "professional",
+      "ids": [
+        9094375739,
+        9094241558,
+        9094204021,
+        9094196499,
+        9094149032,
+        9094100803,
+        9094077408,
+        9094062387,
+        9094055565,
+        9093999184,
+        9093927215,
+        9093871938,
+        9093458287,
+        9093401586,
+        9093340128,
+        9093259247,
+        9093255096,
+        9093175023,
+        9093145184,
+        9093051668,
+        9093041580,
+        9092956211,
+        9092923974,
+        9092843858,
+        9092818330,
+        9092706541,
+        9092641299,
+        9092574111,
+        9092124714,
+        9092063120,
+        9091993665,
+        9091950656,
+        9091867209,
+        9091792655,
+        9091678507,
+        9091638344,
+        9091523157,
+        9091521748,
+        9091507542,
+        9091386510,
+        9091378026,
+        9091310904,
+        9091291242,
+        9091236030,
+        9091138476,
+        9091135592,
+        9090701002,
+        9090631460,
+        9090576268,
+        9090500945,
+        9090414768,
+        9090331679,
+        9090295298,
+        9090241603,
+        9090171021,
+        9090050956,
+        9090049848,
+        9090044969,
+        9089968791,
+        9089893551,
+        9089886596,
+        9089764053,
+        9089662627,
+        9089662134,
+        9089593281,
+        9089567599,
+        9089520696,
+        9089448051,
+        9088923051,
+        9088831675,
+        9088760214,
+        9088710443,
+        9088639372,
+        9088593108,
+        9088481002,
+        9088414151,
+        9088363938,
+        9088362009,
+        9088316044,
+        9088309338,
+        9088267544,
+        9088218721,
+        9088161900,
+        9088130768,
+        9088086810,
+        9088069727,
+        9088001992,
+        9087999035,
+        9087439951,
+        9087374444,
+        9087276030,
+        9087180510,
+        9087070975,
+        9087068600,
+        9087022411,
+        9086982375,
+        9086957012,
+        9086956929,
+        9086875606,
+        9086867468
+      ]
+    },
+    {
+      "cohort": "ranked",
+      "parsed_ids": [
+        9094427796,
+        9094423378,
+        9094422972,
+        9094422763,
+        9094421440,
+        9094421132,
+        9094418780,
+        9094418205,
+        9094417925,
+        9094417755,
+        9094416430,
+        9094415644,
+        9094414918,
+        9094413985,
+        9094412885,
+        9094412369,
+        9094412095,
+        9094411562,
+        9094411424,
+        9094410799,
+        9094410550,
+        9094410306,
+        9094410228,
+        9094409632,
+        9094409545,
+        9094409399,
+        9094409295,
+        9094408503,
+        9094407629,
+        9094407305,
+        9094406722,
+        9094406067,
+        9094405843,
+        9094405138,
+        9094404813,
+        9094404779,
+        9094404582,
+        9094403693,
+        9094403098,
+        9094402565,
+        9094402553,
+        9094401123,
+        9094401076,
+        9094401020,
+        9094400691,
+        9094400446,
+        9094400381,
+        9094399186,
+        9094399169,
+        9094399024,
+        9094398849,
+        9094398810,
+        9094398543,
+        9094398439,
+        9094398433,
+        9094398134,
+        9094396826,
+        9094396609,
+        9094396590,
+        9094396490,
+        9094396180,
+        9094396097,
+        9094395994,
+        9094395885,
+        9094395166,
+        9094395087,
+        9094394427,
+        9094394426,
+        9094394098,
+        9094393553,
+        9094393528,
+        9094393435,
+        9094393406,
+        9094393345,
+        9094393267,
+        9094393076,
+        9094393028,
+        9094392510,
+        9094392297,
+        9094391860,
+        9094391549,
+        9094390538,
+        9094390137,
+        9094389972,
+        9094389275,
+        9094389177,
+        9094388988,
+        9094388449,
+        9094388203,
+        9094388122,
+        9094388063,
+        9094387922,
+        9094387650,
+        9094387634,
+        9094387490,
+        9094387426,
+        9094386923,
+        9094386776,
+        9094386540,
+        9094386446
+      ],
+      "eligible_lobby_candidates": [
+        {
+          "match_id": 9094409295,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094400691,
+          "avg_rank_tier": 63
+        },
+        {
+          "match_id": 9094399186,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094396590,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094395885,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094394426,
+          "avg_rank_tier": 35
+        },
+        {
+          "match_id": 9094393553,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094393528,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094393345,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094393267,
+          "avg_rank_tier": 53
+        },
+        {
+          "match_id": 9094388122,
+          "avg_rank_tier": 35
+        },
+        {
+          "match_id": 9094387650,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094386540,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094386446,
+          "avg_rank_tier": 54
+        }
+      ]
+    },
+    {
+      "cohort": "ranked",
+      "parsed_ids": [
+        9094386284,
+        9094386252,
+        9094386246,
+        9094385963,
+        9094385940,
+        9094385905,
+        9094385781,
+        9094385211,
+        9094385124,
+        9094384754,
+        9094384601,
+        9094384598,
+        9094384515,
+        9094384488,
+        9094384442,
+        9094384431,
+        9094384326,
+        9094384306,
+        9094384125,
+        9094383899,
+        9094383888,
+        9094383818,
+        9094383719,
+        9094383619,
+        9094383588,
+        9094383460,
+        9094383426,
+        9094383420,
+        9094382968,
+        9094382600,
+        9094382460,
+        9094382353,
+        9094382308,
+        9094382250,
+        9094382233,
+        9094382186,
+        9094382154,
+        9094382092,
+        9094381897,
+        9094381884,
+        9094381737,
+        9094381717,
+        9094381689,
+        9094381651,
+        9094380555,
+        9094380240,
+        9094380204,
+        9094380185,
+        9094380166,
+        9094380068,
+        9094379976,
+        9094379816,
+        9094379648,
+        9094379635,
+        9094379574,
+        9094378601,
+        9094378596,
+        9094377928,
+        9094377843,
+        9094377777,
+        9094377731,
+        9094377713,
+        9094377663,
+        9094377319,
+        9094377128,
+        9094376699,
+        9094376682,
+        9094376671,
+        9094376388,
+        9094376380,
+        9094376371,
+        9094376226,
+        9094376225,
+        9094376183,
+        9094376029,
+        9094375859,
+        9094375841,
+        9094375752,
+        9094375441,
+        9094375393,
+        9094375366,
+        9094374973,
+        9094374951,
+        9094374481,
+        9094374473,
+        9094374398,
+        9094374349,
+        9094374263,
+        9094374109,
+        9094373750,
+        9094373652,
+        9094373615,
+        9094373381,
+        9094373315,
+        9094373234,
+        9094373024,
+        9094373008,
+        9094373001,
+        9094372897,
+        9094372682
+      ],
+      "eligible_lobby_candidates": [
+        {
+          "match_id": 9094386252,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094385905,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094384754,
+          "avg_rank_tier": 72
+        },
+        {
+          "match_id": 9094384601,
+          "avg_rank_tier": 52
+        },
+        {
+          "match_id": 9094384442,
+          "avg_rank_tier": 53
+        },
+        {
+          "match_id": 9094384431,
+          "avg_rank_tier": 14
+        },
+        {
+          "match_id": 9094384326,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094383888,
+          "avg_rank_tier": 43
+        },
+        {
+          "match_id": 9094383619,
+          "avg_rank_tier": 62
+        },
+        {
+          "match_id": 9094383588,
+          "avg_rank_tier": 43
+        },
+        {
+          "match_id": 9094383460,
+          "avg_rank_tier": 62
+        },
+        {
+          "match_id": 9094383420,
+          "avg_rank_tier": 74
+        },
+        {
+          "match_id": 9094382154,
+          "avg_rank_tier": 54
+        },
+        {
+          "match_id": 9094381737,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094381689,
+          "avg_rank_tier": 44
+        },
+        {
+          "match_id": 9094380204,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094379816,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094378601,
+          "avg_rank_tier": 54
+        },
+        {
+          "match_id": 9094377777,
+          "avg_rank_tier": 71
+        },
+        {
+          "match_id": 9094377319,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094376682,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094376388,
+          "avg_rank_tier": 55
+        },
+        {
+          "match_id": 9094374109,
+          "avg_rank_tier": 63
+        },
+        {
+          "match_id": 9094373008,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094373001,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094372897,
+          "avg_rank_tier": 75
+        }
+      ]
+    },
+    {
+      "cohort": "ranked",
+      "parsed_ids": [
+        9094372498,
+        9094372260,
+        9094372253,
+        9094372168,
+        9094372005,
+        9094371790,
+        9094371734,
+        9094371684,
+        9094371408,
+        9094371212,
+        9094371152,
+        9094371099,
+        9094370599,
+        9094370531,
+        9094370398,
+        9094370357,
+        9094370345,
+        9094370204,
+        9094370087,
+        9094370009,
+        9094369993,
+        9094369758,
+        9094369574,
+        9094369562,
+        9094369538,
+        9094369393,
+        9094369389,
+        9094369378,
+        9094369313,
+        9094369271,
+        9094369143,
+        9094368468,
+        9094368380,
+        9094368245,
+        9094368034,
+        9094368026,
+        9094367959,
+        9094367883,
+        9094367787,
+        9094367683,
+        9094367630,
+        9094367519,
+        9094367412,
+        9094367379,
+        9094367327,
+        9094367274,
+        9094367003,
+        9094366922,
+        9094366897,
+        9094366744,
+        9094366706,
+        9094366690,
+        9094366363,
+        9094366247,
+        9094366188,
+        9094366170,
+        9094366034,
+        9094365825,
+        9094365822,
+        9094365765,
+        9094365739,
+        9094365584,
+        9094365561,
+        9094365453,
+        9094365442,
+        9094365376,
+        9094365192,
+        9094365123,
+        9094365120,
+        9094364950,
+        9094364913,
+        9094364794,
+        9094364709,
+        9094364649,
+        9094364530,
+        9094364392,
+        9094364390,
+        9094364010,
+        9094363995,
+        9094363976,
+        9094363956,
+        9094363885,
+        9094363770,
+        9094363606,
+        9094363568,
+        9094363537,
+        9094363480,
+        9094363463,
+        9094363430,
+        9094363368,
+        9094363318,
+        9094363251,
+        9094363233,
+        9094363220,
+        9094363044,
+        9094362858,
+        9094362836,
+        9094362796,
+        9094362529,
+        9094362453
+      ],
+      "eligible_lobby_candidates": [
+        {
+          "match_id": 9094371152,
+          "avg_rank_tier": 61
+        },
+        {
+          "match_id": 9094371099,
+          "avg_rank_tier": 42
+        },
+        {
+          "match_id": 9094370531,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094370204,
+          "avg_rank_tier": 73
+        },
+        {
+          "match_id": 9094369562,
+          "avg_rank_tier": 42
+        },
+        {
+          "match_id": 9094369313,
+          "avg_rank_tier": 44
+        },
+        {
+          "match_id": 9094369143,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094367883,
+          "avg_rank_tier": 21
+        },
+        {
+          "match_id": 9094367327,
+          "avg_rank_tier": 54
+        },
+        {
+          "match_id": 9094366247,
+          "avg_rank_tier": 22
+        },
+        {
+          "match_id": 9094366034,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094365825,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094365765,
+          "avg_rank_tier": 54
+        },
+        {
+          "match_id": 9094365584,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094365192,
+          "avg_rank_tier": 65
+        },
+        {
+          "match_id": 9094365123,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094364709,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094364392,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094363770,
+          "avg_rank_tier": 44
+        },
+        {
+          "match_id": 9094363430,
+          "avg_rank_tier": 21
+        },
+        {
+          "match_id": 9094363233,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094362796,
+          "avg_rank_tier": 52
+        }
+      ]
+    },
+    {
+      "cohort": "ranked",
+      "parsed_ids": [
+        9094362447,
+        9094362416,
+        9094362355,
+        9094362304,
+        9094362279,
+        9094362224,
+        9094362170,
+        9094362161,
+        9094361993,
+        9094361979,
+        9094361914,
+        9094361727,
+        9094361715,
+        9094361683,
+        9094361490,
+        9094361380,
+        9094361123,
+        9094361106,
+        9094361076,
+        9094361050,
+        9094360749,
+        9094360533,
+        9094360458,
+        9094360318,
+        9094360245,
+        9094359994,
+        9094359844,
+        9094359810,
+        9094359747,
+        9094359698,
+        9094359696,
+        9094359692,
+        9094359563,
+        9094359516,
+        9094359450,
+        9094359449,
+        9094359443,
+        9094359261,
+        9094359206,
+        9094359092,
+        9094359058,
+        9094358998,
+        9094358963,
+        9094358754,
+        9094358628,
+        9094358568,
+        9094358441,
+        9094358438,
+        9094358419,
+        9094358388,
+        9094358233,
+        9094358082,
+        9094358008,
+        9094357881,
+        9094357859,
+        9094357854,
+        9094357644,
+        9094357594,
+        9094357583,
+        9094357535,
+        9094357524,
+        9094357481,
+        9094357351,
+        9094357142,
+        9094357104,
+        9094357084,
+        9094357027,
+        9094356998,
+        9094356849,
+        9094356834,
+        9094356816,
+        9094356794,
+        9094356640,
+        9094356524,
+        9094356421,
+        9094356389,
+        9094356267,
+        9094356256,
+        9094356086,
+        9094356073,
+        9094355938,
+        9094355874,
+        9094355868,
+        9094355859,
+        9094355649,
+        9094355484,
+        9094355294,
+        9094355197,
+        9094355170,
+        9094355067,
+        9094354351,
+        9094354269,
+        9094354241,
+        9094354234,
+        9094354144,
+        9094353756,
+        9094353718,
+        9094353652,
+        9094353582,
+        9094353526
+      ],
+      "eligible_lobby_candidates": [
+        {
+          "match_id": 9094362447,
+          "avg_rank_tier": 53
+        },
+        {
+          "match_id": 9094362224,
+          "avg_rank_tier": 51
+        },
+        {
+          "match_id": 9094362170,
+          "avg_rank_tier": 51
+        },
+        {
+          "match_id": 9094360749,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094359698,
+          "avg_rank_tier": 55
+        },
+        {
+          "match_id": 9094359696,
+          "avg_rank_tier": 44
+        },
+        {
+          "match_id": 9094359516,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094359206,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094358998,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094358963,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094358568,
+          "avg_rank_tier": 41
+        },
+        {
+          "match_id": 9094357481,
+          "avg_rank_tier": 64
+        },
+        {
+          "match_id": 9094357084,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094356998,
+          "avg_rank_tier": 54
+        },
+        {
+          "match_id": 9094356849,
+          "avg_rank_tier": 44
+        },
+        {
+          "match_id": 9094356816,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094356524,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094356073,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094355649,
+          "avg_rank_tier": 61
+        },
+        {
+          "match_id": 9094355484,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094355197,
+          "avg_rank_tier": 45
+        },
+        {
+          "match_id": 9094354144,
+          "avg_rank_tier": 72
+        }
+      ]
+    },
+    {
+      "cohort": "ranked",
+      "parsed_ids": [
+        9094353453,
+        9094353407,
+        9094353319,
+        9094353311,
+        9094353264,
+        9094353240,
+        9094353082,
+        9094353049,
+        9094352954,
+        9094352935,
+        9094352769,
+        9094352698,
+        9094352629,
+        9094352490,
+        9094352416,
+        9094352229,
+        9094352225,
+        9094352221,
+        9094352177,
+        9094352152,
+        9094352081,
+        9094352067,
+        9094351950,
+        9094351903,
+        9094351842,
+        9094351735,
+        9094351730,
+        9094351645,
+        9094351562,
+        9094351498,
+        9094351419,
+        9094351237,
+        9094351232,
+        9094351191,
+        9094351165,
+        9094351027,
+        9094350992,
+        9094350962,
+        9094350961,
+        9094350943,
+        9094350845,
+        9094350706,
+        9094350619,
+        9094350568,
+        9094350562,
+        9094350389,
+        9094350370,
+        9094350356,
+        9094350354,
+        9094350280,
+        9094350256,
+        9094350150,
+        9094350146,
+        9094350145,
+        9094349848,
+        9094349807,
+        9094349774,
+        9094349745,
+        9094349661,
+        9094349605,
+        9094349597,
+        9094349592,
+        9094349543,
+        9094349461,
+        9094349396,
+        9094349376,
+        9094349219,
+        9094349165,
+        9094349017,
+        9094349016,
+        9094348964,
+        9094348842,
+        9094348833,
+        9094348773,
+        9094348689,
+        9094348662,
+        9094348598,
+        9094348552,
+        9094348476,
+        9094348471,
+        9094348426,
+        9094348214,
+        9094348106,
+        9094348079,
+        9094348048,
+        9094347946,
+        9094347931,
+        9094347793,
+        9094347789,
+        9094347775,
+        9094347773,
+        9094347688,
+        9094347529,
+        9094347461,
+        9094347439,
+        9094347291,
+        9094347263,
+        9094347257,
+        9094346920,
+        9094346899
+      ],
+      "eligible_lobby_candidates": [
+        {
+          "match_id": 9094353453,
+          "avg_rank_tier": 65
+        },
+        {
+          "match_id": 9094353311,
+          "avg_rank_tier": 45
+        },
+        {
+          "match_id": 9094353049,
+          "avg_rank_tier": 74
+        },
+        {
+          "match_id": 9094352769,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094352225,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094351842,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094351730,
+          "avg_rank_tier": 54
+        },
+        {
+          "match_id": 9094351645,
+          "avg_rank_tier": 55
+        },
+        {
+          "match_id": 9094351419,
+          "avg_rank_tier": 43
+        },
+        {
+          "match_id": 9094350962,
+          "avg_rank_tier": 23
+        },
+        {
+          "match_id": 9094350943,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094350619,
+          "avg_rank_tier": 41
+        },
+        {
+          "match_id": 9094350150,
+          "avg_rank_tier": 42
+        },
+        {
+          "match_id": 9094350145,
+          "avg_rank_tier": 23
+        },
+        {
+          "match_id": 9094349807,
+          "avg_rank_tier": 23
+        },
+        {
+          "match_id": 9094349219,
+          "avg_rank_tier": 53
+        },
+        {
+          "match_id": 9094348833,
+          "avg_rank_tier": 54
+        },
+        {
+          "match_id": 9094348598,
+          "avg_rank_tier": 54
+        },
+        {
+          "match_id": 9094347775,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094347773,
+          "avg_rank_tier": 24
+        }
+      ]
+    },
+    {
+      "cohort": "ranked",
+      "parsed_ids": [
+        9094346874,
+        9094346832,
+        9094346812,
+        9094346797,
+        9094346591,
+        9094346464,
+        9094346354,
+        9094346312,
+        9094346296,
+        9094346091,
+        9094346041,
+        9094345916,
+        9094345860,
+        9094345781,
+        9094345693,
+        9094345462,
+        9094345355,
+        9094345330,
+        9094345279,
+        9094345248,
+        9094345244,
+        9094345234,
+        9094345177,
+        9094345176,
+        9094345175,
+        9094345173,
+        9094345157,
+        9094345087,
+        9094345012,
+        9094344991,
+        9094344970,
+        9094344883,
+        9094344696,
+        9094344688,
+        9094344617,
+        9094344568,
+        9094344381,
+        9094344318,
+        9094344273,
+        9094344271,
+        9094344237,
+        9094344128,
+        9094343956,
+        9094343944,
+        9094343857,
+        9094343776,
+        9094343675,
+        9094343438,
+        9094343352,
+        9094343301,
+        9094343274,
+        9094343238,
+        9094343202,
+        9094343104,
+        9094343027,
+        9094343007,
+        9094342843,
+        9094342791,
+        9094342778,
+        9094342682,
+        9094342671,
+        9094342617,
+        9094342536,
+        9094342513,
+        9094342470,
+        9094342433,
+        9094342391,
+        9094342361,
+        9094342289,
+        9094342279,
+        9094342273,
+        9094342248,
+        9094342124,
+        9094342116,
+        9094342044,
+        9094342025,
+        9094341914,
+        9094341839,
+        9094341815,
+        9094341793,
+        9094341789,
+        9094341636,
+        9094341600,
+        9094341551,
+        9094341547,
+        9094341417,
+        9094341416,
+        9094341301,
+        9094341270,
+        9094341262,
+        9094341107,
+        9094341105,
+        9094341101,
+        9094341038,
+        9094341017,
+        9094340973,
+        9094340964,
+        9094340887,
+        9094340884,
+        9094340828
+      ],
+      "eligible_lobby_candidates": [
+        {
+          "match_id": 9094346832,
+          "avg_rank_tier": 44
+        },
+        {
+          "match_id": 9094346296,
+          "avg_rank_tier": 53
+        },
+        {
+          "match_id": 9094345693,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094345462,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094345355,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094345330,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094345176,
+          "avg_rank_tier": 44
+        },
+        {
+          "match_id": 9094344970,
+          "avg_rank_tier": 42
+        },
+        {
+          "match_id": 9094344617,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094343675,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094343301,
+          "avg_rank_tier": 72
+        },
+        {
+          "match_id": 9094343238,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094343007,
+          "avg_rank_tier": 54
+        },
+        {
+          "match_id": 9094342279,
+          "avg_rank_tier": 52
+        },
+        {
+          "match_id": 9094342044,
+          "avg_rank_tier": 33
+        },
+        {
+          "match_id": 9094341839,
+          "avg_rank_tier": 51
+        },
+        {
+          "match_id": 9094341789,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094341600,
+          "avg_rank_tier": 25
+        },
+        {
+          "match_id": 9094341547,
+          "avg_rank_tier": 62
+        },
+        {
+          "match_id": 9094341301,
+          "avg_rank_tier": 64
+        },
+        {
+          "match_id": 9094341262,
+          "avg_rank_tier": 22
+        },
+        {
+          "match_id": 9094341107,
+          "avg_rank_tier": 24
+        },
+        {
+          "match_id": 9094341105,
+          "avg_rank_tier": 45
+        },
+        {
+          "match_id": 9094340973,
+          "avg_rank_tier": 51
+        }
+      ]
+    },
+    {
+      "cohort": "ranked",
+      "parsed_ids": [
+        9094340645,
+        9094340586,
+        9094340583,
+        9094340558,
+        9094340557,
+        9094340518,
+        9094340444,
+        9094340424,
+        9094340394,
+        9094340318,
+        9094340241,
+        9094340193,
+        9094339914,
+        9094339875,
+        9094339868,
+        9094339785,
+        9094339784,
+        9094339754,
+        9094339658,
+        9094339624,
+        9094339604,
+        9094339562,
+        9094339368,
+        9094339367,
+        9094339329,
+        9094339324,
+        9094339198,
+        9094339179,
+        9094339070,
+        9094339055,
+        9094338980,
+        9094338965,
+        9094338963,
+        9094338900,
+        9094338812,
+        9094338802,
+        9094338745,
+        9094338604,
+        9094338555,
+        9094338550,
+        9094338472,
+        9094338400,
+        9094338353,
+        9094338267,
+        9094338239,
+        9094338227,
+        9094338207,
+        9094338205,
+        9094338182,
+        9094338011,
+        9094337975,
+        9094337930,
+        9094337920,
+        9094337852,
+        9094337803,
+        9094337785,
+        9094337665,
+        9094337586,
+        9094337556,
+        9094337548,
+        9094337542,
+        9094337534,
+        9094337476,
+        9094337382,
+        9094337362,
+        9094337275,
+        9094337226,
+        9094337141,
+        9094337125,
+        9094336934,
+        9094336768,
+        9094336764,
+        9094336698,
+        9094336682,
+        9094336641,
+        9094336592,
+        9094336588,
+        9094336579,
+        9094336461,
+        9094336425,
+        9094336424,
+        9094336206,
+        9094335965,
+        9094335909,
+        9094335899,
+        9094335897,
+        9094335891,
+        9094335873,
+        9094335751,
+        9094335718,
+        9094335701,
+        9094335678,
+        9094335611,
+        9094335459,
+        9094335375,
+        9094335344,
+        9094335307,
+        9094335267,
+        9094335223,
+        9094335145
+      ],
+      "eligible_lobby_candidates": [
+        {
+          "match_id": 9094340583,
+          "avg_rank_tier": 34
+        },
+        {
+          "match_id": 9094340193,
+          "avg_rank_tier": 44
+        },
+        {
+          "match_id": 9094339367,
+          "avg_rank_tier": 52
+        },
+        {
+          "match_id": 9094338980,
+          "avg_rank_tier": 51
+        },
+        {
+          "match_id": 9094338965,
+          "avg_rank_tier": 35
+        },
+        {
+          "match_id": 9094338900,
+          "avg_rank_tier": 61
+        },
+        {
+          "match_id": 9094338604,
+          "avg_rank_tier": 61
+        },
+        {
+          "match_id": 9094338555,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094338353,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094338267,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094338207,
+          "avg_rank_tier": 21
+        },
+        {
+          "match_id": 9094338182,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094338011,
+          "avg_rank_tier": 63
+        },
+        {
+          "match_id": 9094337975,
+          "avg_rank_tier": 72
+        },
+        {
+          "match_id": 9094337785,
+          "avg_rank_tier": 23
+        },
+        {
+          "match_id": 9094337586,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094337476,
+          "avg_rank_tier": 15
+        },
+        {
+          "match_id": 9094337275,
+          "avg_rank_tier": 35
+        },
+        {
+          "match_id": 9094336682,
+          "avg_rank_tier": 34
+        },
+        {
+          "match_id": 9094336579,
+          "avg_rank_tier": 51
+        },
+        {
+          "match_id": 9094336424,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094335909,
+          "avg_rank_tier": 75
+        },
+        {
+          "match_id": 9094335751,
+          "avg_rank_tier": 44
+        },
+        {
+          "match_id": 9094335307,
+          "avg_rank_tier": 31
+        }
+      ]
+    }
+  ],
+  "cohorts": {
+    "professional": {
+      "matches": 5,
+      "players": 50,
+      "match_ids": [
+        9094241558,
+        9094100803,
+        9094055565,
+        9093871938,
+        9093401586
+      ],
+      "start_time_min": 1794863435,
+      "start_time_max": 1794927912,
+      "league_ids": {
+        "20486": 4,
+        "20511": 1
+      },
+      "rank_groups": {
+        "unknown": 5
+      },
+      "reported_positions_audit_only": {
+        "5": 10,
+        "2": 10,
+        "3": 10,
+        "4": 10,
+        "1": 10
+      },
+      "distinct_heroes": 32
+    },
+    "ranked": {
+      "matches": 100,
+      "players": 1000,
+      "match_ids": [
+        9094409295,
+        9094395885,
+        9094394426,
+        9094393553,
+        9094393345,
+        9094393267,
+        9094387650,
+        9094386540,
+        9094386446,
+        9094386252,
+        9094385905,
+        9094384754,
+        9094384442,
+        9094384326,
+        9094383888,
+        9094383460,
+        9094383420,
+        9094382154,
+        9094381737,
+        9094381689,
+        9094380204,
+        9094379816,
+        9094378601,
+        9094377777,
+        9094374109,
+        9094372897,
+        9094371099,
+        9094370204,
+        9094369313,
+        9094369143,
+        9094367883,
+        9094366247,
+        9094365825,
+        9094365765,
+        9094365584,
+        9094365192,
+        9094365123,
+        9094364392,
+        9094363770,
+        9094363430,
+        9094363233,
+        9094362796,
+        9094362447,
+        9094362224,
+        9094362170,
+        9094359698,
+        9094359696,
+        9094358998,
+        9094358963,
+        9094357481,
+        9094357084,
+        9094356849,
+        9094356073,
+        9094355484,
+        9094355197,
+        9094354144,
+        9094353453,
+        9094353311,
+        9094353049,
+        9094352769,
+        9094352225,
+        9094351842,
+        9094351419,
+        9094350962,
+        9094350943,
+        9094350619,
+        9094350150,
+        9094350145,
+        9094349219,
+        9094348598,
+        9094347773,
+        9094346832,
+        9094345693,
+        9094345330,
+        9094345176,
+        9094344970,
+        9094344617,
+        9094343301,
+        9094343007,
+        9094342044,
+        9094341839,
+        9094341789,
+        9094341600,
+        9094341547,
+        9094341301,
+        9094341107,
+        9094341105,
+        9094340583,
+        9094340193,
+        9094339367,
+        9094338965,
+        9094338900,
+        9094338604,
+        9094338555,
+        9094338267,
+        9094338207,
+        9094338182,
+        9094338011,
+        9094337975,
+        9094337785
+      ],
+      "start_time_min": 1794931774,
+      "start_time_max": 1794934904,
+      "league_ids": {
+        "0": 100
+      },
+      "rank_groups": {
+        "70+": 43,
+        "10-49": 31,
+        "50-69": 26
+      },
+      "reported_positions_audit_only": {
+        "1": 200,
+        "4": 200,
+        "2": 200,
+        "5": 200,
+        "3": 200
+      },
+      "distinct_heroes": 124
+    }
+  },
+  "quality_audit": {
+    "no_overlap_with_previous_620_matches": true,
+    "strict_future_boundary_verified": true,
+    "full_raw_vs_compact_feature_parity_matches": 105,
+    "original_training_full_raw_vs_compact_feature_parity_matches": 500,
+    "original_training_games_with_recorded_leaver_status_ge2": 0,
+    "original_training_games_with_transient_disconnect_status1": 174,
+    "holdout_requires_all_leaver_status_zero": true,
+    "prediction_or_error_based_selection": false,
+    "sampling_limitations": [
+      "Only five qualifying professional games were available after the strict cutoff; professional results are exploratory.",
+      "Public matches are a parsed convenience sample within a narrow time window, not a representative sample of all ranks or dates.",
+      "Strict holdout status-zero filtering excludes transient disconnections; original training data allowed them.",
+      "Reported position estimates are post-game metadata used for audit slices only, never model inputs."
+    ]
+  },
+  "training_snapshot": {
+    "file": "coach-ml-training-snapshots.json.gz",
+    "sha256": "0e06896eea76e01c919bcac915e5ec40718b56d54dbc3b34891e543ef0425b9b",
+    "matches": 500
+  }
+}

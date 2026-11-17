@@ -106,6 +106,9 @@ def predict(model, row):
     """Rank items from an at-10:00 snapshot. No later action or outcome is read."""
     if not model or not _has_snapshot(row):
         return None
+    if model.get("task") == "recorded_next_item":
+        from .item_experiments import predict_item
+        return predict_item(model, row)
     features = _features(row, model["preprocessing"])
     probabilities = _probabilities(model["weights"], features)
     ranked = sorted(zip(model["classes"], probabilities), key=lambda pair: -pair[1])

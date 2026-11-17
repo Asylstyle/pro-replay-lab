@@ -1,0 +1,463 @@
+{
+  "format": "ml-error-analysis-evidence-1",
+  "phase": "phase1 only; no phase2 evaluation data read",
+  "sources": {
+    "phase1_report": {
+      "path": "examples/economy-model-comparison.json",
+      "sha256": "275bdfc5c2f9ec4b5b6a2dac5f673914bc5b654bf0acdde0362c997a590eafd4"
+    },
+    "training": {
+      "path": "examples/coach-ml-training-snapshots.json.gz",
+      "sha256": "0e06896eea76e01c919bcac915e5ec40718b56d54dbc3b34891e543ef0425b9b"
+    },
+    "phase1_holdout": {
+      "path": "examples/coach-ml-holdout-snapshots.json.gz",
+      "sha256": "b03da16f4b4adeb288d8f269e43f83f73fe8d5f5fe327e271440fe20132bb97b"
+    }
+  },
+  "profiles": {
+    "professional_training": {
+      "games": 400,
+      "players": 4000,
+      "hero_training_support": {
+        "seen_20_plus": 3580,
+        "rare_1_19": 420
+      },
+      "numeric_features": {
+        "at10:lh": {
+          "mean": 40.358,
+          "sd": 28.692060504606495,
+          "missing": 0
+        },
+        "at10:gold": {
+          "mean": 3089.22575,
+          "sd": 1126.9160899494414,
+          "missing": 0
+        },
+        "at10:xp": {
+          "mean": 3192.8585,
+          "sd": 1100.2441585747001,
+          "missing": 0
+        },
+        "extra:gold_share_10": {
+          "mean": 0.2,
+          "sd": 0.07067674165575187,
+          "missing": 0
+        },
+        "extra:team_gold_10": {
+          "mean": 15446.12875,
+          "sd": 1333.0162929137205,
+          "missing": 0
+        },
+        "extra:own_denies_10": {
+          "mean": 5.64675,
+          "sd": 5.542694690987408,
+          "missing": 0
+        },
+        "extra:at5_gold": {
+          "mean": 1312.111,
+          "sd": 470.06173709311844,
+          "missing": 0
+        }
+      },
+      "farm_rank": {
+        "1": {
+          "players": 800,
+          "mean_lh_at10": 71.82,
+          "mean_gain_lh_10to20": 121.06375,
+          "mean_gain_gold_10to20": 6521.63625
+        },
+        "2": {
+          "players": 801,
+          "mean_lh_at10": 61.54431960049938,
+          "mean_gain_lh_10to20": 106.22097378277154,
+          "mean_gain_gold_10to20": 5997.214731585518
+        },
+        "3": {
+          "players": 799,
+          "mean_lh_at10": 51.896120150187734,
+          "mean_gain_lh_10to20": 101.13767209011264,
+          "mean_gain_gold_10to20": 5792.5444305381725
+        },
+        "4": {
+          "players": 801,
+          "mean_lh_at10": 9.769038701622971,
+          "mean_gain_lh_10to20": 18.23470661672909,
+          "mean_gain_gold_10to20": 2896.2009987515607
+        },
+        "5": {
+          "players": 799,
+          "mean_lh_at10": 6.74468085106383,
+          "mean_gain_lh_10to20": 15.773466833541928,
+          "mean_gain_gold_10to20": 2769.7596996245306
+        }
+      }
+    },
+    "phase1_ranked": {
+      "games": 100,
+      "players": 1000,
+      "hero_training_support": {
+        "seen_20_plus": 563,
+        "rare_1_19": 434,
+        "unseen_0": 3
+      },
+      "numeric_features": {
+        "at10:lh": {
+          "mean": 30.866,
+          "sd": 21.743781731796336,
+          "missing": 0
+        },
+        "at10:gold": {
+          "mean": 2892.042,
+          "sd": 936.5704032457998,
+          "missing": 0
+        },
+        "at10:xp": {
+          "mean": 3150.8,
+          "sd": 993.109144052153,
+          "missing": 0
+        },
+        "extra:gold_share_10": {
+          "mean": 0.2,
+          "sd": 0.060014052296602484,
+          "missing": 0
+        },
+        "extra:team_gold_10": {
+          "mean": 14460.21,
+          "sd": 1696.5383714788181,
+          "missing": 0
+        },
+        "extra:own_denies_10": {
+          "mean": 5.086,
+          "sd": 4.85948598104779,
+          "missing": 0
+        },
+        "extra:at5_gold": {
+          "mean": 1266.213,
+          "sd": 413.8650258610892,
+          "missing": 0
+        }
+      },
+      "farm_rank": {
+        "1": {
+          "players": 200,
+          "mean_lh_at10": 53.96,
+          "mean_gain_lh_10to20": 86.545,
+          "mean_gain_gold_10to20": 5792.52
+        },
+        "2": {
+          "players": 200,
+          "mean_lh_at10": 45.675,
+          "mean_gain_lh_10to20": 81.175,
+          "mean_gain_gold_10to20": 5401.645
+        },
+        "3": {
+          "players": 200,
+          "mean_lh_at10": 36.565,
+          "mean_gain_lh_10to20": 67.545,
+          "mean_gain_gold_10to20": 4794.765
+        },
+        "4": {
+          "players": 200,
+          "mean_lh_at10": 11.23,
+          "mean_gain_lh_10to20": 25.145,
+          "mean_gain_gold_10to20": 3395.6
+        },
+        "5": {
+          "players": 200,
+          "mean_lh_at10": 6.9,
+          "mean_gain_lh_10to20": 16.45,
+          "mean_gain_gold_10to20": 3057.395
+        }
+      }
+    }
+  },
+  "coefficient_diagnostics": {
+    "1": {
+      "lh": {
+        "hero_coefficients_l2_original_target_units": 225.98296353067443,
+        "hero_coefficient_max_absolute": 70.45638422548362,
+        "farm_rank_coefficients_original_target_units": [
+          21.890240998114233,
+          21.313976817931746,
+          21.564944647619512,
+          -32.32894688673764,
+          -32.44021557690203
+        ],
+        "largest_absolute_hero_coefficients": [
+          {
+            "hero_id": 89,
+            "training_examples": 12,
+            "coefficient": 70.45638422548362
+          },
+          {
+            "hero_id": 46,
+            "training_examples": 18,
+            "coefficient": 57.46371570089887
+          },
+          {
+            "hero_id": 82,
+            "training_examples": 2,
+            "coefficient": 57.05838972986607
+          },
+          {
+            "hero_id": 48,
+            "training_examples": 27,
+            "coefficient": 53.126046677513735
+          }
+        ]
+      },
+      "gold": {
+        "hero_coefficients_l2_original_target_units": 6820.8589929500595,
+        "hero_coefficient_max_absolute": 2096.0460213480965,
+        "farm_rank_coefficients_original_target_units": [
+          785.7809593198247,
+          746.7319712192658,
+          747.5012991895901,
+          -1156.2939391684272,
+          -1123.7202905612246
+        ],
+        "largest_absolute_hero_coefficients": [
+          {
+            "hero_id": 73,
+            "training_examples": 15,
+            "coefficient": 2096.0460213480965
+          },
+          {
+            "hero_id": 89,
+            "training_examples": 12,
+            "coefficient": 2024.2837901012713
+          },
+          {
+            "hero_id": 53,
+            "training_examples": 82,
+            "coefficient": 1694.4447376166916
+          },
+          {
+            "hero_id": 46,
+            "training_examples": 18,
+            "coefficient": 1457.0628724197668
+          }
+        ]
+      },
+      "xp": {
+        "hero_coefficients_l2_original_target_units": 8856.799202097349,
+        "hero_coefficient_max_absolute": 2398.032344281263,
+        "farm_rank_coefficients_original_target_units": [
+          914.2972065947721,
+          912.7224696116456,
+          832.6783102984151,
+          -1353.6106315866664,
+          -1306.0873549173664
+        ],
+        "largest_absolute_hero_coefficients": [
+          {
+            "hero_id": 34,
+            "training_examples": 3,
+            "coefficient": 2398.032344281263
+          },
+          {
+            "hero_id": 46,
+            "training_examples": 18,
+            "coefficient": 2390.5785238457784
+          },
+          {
+            "hero_id": 18,
+            "training_examples": 36,
+            "coefficient": 2169.1332033975386
+          },
+          {
+            "hero_id": 48,
+            "training_examples": 27,
+            "coefficient": 1986.619885315867
+          }
+        ]
+      }
+    },
+    "100": {
+      "lh": {
+        "hero_coefficients_l2_original_target_units": 40.03704379444549,
+        "hero_coefficient_max_absolute": 20.147460079765853,
+        "farm_rank_coefficients_original_target_units": [
+          2.9666304102626384,
+          6.8329795767977295,
+          13.335199091783286,
+          -12.745315843870427,
+          -10.389493234973328
+        ],
+        "largest_absolute_hero_coefficients": [
+          {
+            "hero_id": 53,
+            "training_examples": 82,
+            "coefficient": 20.147460079765853
+          },
+          {
+            "hero_id": 2,
+            "training_examples": 59,
+            "coefficient": -9.363806507905668
+          },
+          {
+            "hero_id": 48,
+            "training_examples": 27,
+            "coefficient": 8.93017528071271
+          },
+          {
+            "hero_id": 36,
+            "training_examples": 67,
+            "coefficient": 8.316745386621117
+          }
+        ]
+      },
+      "gold": {
+        "hero_coefficients_l2_original_target_units": 1278.6209545813192,
+        "hero_coefficient_max_absolute": 645.7338250560049,
+        "farm_rank_coefficients_original_target_units": [
+          111.74487882621426,
+          238.15410957876406,
+          483.38281411296794,
+          -473.66547345377734,
+          -359.6163290641823
+        ],
+        "largest_absolute_hero_coefficients": [
+          {
+            "hero_id": 53,
+            "training_examples": 82,
+            "coefficient": 645.7338250560049
+          },
+          {
+            "hero_id": 28,
+            "training_examples": 46,
+            "coefficient": -347.547622832215
+          },
+          {
+            "hero_id": 2,
+            "training_examples": 59,
+            "coefficient": -294.01293773979904
+          },
+          {
+            "hero_id": 3,
+            "training_examples": 88,
+            "coefficient": -246.79835584832873
+          }
+        ]
+      },
+      "xp": {
+        "hero_coefficients_l2_original_target_units": 1630.7323506690836,
+        "hero_coefficient_max_absolute": 486.2307885172935,
+        "farm_rank_coefficients_original_target_units": [
+          115.56640950474282,
+          291.36493986000306,
+          501.04514928364745,
+          -521.3612473648124,
+          -386.615251283574
+        ],
+        "largest_absolute_hero_coefficients": [
+          {
+            "hero_id": 98,
+            "training_examples": 43,
+            "coefficient": 486.2307885172935
+          },
+          {
+            "hero_id": 36,
+            "training_examples": 67,
+            "coefficient": 470.2977370779132
+          },
+          {
+            "hero_id": 55,
+            "training_examples": 69,
+            "coefficient": -421.68154413574115
+          },
+          {
+            "hero_id": 18,
+            "training_examples": 36,
+            "coefficient": 417.55655083893794
+          }
+        ]
+      }
+    }
+  },
+  "illustrative_case": {
+    "match_id": 9094347773,
+    "hero_id": 70,
+    "player_slot": 3,
+    "source_url": "https://api.opendota.com/api/matches/9094347773",
+    "source_gzip_sha256": "b8471d97028ce1d1be3e70959cc4f9845de3a1420e65bf6b82d4287cc31c0269",
+    "reported_gold_outlier": {
+      "match_id": 9094347773,
+      "player_index": 3,
+      "hero": 70,
+      "farm_rank_10": 1,
+      "at10": 2641,
+      "actual": 4640,
+      "predicted": 8595.62433863811,
+      "absolute_error": 3955.62433863811,
+      "match_url": "https://www.opendota.com/matches/9094347773"
+    },
+    "deaths_10to20": [
+      {
+        "gold_fed": 315,
+        "time": 613,
+        "gold_lost": 80,
+        "key": "npc_dota_hero_riki",
+        "time_dead": 26
+      },
+      {
+        "gold_fed": 320,
+        "time": 661,
+        "gold_lost": 82,
+        "key": "npc_dota_hero_zuus",
+        "time_dead": 27
+      },
+      {
+        "gold_fed": 315,
+        "time": 743,
+        "gold_lost": 85,
+        "key": "npc_dota_hero_riki",
+        "time_dead": 28
+      },
+      {
+        "gold_fed": 334,
+        "time": 792,
+        "gold_lost": 87,
+        "key": "npc_dota_hero_riki",
+        "time_dead": 28
+      },
+      {
+        "gold_fed": 307,
+        "time": 883,
+        "gold_lost": 94,
+        "key": "npc_dota_hero_riki",
+        "time_dead": 28
+      },
+      {
+        "gold_fed": 309,
+        "time": 946,
+        "gold_lost": 95,
+        "key": "npc_dota_hero_sniper",
+        "time_dead": 28
+      },
+      {
+        "gold_fed": 325,
+        "time": 1001,
+        "gold_lost": 95,
+        "key": "npc_dota_hero_zuus",
+        "time_dead": 29
+      }
+    ],
+    "recorded_dead_seconds_10to20": 194,
+    "kills_10to20": [],
+    "snapshots": [
+      {
+        "second": 600,
+        "last_hits": 40,
+        "gold": 2641
+      },
+      {
+        "second": 1200,
+        "last_hits": 58,
+        "gold": 4640
+      }
+    ],
+    "limitation": "Post-10 deaths explain the observed sequence descriptively. They were unavailable at prediction time and were not added to model features. No avoidable-gold-loss or causal-optimal-action estimate follows."
+  }
+}

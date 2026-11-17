@@ -1,0 +1,43 @@
+{
+  "schema": "pro-replay-ml-holdout-selection-v1",
+  "registered_at_utc": "2026-11-17T17:35:27.377723+00:00",
+  "seed": 20261117,
+  "training_id_file": "examples/coach-pro-match-ids.txt",
+  "excluded_previous_ranked_id_file": "examples/coach-ranked-evaluation.json",
+  "strict_start_after": 1794857832,
+  "strict_start_after_utc": "2026-11-16T19:37:12+00:00",
+  "professional": {
+    "candidate_source": "OpenDota /proMatches, descending IDs until start_time <= cutoff",
+    "order": "descending match_id; collect first100 eligible or exhaust future population",
+    "target_count": 100,
+    "tier": [
+      "professional",
+      "premium"
+    ],
+    "requires_team_ids": true
+  },
+  "ranked": {
+    "candidate_source": "OpenDota /parsedMatches, descending pages; intersect public_matches WHERE lobby_type=7 AND game_mode=22 via /explorer",
+    "order": "descending match_id; first100 eligible after cutoff; max12pages",
+    "target_count": 100,
+    "lobby_type": 7,
+    "game_mode": 22,
+    "rank_quotas": null
+  },
+  "eligibility": [
+    "not in original500 pro or original120 ranked IDs",
+    "start_time strictly after latest end_time of any original500pro game",
+    "10 distinct validslots and positive hero IDs",
+    "duration>=1200",
+    "allplayers have finite nonnegative lh/gold/xp at600and1200, nondecreasing",
+    "no recorded nonzero leaver_status",
+    "not synthetic/demo"
+  ],
+  "stop_conditions": [
+    "target attained",
+    "future candidate population exhausted",
+    "12ranked pages exhausted",
+    "API errors3consecutive per cohort"
+  ],
+  "outcomes_unused": "Candidate collection and exclusions use eligibility only, never predictions/errors or match win outcome. Both sealed cohorts remain unused for tuning. Model candidate selection uses original400 temporaldevelopment games only."
+}

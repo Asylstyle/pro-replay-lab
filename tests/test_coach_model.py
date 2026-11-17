@@ -134,7 +134,7 @@ class PublishedCorpusTests(unittest.TestCase):
             raw = json.load(source)
         self.assertEqual([game["match_id"] for game in raw], expected_ids)
         self.assertEqual(len(set(expected_ids)), len(expected_ids))
-        bundled = load_coach_model()
+        bundled = load_coach_model(folder / "pro-coach-model.json")
         trained = train_coach_model(raw)
         self.assertEqual(trained["coverage"], bundled["coverage"])
         for role, targets in trained["metrics_by_position"].items():

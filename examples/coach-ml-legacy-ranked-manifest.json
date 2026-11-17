@@ -1,0 +1,497 @@
+{
+  "schema": "pro-replay-ml-legacy-ranked-v1",
+  "provenance": "Original 120 ranked matches, including one game ending before minute 20. Previously inspected descriptive evaluation sample; never a fresh sealed test set. Model comparisons must retain the same 119 eligible matches.",
+  "source": "OpenDota /matches/{match_id}; rank metadata from the original public_matches candidate query",
+  "original_evaluation_file": "coach-ranked-evaluation.json",
+  "original_selection": "120 parsed 5v5 Ranked All Pick matches without recorded leavers, selected from ten match-ID windows with 40 matches per lobby-rank group. Only complete, cumulative 10:00 and 20:00 snapshots for all ten players are scored.",
+  "excluded_source_matches": {
+    "9085649578": {
+      "duration": 1183,
+      "reason": "ended_before_minute_20"
+    }
+  },
+  "sources": [
+    {
+      "match_id": 9085647260,
+      "avg_rank_tier": 41
+    },
+    {
+      "match_id": 9085647333,
+      "avg_rank_tier": 75
+    },
+    {
+      "match_id": 9085647559,
+      "avg_rank_tier": 44
+    },
+    {
+      "match_id": 9085647592,
+      "avg_rank_tier": 61
+    },
+    {
+      "match_id": 9085647748,
+      "avg_rank_tier": 54
+    },
+    {
+      "match_id": 9085648503,
+      "avg_rank_tier": 31
+    },
+    {
+      "match_id": 9085648694,
+      "avg_rank_tier": 53
+    },
+    {
+      "match_id": 9085649152,
+      "avg_rank_tier": 53
+    },
+    {
+      "match_id": 9085649187,
+      "avg_rank_tier": 55
+    },
+    {
+      "match_id": 9085649382,
+      "avg_rank_tier": 75
+    },
+    {
+      "match_id": 9085649385,
+      "avg_rank_tier": 34
+    },
+    {
+      "match_id": 9085649578,
+      "avg_rank_tier": 75
+    },
+    {
+      "match_id": 9085649786,
+      "avg_rank_tier": 41
+    },
+    {
+      "match_id": 9086497279,
+      "avg_rank_tier": 75
+    },
+    {
+      "match_id": 9086497898,
+      "avg_rank_tier": 44
+    },
+    {
+      "match_id": 9086498344,
+      "avg_rank_tier": 21
+    },
+    {
+      "match_id": 9086498623,
+      "avg_rank_tier": 75
+    },
+    {
+      "match_id": 9086498845,
+      "avg_rank_tier": 75
+    },
+    {
+      "match_id": 9086498992,
+      "avg_rank_tier": 75
+    },
+    {
+      "match_id": 9086499907,
+      "avg_rank_tier": 54
+    },
+    {
+      "match_id": 9087347156,
+      "avg_rank_tier": 63
+    },
+    {
+      "match_id": 9087347383,
+      "avg_rank_tier": 75
+    },
+    {
+      "match_id": 9087347385,
+      "avg_rank_tier": 52
+    },
+    {
+      "match_id": 9087347476,
+      "avg_rank_tier": 41
+    },
+    {
+      "match_id": 9087347490,
+      "avg_rank_tier": 44
+    },
+    {
+      "match_id": 9087347539,
+      "avg_rank_tier": 45
+    },
+    {
+      "match_id": 9087347726,
+      "avg_rank_tier": 34
+    },
+    {
+      "match_id": 9087347821,
+      "avg_rank_tier": 43
+    },
+    {
+      "match_id": 9087347854,
+      "avg_rank_tier": 61
+    },
+    {
+      "match_id": 9087347916,
+      "avg_rank_tier": 75
+    },
+    {
+      "match_id": 9087348088,
+      "avg_rank_tier": 62
+    },
+    {
+      "match_id": 9087348106,
+      "avg_rank_tier": 71
+    },
+    {
+      "match_id": 9087348558,
+      "avg_rank_tier": 63
+    },
+    {
+      "match_id": 9087348738,
+      "avg_rank_tier": 42
+    },
+    {
+      "match_id": 9087348942,
+      "avg_rank_tier": 54
+    },
+    {
+      "match_id": 9087348944,
+      "avg_rank_tier": 31
+    },
+    {
+      "match_id": 9087348982,
+      "avg_rank_tier": 75
+    },
+    {
+      "match_id": 9087349206,
+      "avg_rank_tier": 43
+    },
+    {
+      "match_id": 9087349289,
+      "avg_rank_tier": 25
+    },
+    {
+      "match_id": 9088198089,
+      "avg_rank_tier": 75
+    },
+    {
+      "match_id": 9088198375,
+      "avg_rank_tier": 75
+    },
+    {
+      "match_id": 9088198460,
+      "avg_rank_tier": 44
+    },
+    {
+      "match_id": 9088198683,
+      "avg_rank_tier": 61
+    },
+    {
+      "match_id": 9088198897,
+      "avg_rank_tier": 53
+    },
+    {
+      "match_id": 9088198939,
+      "avg_rank_tier": 33
+    },
+    {
+      "match_id": 9088198944,
+      "avg_rank_tier": 41
+    },
+    {
+      "match_id": 9088199074,
+      "avg_rank_tier": 34
+    },
+    {
+      "match_id": 9088199218,
+      "avg_rank_tier": 35
+    },
+    {
+      "match_id": 9088199241,
+      "avg_rank_tier": 25
+    },
+    {
+      "match_id": 9088199530,
+      "avg_rank_tier": 45
+    },
+    {
+      "match_id": 9088199562,
+      "avg_rank_tier": 62
+    },
+    {
+      "match_id": 9088199723,
+      "avg_rank_tier": 75
+    },
+    {
+      "match_id": 9088199728,
+      "avg_rank_tier": 75
+    },
+    {
+      "match_id": 9088199898,
+      "avg_rank_tier": 75
+    },
+    {
+      "match_id": 9088199990,
+      "avg_rank_tier": 45
+    },
+    {
+      "match_id": 9089047841,
+      "avg_rank_tier": 75
+    },
+    {
+      "match_id": 9089048109,
+      "avg_rank_tier": 75
+    },
+    {
+      "match_id": 9089048116,
+      "avg_rank_tier": 53
+    },
+    {
+      "match_id": 9089048451,
+      "avg_rank_tier": 52
+    },
+    {
+      "match_id": 9089049267,
+      "avg_rank_tier": 75
+    },
+    {
+      "match_id": 9089049493,
+      "avg_rank_tier": 52
+    },
+    {
+      "match_id": 9089049537,
+      "avg_rank_tier": 45
+    },
+    {
+      "match_id": 9089049576,
+      "avg_rank_tier": 43
+    },
+    {
+      "match_id": 9089049587,
+      "avg_rank_tier": 51
+    },
+    {
+      "match_id": 9089049822,
+      "avg_rank_tier": 75
+    },
+    {
+      "match_id": 9089049950,
+      "avg_rank_tier": 55
+    },
+    {
+      "match_id": 9089897108,
+      "avg_rank_tier": 75
+    },
+    {
+      "match_id": 9089897140,
+      "avg_rank_tier": 55
+    },
+    {
+      "match_id": 9089897664,
+      "avg_rank_tier": 54
+    },
+    {
+      "match_id": 9089898254,
+      "avg_rank_tier": 45
+    },
+    {
+      "match_id": 9089898310,
+      "avg_rank_tier": 61
+    },
+    {
+      "match_id": 9089898442,
+      "avg_rank_tier": 43
+    },
+    {
+      "match_id": 9089898805,
+      "avg_rank_tier": 75
+    },
+    {
+      "match_id": 9089899309,
+      "avg_rank_tier": 62
+    },
+    {
+      "match_id": 9089899565,
+      "avg_rank_tier": 42
+    },
+    {
+      "match_id": 9090748366,
+      "avg_rank_tier": 31
+    },
+    {
+      "match_id": 9090748482,
+      "avg_rank_tier": 75
+    },
+    {
+      "match_id": 9090748674,
+      "avg_rank_tier": 75
+    },
+    {
+      "match_id": 9090748955,
+      "avg_rank_tier": 64
+    },
+    {
+      "match_id": 9090749058,
+      "avg_rank_tier": 71
+    },
+    {
+      "match_id": 9090749107,
+      "avg_rank_tier": 54
+    },
+    {
+      "match_id": 9090749286,
+      "avg_rank_tier": 75
+    },
+    {
+      "match_id": 9090749668,
+      "avg_rank_tier": 55
+    },
+    {
+      "match_id": 9090749745,
+      "avg_rank_tier": 75
+    },
+    {
+      "match_id": 9090749793,
+      "avg_rank_tier": 52
+    },
+    {
+      "match_id": 9090749802,
+      "avg_rank_tier": 64
+    },
+    {
+      "match_id": 9091597195,
+      "avg_rank_tier": 74
+    },
+    {
+      "match_id": 9091597413,
+      "avg_rank_tier": 71
+    },
+    {
+      "match_id": 9091597678,
+      "avg_rank_tier": 54
+    },
+    {
+      "match_id": 9091598463,
+      "avg_rank_tier": 75
+    },
+    {
+      "match_id": 9091598845,
+      "avg_rank_tier": 34
+    },
+    {
+      "match_id": 9091598975,
+      "avg_rank_tier": 75
+    },
+    {
+      "match_id": 9091599186,
+      "avg_rank_tier": 61
+    },
+    {
+      "match_id": 9091599355,
+      "avg_rank_tier": 75
+    },
+    {
+      "match_id": 9091599807,
+      "avg_rank_tier": 65
+    },
+    {
+      "match_id": 9092446880,
+      "avg_rank_tier": 75
+    },
+    {
+      "match_id": 9092447123,
+      "avg_rank_tier": 75
+    },
+    {
+      "match_id": 9092447477,
+      "avg_rank_tier": 75
+    },
+    {
+      "match_id": 9092447994,
+      "avg_rank_tier": 75
+    },
+    {
+      "match_id": 9092449452,
+      "avg_rank_tier": 75
+    },
+    {
+      "match_id": 9093295618,
+      "avg_rank_tier": 74
+    },
+    {
+      "match_id": 9093296802,
+      "avg_rank_tier": 54
+    },
+    {
+      "match_id": 9093296860,
+      "avg_rank_tier": 34
+    },
+    {
+      "match_id": 9093296980,
+      "avg_rank_tier": 54
+    },
+    {
+      "match_id": 9093297019,
+      "avg_rank_tier": 52
+    },
+    {
+      "match_id": 9093297240,
+      "avg_rank_tier": 32
+    },
+    {
+      "match_id": 9093297478,
+      "avg_rank_tier": 71
+    },
+    {
+      "match_id": 9093297713,
+      "avg_rank_tier": 25
+    },
+    {
+      "match_id": 9093297718,
+      "avg_rank_tier": 44
+    },
+    {
+      "match_id": 9093297938,
+      "avg_rank_tier": 63
+    },
+    {
+      "match_id": 9093298543,
+      "avg_rank_tier": 51
+    },
+    {
+      "match_id": 9093298682,
+      "avg_rank_tier": 45
+    },
+    {
+      "match_id": 9093298902,
+      "avg_rank_tier": 63
+    },
+    {
+      "match_id": 9093298935,
+      "avg_rank_tier": 43
+    },
+    {
+      "match_id": 9093299222,
+      "avg_rank_tier": 33
+    },
+    {
+      "match_id": 9093299324,
+      "avg_rank_tier": 45
+    },
+    {
+      "match_id": 9093299713,
+      "avg_rank_tier": 52
+    },
+    {
+      "match_id": 9093299733,
+      "avg_rank_tier": 75
+    },
+    {
+      "match_id": 9093299931,
+      "avg_rank_tier": 63
+    },
+    {
+      "match_id": 9093299980,
+      "avg_rank_tier": 44
+    }
+  ],
+  "snapshot_file": "coach-ml-legacy-ranked-snapshots.json.gz",
+  "snapshot_sha256": "1e9935d55cf6bed9d6b6bc5ff48a50d679272ef2dfe4138d9076952471246a1f"
+}

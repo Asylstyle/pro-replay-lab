@@ -1,0 +1,25 @@
+{
+  "selected_recipe": "ridge_rich_1",
+  "protocol_sha256": "05d81696cde9707165588b7f0419bda7c0c728b803eb5f7cb3145c1055c30468",
+  "selection_sha256": "a54eccd22b1c2aa0610481ec9ee739419bfe9f1050756b68c16fe8a479053dbf",
+  "frozen_at_utc": "2026-11-17T17:44:28.642463+00:00",
+  "wall_seconds": 149.0302776999888,
+  "python": "3.14.3",
+  "scikit_learn": "1.9.1",
+  "cpu_threads": 1,
+  "release_gate": "Winner fixed by development CV; promote only if every target MAE is lower than legacy ridge on fresh ranked games, with at least 50 eligible games.",
+  "candidate_sha256": {
+    "rank_median": "290b1245f1e6fec4f0721d2e4d67f785fb92dd7a21fdcb9b3035a0c625464f9b",
+    "extrapolation_10": "4e5efb0fab9a71fa99e4474da537e8d4fff94f136190f2983f6052af078317f3",
+    "ridge_legacy": "674effcf93bb71be705202f8f0d3c0e10f26bc632d627400164f1219a52578af",
+    "ridge_base_100": "a78ff0ff99ae00be5e023a065b98d3a0c26231acf0a7dec581c8998fc83595d2",
+    "ridge_rich_1": "6db32ce3e1dc141b91290f0c10a7ee63f792f9f13bec9bad9c1d3c5a712d7e06",
+    "ridge_rich_10": "278230749d15501b78386db37f11cc711c11103197ae15cdaf745498c235c4c3",
+    "ridge_rich_100": "c14c4bcaa53af4fe5c92bff32660c96d560a8a9a5d4c2da3af73c5c7a20d43ac",
+    "random_forest": "398e8d10bcf8e6a805e264d42b6dc2d47b6193ce3e0f1df419ee7dd4364ca855",
+    "extra_trees": "4f115c8ea885a836f04a98cc872de2a9bd233247367f612a0cdc53ee511af7d8",
+    "extra_trees_base": "39ec724c1ef60bc8e71b3323dbc4e9884583a74e1b7b96ec88e153f23deab213",
+    "boosting_huber": "f69eb71f60f766c7d8f75b9a360c86dd8bac25d5e78705cdc50547b1ec4252f3",
+    "boosting_absolute": "57b97fc0794a7e2c2a095008ea73ca51203cbcdf0ebe7fc1c0ff53bd3598df52"
+  }
+}

@@ -1,0 +1,5029 @@
+{
+  "format": 1,
+  "protocol": {
+    "version": 1,
+    "target": "First recorded tracked item purchased after 10:00 and through 30:00",
+    "population": "one player; only matches with an observed target purchase",
+    "features": "hero, patch, LH/gold/XP at exactly 10:00; history variant adds purchases at time<=600",
+    "split": "last 20% by match start time is the legacy test; same timestamps stay together",
+    "validation": "expanding windows: first 50% -> next 25%, first 75% -> last 25% of development",
+    "selection": "highest pooled validation accuracy, then lowest log-loss, then recipe name",
+    "test_status": "previously reported benchmark, not a newly sealed holdout",
+    "seed": 41,
+    "threads": 1,
+    "unseen_label_probability_floor": 1e-12,
+    "confidence_threshold": 0.6,
+    "recipes": [
+      {
+        "name": "global_prior",
+        "kind": "prior",
+        "alpha": 1.0
+      },
+      {
+        "name": "hero_prior_1",
+        "kind": "hero_prior",
+        "alpha": 1.0
+      },
+      {
+        "name": "hero_prior_5",
+        "kind": "hero_prior",
+        "alpha": 5.0
+      },
+      {
+        "name": "legacy_softmax",
+        "kind": "softmax"
+      },
+      {
+        "name": "logistic_c01",
+        "kind": "logistic",
+        "C": 0.1
+      },
+      {
+        "name": "logistic_c1",
+        "kind": "logistic",
+        "C": 1.0
+      },
+      {
+        "name": "logistic_history_c1",
+        "kind": "logistic",
+        "C": 1.0,
+        "history": true
+      },
+      {
+        "name": "small_forest",
+        "kind": "forest",
+        "trees": 80,
+        "depth": 6,
+        "leaf": 3
+      },
+      {
+        "name": "legacy_hero_frequency",
+        "kind": "hero_frequency"
+      }
+    ]
+  },
+  "protocol_sha256": "2e49c13cd8981d36629bb20f5a01d872136e78b904f299460f3e23c0f1cc38ca",
+  "dataset_sha256": "ae79f1b03f230ab3db551a89fddd898b3673d6acac2b5ebbfb9362219da6e574",
+  "coverage": {
+    "input_rows": 100,
+    "eligible_matches": 100,
+    "excluded": {}
+  },
+  "selected_recipe": "legacy_hero_frequency",
+  "data_profile": {
+    "players": [
+      321580662
+    ],
+    "heroes": 28,
+    "patch_values": [
+      "60"
+    ],
+    "patch_versions": [
+      "7.41d",
+      "7.41e",
+      "7.41f"
+    ],
+    "train_labels": {
+      "mage_slayer": 10,
+      "manta": 20,
+      "echo_sabre": 2,
+      "bfury": 9,
+      "ultimate_scepter": 1,
+      "maelstrom": 10,
+      "radiance": 5,
+      "dragon_lance": 1,
+      "mjollnir": 1,
+      "aghanims_shard": 2,
+      "mask_of_madness": 5,
+      "desolator": 1,
+      "diffusal_blade": 7,
+      "travel_boots": 1,
+      "witch_blade": 3,
+      "power_treads": 1,
+      "sphere": 1
+    },
+    "test_labels": {
+      "mage_slayer": 2,
+      "manta": 1,
+      "dragon_lance": 1,
+      "maelstrom": 3,
+      "echo_sabre": 1,
+      "bfury": 3,
+      "witch_blade": 2,
+      "aghanims_shard": 4,
+      "radiance": 2,
+      "diffusal_blade": 1
+    }
+  },
+  "split": {
+    "train_match_ids": [
+      8890074597,
+      8892836635,
+      8892914077,
+      8897588873,
+      8897696869,
+      8897831774,
+      8899028080,
+      8899120700,
+      8943143428,
+      8943200897,
+      8944475884,
+      8944521792,
+      8944680063,
+      8944752572,
+      8944819470,
+      8946351114,
+      8946428867,
+      8946858055,
+      8947050343,
+      8948094346,
+      8948151326,
+      8948235815,
+      8955197224,
+      8955247801,
+      8957180942,
+      8957272720,
+      8957364447,
+      8958478716,
+      8958538533,
+      8959222564,
+      8960365292,
+      8960411225,
+      8960577698,
+      8960655084,
+      8960762254,
+      8960882635,
+      8960991322,
+      9021397355,
+      9021470896,
+      9021556632,
+      9022904766,
+      9023007039,
+      9027799260,
+      9027913516,
+      9028005974,
+      9036107952,
+      9036234584,
+      9036328833,
+      9037858327,
+      9037980041,
+      9039619076,
+      9039730583,
+      9039847755,
+      9040114168,
+      9040268873,
+      9040460429,
+      9040578015,
+      9045134920,
+      9045222694,
+      9046398999,
+      9046513502,
+      9046648464,
+      9046718524,
+      9046816073,
+      9047858548,
+      9047975789,
+      9048097533,
+      9056353535,
+      9056429802,
+      9059726836,
+      9059855376,
+      9061551205,
+      9061650142,
+      9063131170,
+      9063230342,
+      9063353533,
+      9065986613,
+      9066084051,
+      9066180509,
+      9066926114
+    ],
+    "legacy_test_match_ids": [
+      9067019772,
+      9068183471,
+      9068257334,
+      9068332041,
+      9068795274,
+      9068910292,
+      9069021061,
+      9070392472,
+      9070527945,
+      9071596005,
+      9071689576,
+      9071885340,
+      9087374444,
+      9087439951,
+      9088831675,
+      9088923051,
+      9092063120,
+      9092124714,
+      9093175023,
+      9093259247
+    ],
+    "folds": [
+      {
+        "train_match_ids": [
+          8890074597,
+          8892836635,
+          8892914077,
+          8897588873,
+          8897696869,
+          8897831774,
+          8899028080,
+          8899120700,
+          8943143428,
+          8943200897,
+          8944475884,
+          8944521792,
+          8944680063,
+          8944752572,
+          8944819470,
+          8946351114,
+          8946428867,
+          8946858055,
+          8947050343,
+          8948094346,
+          8948151326,
+          8948235815,
+          8955197224,
+          8955247801,
+          8957180942,
+          8957272720,
+          8957364447,
+          8958478716,
+          8958538533,
+          8959222564,
+          8960365292,
+          8960411225,
+          8960577698,
+          8960655084,
+          8960762254,
+          8960882635,
+          8960991322,
+          9021397355,
+          9021470896,
+          9021556632
+        ],
+        "validation_match_ids": [
+          9022904766,
+          9023007039,
+          9027799260,
+          9027913516,
+          9028005974,
+          9036107952,
+          9036234584,
+          9036328833,
+          9037858327,
+          9037980041,
+          9039619076,
+          9039730583,
+          9039847755,
+          9040114168,
+          9040268873,
+          9040460429,
+          9040578015,
+          9045134920,
+          9045222694,
+          9046398999
+        ]
+      },
+      {
+        "train_match_ids": [
+          8890074597,
+          8892836635,
+          8892914077,
+          8897588873,
+          8897696869,
+          8897831774,
+          8899028080,
+          8899120700,
+          8943143428,
+          8943200897,
+          8944475884,
+          8944521792,
+          8944680063,
+          8944752572,
+          8944819470,
+          8946351114,
+          8946428867,
+          8946858055,
+          8947050343,
+          8948094346,
+          8948151326,
+          8948235815,
+          8955197224,
+          8955247801,
+          8957180942,
+          8957272720,
+          8957364447,
+          8958478716,
+          8958538533,
+          8959222564,
+          8960365292,
+          8960411225,
+          8960577698,
+          8960655084,
+          8960762254,
+          8960882635,
+          8960991322,
+          9021397355,
+          9021470896,
+          9021556632,
+          9022904766,
+          9023007039,
+          9027799260,
+          9027913516,
+          9028005974,
+          9036107952,
+          9036234584,
+          9036328833,
+          9037858327,
+          9037980041,
+          9039619076,
+          9039730583,
+          9039847755,
+          9040114168,
+          9040268873,
+          9040460429,
+          9040578015,
+          9045134920,
+          9045222694,
+          9046398999
+        ],
+        "validation_match_ids": [
+          9046513502,
+          9046648464,
+          9046718524,
+          9046816073,
+          9047858548,
+          9047975789,
+          9048097533,
+          9056353535,
+          9056429802,
+          9059726836,
+          9059855376,
+          9061551205,
+          9061650142,
+          9063131170,
+          9063230342,
+          9063353533,
+          9065986613,
+          9066084051,
+          9066180509,
+          9066926114
+        ]
+      }
+    ]
+  },
+  "comparison": [
+    {
+      "recipe": {
+        "name": "global_prior",
+        "kind": "prior",
+        "alpha": 1.0
+      },
+      "validation": {
+        "matches": 40,
+        "correct": 6,
+        "accuracy": 0.15,
+        "accuracy_wilson_95": [
+          0.07061187717320358,
+          0.2907232436648971
+        ],
+        "macro_f1": 0.021739130434782608,
+        "top3_accuracy": 0.4,
+        "log_loss": 6.812383728154724,
+        "brier": 0.9446007966037797,
+        "ece_5_bins": 0.09949392712550606,
+        "unseen_labels": 7,
+        "unseen_hero_matches": 12,
+        "unseen_hero_errors": 11,
+        "confidence_bins": [
+          {
+            "lower": 0.2,
+            "upper": 0.4,
+            "count": 40,
+            "confidence": 0.24949392712550605,
+            "accuracy": 0.15
+          }
+        ],
+        "per_item": [
+          {
+            "item": "aghanims_shard",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "bfury",
+            "support": 6,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "diffusal_blade",
+            "support": 7,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "maelstrom",
+            "support": 4,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "mage_slayer",
+            "support": 6,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "manta",
+            "support": 6,
+            "predicted": 40,
+            "f1": 0.2608695652173913
+          },
+          {
+            "item": "mask_of_madness",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "power_treads",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "radiance",
+            "support": 3,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "sphere",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "travel_boots",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "witch_blade",
+            "support": 3,
+            "predicted": 0,
+            "f1": 0.0
+          }
+        ],
+        "confidence_threshold": 0.6,
+        "confident_coverage": 0.0,
+        "confident_accuracy": null
+      },
+      "folds": [
+        {
+          "matches": 20,
+          "correct": 1,
+          "accuracy": 0.05,
+          "accuracy_wilson_95": [
+            0.008881448800795402,
+            0.23613119344674205
+          ],
+          "macro_f1": 0.008658008658008658,
+          "top3_accuracy": 0.4,
+          "log_loss": 9.911172687803184,
+          "brier": 0.9859467455621301,
+          "ece_5_bins": 0.23846153846153845,
+          "unseen_labels": 6,
+          "unseen_hero_matches": 8,
+          "unseen_hero_errors": 8,
+          "confidence_bins": [
+            {
+              "lower": 0.2,
+              "upper": 0.4,
+              "count": 20,
+              "confidence": 0.28846153846153844,
+              "accuracy": 0.05
+            }
+          ],
+          "per_item": [
+            {
+              "item": "aghanims_shard",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "bfury",
+              "support": 3,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "diffusal_blade",
+              "support": 3,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "maelstrom",
+              "support": 4,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "mage_slayer",
+              "support": 3,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "manta",
+              "support": 1,
+              "predicted": 20,
+              "f1": 0.09523809523809523
+            },
+            {
+              "item": "mask_of_madness",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "power_treads",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "radiance",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "travel_boots",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "witch_blade",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            }
+          ],
+          "confidence_threshold": 0.6,
+          "confident_coverage": 0.0,
+          "confident_accuracy": null
+        },
+        {
+          "matches": 20,
+          "correct": 5,
+          "accuracy": 0.25,
+          "accuracy_wilson_95": [
+            0.11186170140766569,
+            0.468700877618744
+          ],
+          "macro_f1": 0.05714285714285715,
+          "top3_accuracy": 0.4,
+          "log_loss": 3.7135947685062627,
+          "brier": 0.9032548476454293,
+          "ece_5_bins": 0.03947368421052633,
+          "unseen_labels": 1,
+          "unseen_hero_matches": 4,
+          "unseen_hero_errors": 3,
+          "confidence_bins": [
+            {
+              "lower": 0.2,
+              "upper": 0.4,
+              "count": 20,
+              "confidence": 0.21052631578947367,
+              "accuracy": 0.25
+            }
+          ],
+          "per_item": [
+            {
+              "item": "bfury",
+              "support": 3,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "diffusal_blade",
+              "support": 4,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "mage_slayer",
+              "support": 3,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "manta",
+              "support": 5,
+              "predicted": 20,
+              "f1": 0.4
+            },
+            {
+              "item": "radiance",
+              "support": 2,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "sphere",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "witch_blade",
+              "support": 2,
+              "predicted": 0,
+              "f1": 0.0
+            }
+          ],
+          "confidence_threshold": 0.6,
+          "confident_coverage": 0.0,
+          "confident_accuracy": null
+        }
+      ],
+      "legacy_test": {
+        "matches": 20,
+        "correct": 1,
+        "accuracy": 0.05,
+        "accuracy_wilson_95": [
+          0.008881448800795402,
+          0.23613119344674205
+        ],
+        "macro_f1": 0.009523809523809523,
+        "top3_accuracy": 0.3,
+        "log_loss": 2.7465353831547015,
+        "brier": 0.9485917738335636,
+        "ece_5_bins": 0.16649484536082476,
+        "unseen_labels": 0,
+        "unseen_hero_matches": 5,
+        "unseen_hero_errors": 5,
+        "confidence_bins": [
+          {
+            "lower": 0.2,
+            "upper": 0.4,
+            "count": 20,
+            "confidence": 0.21649484536082478,
+            "accuracy": 0.05
+          }
+        ],
+        "per_item": [
+          {
+            "item": "aghanims_shard",
+            "support": 4,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "bfury",
+            "support": 3,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "diffusal_blade",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "dragon_lance",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "echo_sabre",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "maelstrom",
+            "support": 3,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "mage_slayer",
+            "support": 2,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "manta",
+            "support": 1,
+            "predicted": 20,
+            "f1": 0.09523809523809523
+          },
+          {
+            "item": "radiance",
+            "support": 2,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "witch_blade",
+            "support": 2,
+            "predicted": 0,
+            "f1": 0.0
+          }
+        ],
+        "confidence_threshold": 0.6,
+        "confident_coverage": 0.0,
+        "confident_accuracy": null
+      }
+    },
+    {
+      "recipe": {
+        "name": "hero_prior_1",
+        "kind": "hero_prior",
+        "alpha": 1.0
+      },
+      "validation": {
+        "matches": 40,
+        "correct": 24,
+        "accuracy": 0.6,
+        "accuracy_wilson_95": [
+          0.44595893660346186,
+          0.7365167431570808
+        ],
+        "macro_f1": 0.4318831168831169,
+        "top3_accuracy": 0.75,
+        "log_loss": 5.55131452240147,
+        "brier": 0.49902468582453113,
+        "ece_5_bins": 0.1913876036244458,
+        "unseen_labels": 7,
+        "unseen_hero_matches": 12,
+        "unseen_hero_errors": 11,
+        "confidence_bins": [
+          {
+            "lower": 0.2,
+            "upper": 0.4,
+            "count": 14,
+            "confidence": 0.27385772122614227,
+            "accuracy": 0.07142857142857142
+          },
+          {
+            "lower": 0.4,
+            "upper": 0.6,
+            "count": 4,
+            "confidence": 0.5408653846153846,
+            "accuracy": 1.0
+          },
+          {
+            "lower": 0.6,
+            "upper": 0.8,
+            "count": 15,
+            "confidence": 0.6767633828160143,
+            "accuracy": 0.8
+          },
+          {
+            "lower": 0.8,
+            "upper": 1.0,
+            "count": 7,
+            "confidence": 0.8376559530694869,
+            "accuracy": 1.0
+          }
+        ],
+        "per_item": [
+          {
+            "item": "aghanims_shard",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "bfury",
+            "support": 6,
+            "predicted": 6,
+            "f1": 1.0
+          },
+          {
+            "item": "diffusal_blade",
+            "support": 7,
+            "predicted": 4,
+            "f1": 0.5454545454545454
+          },
+          {
+            "item": "maelstrom",
+            "support": 4,
+            "predicted": 3,
+            "f1": 0.8571428571428571
+          },
+          {
+            "item": "mage_slayer",
+            "support": 6,
+            "predicted": 4,
+            "f1": 0.8
+          },
+          {
+            "item": "manta",
+            "support": 6,
+            "predicted": 19,
+            "f1": 0.48
+          },
+          {
+            "item": "mask_of_madness",
+            "support": 1,
+            "predicted": 1,
+            "f1": 1.0
+          },
+          {
+            "item": "power_treads",
+            "support": 1,
+            "predicted": 2,
+            "f1": 0.0
+          },
+          {
+            "item": "radiance",
+            "support": 3,
+            "predicted": 1,
+            "f1": 0.5
+          },
+          {
+            "item": "sphere",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "travel_boots",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "witch_blade",
+            "support": 3,
+            "predicted": 0,
+            "f1": 0.0
+          }
+        ],
+        "confidence_threshold": 0.6,
+        "confident_coverage": 0.55,
+        "confident_accuracy": 0.8636363636363636
+      },
+      "folds": [
+        {
+          "matches": 20,
+          "correct": 11,
+          "accuracy": 0.55,
+          "accuracy_wilson_95": [
+            0.34208534245034233,
+            0.7418021417443759
+          ],
+          "macro_f1": 0.4399055489964581,
+          "top3_accuracy": 0.7,
+          "log_loss": 8.806568883041463,
+          "brier": 0.5632066896778436,
+          "ece_5_bins": 0.2534935897435897,
+          "unseen_labels": 6,
+          "unseen_hero_matches": 8,
+          "unseen_hero_errors": 8,
+          "confidence_bins": [
+            {
+              "lower": 0.2,
+              "upper": 0.4,
+              "count": 8,
+              "confidence": 0.28846153846153844,
+              "accuracy": 0.0
+            },
+            {
+              "lower": 0.4,
+              "upper": 0.6,
+              "count": 4,
+              "confidence": 0.5408653846153846,
+              "accuracy": 1.0
+            },
+            {
+              "lower": 0.6,
+              "upper": 0.8,
+              "count": 3,
+              "confidence": 0.6816239316239315,
+              "accuracy": 0.6666666666666666
+            },
+            {
+              "lower": 0.8,
+              "upper": 1.0,
+              "count": 5,
+              "confidence": 0.8238461538461539,
+              "accuracy": 1.0
+            }
+          ],
+          "per_item": [
+            {
+              "item": "aghanims_shard",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "bfury",
+              "support": 3,
+              "predicted": 3,
+              "f1": 1.0
+            },
+            {
+              "item": "diffusal_blade",
+              "support": 3,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "maelstrom",
+              "support": 4,
+              "predicted": 3,
+              "f1": 0.8571428571428571
+            },
+            {
+              "item": "mage_slayer",
+              "support": 3,
+              "predicted": 2,
+              "f1": 0.8
+            },
+            {
+              "item": "manta",
+              "support": 1,
+              "predicted": 10,
+              "f1": 0.18181818181818182
+            },
+            {
+              "item": "mask_of_madness",
+              "support": 1,
+              "predicted": 1,
+              "f1": 1.0
+            },
+            {
+              "item": "power_treads",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "radiance",
+              "support": 1,
+              "predicted": 1,
+              "f1": 1.0
+            },
+            {
+              "item": "travel_boots",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "witch_blade",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            }
+          ],
+          "confidence_threshold": 0.6,
+          "confident_coverage": 0.4,
+          "confident_accuracy": 0.875
+        },
+        {
+          "matches": 20,
+          "correct": 13,
+          "accuracy": 0.65,
+          "accuracy_wilson_95": [
+            0.43285427668523624,
+            0.818808175898918
+          ],
+          "macro_f1": 0.4080357142857143,
+          "top3_accuracy": 0.8,
+          "log_loss": 2.2960601617614773,
+          "brier": 0.4348426819712188,
+          "ece_5_bins": 0.13376879699248123,
+          "unseen_labels": 1,
+          "unseen_hero_matches": 4,
+          "unseen_hero_errors": 3,
+          "confidence_bins": [
+            {
+              "lower": 0.2,
+              "upper": 0.4,
+              "count": 6,
+              "confidence": 0.25438596491228066,
+              "accuracy": 0.16666666666666666
+            },
+            {
+              "lower": 0.6,
+              "upper": 0.8,
+              "count": 12,
+              "confidence": 0.675548245614035,
+              "accuracy": 0.8333333333333334
+            },
+            {
+              "lower": 0.8,
+              "upper": 1.0,
+              "count": 2,
+              "confidence": 0.8721804511278196,
+              "accuracy": 1.0
+            }
+          ],
+          "per_item": [
+            {
+              "item": "bfury",
+              "support": 3,
+              "predicted": 3,
+              "f1": 1.0
+            },
+            {
+              "item": "diffusal_blade",
+              "support": 4,
+              "predicted": 4,
+              "f1": 0.75
+            },
+            {
+              "item": "mage_slayer",
+              "support": 3,
+              "predicted": 2,
+              "f1": 0.8
+            },
+            {
+              "item": "manta",
+              "support": 5,
+              "predicted": 9,
+              "f1": 0.7142857142857143
+            },
+            {
+              "item": "power_treads",
+              "support": 0,
+              "predicted": 2,
+              "f1": 0.0
+            },
+            {
+              "item": "radiance",
+              "support": 2,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "sphere",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "witch_blade",
+              "support": 2,
+              "predicted": 0,
+              "f1": 0.0
+            }
+          ],
+          "confidence_threshold": 0.6,
+          "confident_coverage": 0.7,
+          "confident_accuracy": 0.8571428571428571
+        }
+      ],
+      "legacy_test": {
+        "matches": 20,
+        "correct": 12,
+        "accuracy": 0.6,
+        "accuracy_wilson_95": [
+          0.3865815007622531,
+          0.781193467627183
+        ],
+        "macro_f1": 0.5171717171717172,
+        "top3_accuracy": 0.65,
+        "log_loss": 1.654525644945501,
+        "brier": 0.516430727278453,
+        "ece_5_bins": 0.1311340206185567,
+        "unseen_labels": 0,
+        "unseen_hero_matches": 5,
+        "unseen_hero_errors": 5,
+        "confidence_bins": [
+          {
+            "lower": 0.2,
+            "upper": 0.4,
+            "count": 5,
+            "confidence": 0.21649484536082478,
+            "accuracy": 0.0
+          },
+          {
+            "lower": 0.4,
+            "upper": 0.6,
+            "count": 1,
+            "confidence": 0.5567010309278351,
+            "accuracy": 1.0
+          },
+          {
+            "lower": 0.6,
+            "upper": 0.8,
+            "count": 8,
+            "confidence": 0.6617769186712485,
+            "accuracy": 0.625
+          },
+          {
+            "lower": 0.8,
+            "upper": 1.0,
+            "count": 6,
+            "confidence": 0.8662180221458572,
+            "accuracy": 1.0
+          }
+        ],
+        "per_item": [
+          {
+            "item": "aghanims_shard",
+            "support": 4,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "bfury",
+            "support": 3,
+            "predicted": 3,
+            "f1": 1.0
+          },
+          {
+            "item": "diffusal_blade",
+            "support": 1,
+            "predicted": 1,
+            "f1": 1.0
+          },
+          {
+            "item": "dragon_lance",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "echo_sabre",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "maelstrom",
+            "support": 3,
+            "predicted": 2,
+            "f1": 0.8
+          },
+          {
+            "item": "mage_slayer",
+            "support": 2,
+            "predicted": 2,
+            "f1": 1.0
+          },
+          {
+            "item": "manta",
+            "support": 1,
+            "predicted": 8,
+            "f1": 0.2222222222222222
+          },
+          {
+            "item": "mask_of_madness",
+            "support": 0,
+            "predicted": 1,
+            "f1": 0.0
+          },
+          {
+            "item": "radiance",
+            "support": 2,
+            "predicted": 1,
+            "f1": 0.6666666666666666
+          },
+          {
+            "item": "witch_blade",
+            "support": 2,
+            "predicted": 2,
+            "f1": 1.0
+          }
+        ],
+        "confidence_threshold": 0.6,
+        "confident_coverage": 0.7,
+        "confident_accuracy": 0.7857142857142857
+      }
+    },
+    {
+      "recipe": {
+        "name": "hero_prior_5",
+        "kind": "hero_prior",
+        "alpha": 5.0
+      },
+      "validation": {
+        "matches": 40,
+        "correct": 21,
+        "accuracy": 0.525,
+        "accuracy_wilson_95": [
+          0.3749736210669248,
+          0.670645298873211
+        ],
+        "macro_f1": 0.3998196248196248,
+        "top3_accuracy": 0.75,
+        "log_loss": 5.937297356790646,
+        "brier": 0.6666923972757072,
+        "ece_5_bins": 0.188198156010656,
+        "unseen_labels": 7,
+        "unseen_hero_matches": 12,
+        "unseen_hero_errors": 11,
+        "confidence_bins": [
+          {
+            "lower": 0.0,
+            "upper": 0.2,
+            "count": 2,
+            "confidence": 0.16165413533834586,
+            "accuracy": 0.0
+          },
+          {
+            "lower": 0.2,
+            "upper": 0.4,
+            "count": 24,
+            "confidence": 0.2887781687123792,
+            "accuracy": 0.375
+          },
+          {
+            "lower": 0.4,
+            "upper": 0.6,
+            "count": 14,
+            "confidence": 0.49033614151095356,
+            "accuracy": 0.8571428571428571
+          }
+        ],
+        "per_item": [
+          {
+            "item": "aghanims_shard",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "bfury",
+            "support": 6,
+            "predicted": 3,
+            "f1": 0.6666666666666666
+          },
+          {
+            "item": "diffusal_blade",
+            "support": 7,
+            "predicted": 4,
+            "f1": 0.5454545454545454
+          },
+          {
+            "item": "maelstrom",
+            "support": 4,
+            "predicted": 3,
+            "f1": 0.8571428571428571
+          },
+          {
+            "item": "mage_slayer",
+            "support": 6,
+            "predicted": 4,
+            "f1": 0.8
+          },
+          {
+            "item": "manta",
+            "support": 6,
+            "predicted": 22,
+            "f1": 0.42857142857142855
+          },
+          {
+            "item": "mask_of_madness",
+            "support": 1,
+            "predicted": 1,
+            "f1": 1.0
+          },
+          {
+            "item": "power_treads",
+            "support": 1,
+            "predicted": 2,
+            "f1": 0.0
+          },
+          {
+            "item": "radiance",
+            "support": 3,
+            "predicted": 1,
+            "f1": 0.5
+          },
+          {
+            "item": "sphere",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "travel_boots",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "witch_blade",
+            "support": 3,
+            "predicted": 0,
+            "f1": 0.0
+          }
+        ],
+        "confidence_threshold": 0.6,
+        "confident_coverage": 0.0,
+        "confident_accuracy": null
+      },
+      "folds": [
+        {
+          "matches": 20,
+          "correct": 8,
+          "accuracy": 0.4,
+          "accuracy_wilson_95": [
+            0.21880653237281705,
+            0.6134184992377469
+          ],
+          "macro_f1": 0.34545454545454546,
+          "top3_accuracy": 0.7,
+          "log_loss": 9.171804809421124,
+          "brier": 0.7379518157361564,
+          "ece_5_bins": 0.20489316239316233,
+          "unseen_labels": 6,
+          "unseen_hero_matches": 8,
+          "unseen_hero_errors": 8,
+          "confidence_bins": [
+            {
+              "lower": 0.2,
+              "upper": 0.4,
+              "count": 13,
+              "confidence": 0.277120315581854,
+              "accuracy": 0.15384615384615385
+            },
+            {
+              "lower": 0.4,
+              "upper": 0.6,
+              "count": 7,
+              "confidence": 0.5006715506715507,
+              "accuracy": 0.8571428571428571
+            }
+          ],
+          "per_item": [
+            {
+              "item": "aghanims_shard",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "bfury",
+              "support": 3,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "diffusal_blade",
+              "support": 3,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "maelstrom",
+              "support": 4,
+              "predicted": 3,
+              "f1": 0.8571428571428571
+            },
+            {
+              "item": "mage_slayer",
+              "support": 3,
+              "predicted": 2,
+              "f1": 0.8
+            },
+            {
+              "item": "manta",
+              "support": 1,
+              "predicted": 13,
+              "f1": 0.14285714285714285
+            },
+            {
+              "item": "mask_of_madness",
+              "support": 1,
+              "predicted": 1,
+              "f1": 1.0
+            },
+            {
+              "item": "power_treads",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "radiance",
+              "support": 1,
+              "predicted": 1,
+              "f1": 1.0
+            },
+            {
+              "item": "travel_boots",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "witch_blade",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            }
+          ],
+          "confidence_threshold": 0.6,
+          "confident_coverage": 0.0,
+          "confident_accuracy": null
+        },
+        {
+          "matches": 20,
+          "correct": 13,
+          "accuracy": 0.65,
+          "accuracy_wilson_95": [
+            0.43285427668523624,
+            0.818808175898918
+          ],
+          "macro_f1": 0.4080357142857143,
+          "top3_accuracy": 0.8,
+          "log_loss": 2.702789904160168,
+          "brier": 0.595432978815258,
+          "ece_5_bins": 0.33175955988455985,
+          "unseen_labels": 1,
+          "unseen_hero_matches": 4,
+          "unseen_hero_errors": 3,
+          "confidence_bins": [
+            {
+              "lower": 0.0,
+              "upper": 0.2,
+              "count": 2,
+              "confidence": 0.16165413533834586,
+              "accuracy": 0.0
+            },
+            {
+              "lower": 0.2,
+              "upper": 0.4,
+              "count": 11,
+              "confidence": 0.3025556315029999,
+              "accuracy": 0.6363636363636364
+            },
+            {
+              "lower": 0.4,
+              "upper": 0.6,
+              "count": 7,
+              "confidence": 0.4800007323503564,
+              "accuracy": 0.8571428571428571
+            }
+          ],
+          "per_item": [
+            {
+              "item": "bfury",
+              "support": 3,
+              "predicted": 3,
+              "f1": 1.0
+            },
+            {
+              "item": "diffusal_blade",
+              "support": 4,
+              "predicted": 4,
+              "f1": 0.75
+            },
+            {
+              "item": "mage_slayer",
+              "support": 3,
+              "predicted": 2,
+              "f1": 0.8
+            },
+            {
+              "item": "manta",
+              "support": 5,
+              "predicted": 9,
+              "f1": 0.7142857142857143
+            },
+            {
+              "item": "power_treads",
+              "support": 0,
+              "predicted": 2,
+              "f1": 0.0
+            },
+            {
+              "item": "radiance",
+              "support": 2,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "sphere",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "witch_blade",
+              "support": 2,
+              "predicted": 0,
+              "f1": 0.0
+            }
+          ],
+          "confidence_threshold": 0.6,
+          "confident_coverage": 0.0,
+          "confident_accuracy": null
+        }
+      ],
+      "legacy_test": {
+        "matches": 20,
+        "correct": 12,
+        "accuracy": 0.6,
+        "accuracy_wilson_95": [
+          0.3865815007622531,
+          0.781193467627183
+        ],
+        "macro_f1": 0.5171717171717172,
+        "top3_accuracy": 0.65,
+        "log_loss": 1.8265606068239908,
+        "brier": 0.6122468188069888,
+        "ece_5_bins": 0.1994355229535642,
+        "unseen_labels": 0,
+        "unseen_hero_matches": 5,
+        "unseen_hero_errors": 5,
+        "confidence_bins": [
+          {
+            "lower": 0.2,
+            "upper": 0.4,
+            "count": 11,
+            "confidence": 0.2784546495886702,
+            "accuracy": 0.36363636363636365
+          },
+          {
+            "lower": 0.4,
+            "upper": 0.6,
+            "count": 6,
+            "confidence": 0.49995043616177637,
+            "accuracy": 0.8333333333333334
+          },
+          {
+            "lower": 0.6,
+            "upper": 0.8,
+            "count": 3,
+            "confidence": 0.6495285928275619,
+            "accuracy": 1.0
+          }
+        ],
+        "per_item": [
+          {
+            "item": "aghanims_shard",
+            "support": 4,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "bfury",
+            "support": 3,
+            "predicted": 3,
+            "f1": 1.0
+          },
+          {
+            "item": "diffusal_blade",
+            "support": 1,
+            "predicted": 1,
+            "f1": 1.0
+          },
+          {
+            "item": "dragon_lance",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "echo_sabre",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "maelstrom",
+            "support": 3,
+            "predicted": 2,
+            "f1": 0.8
+          },
+          {
+            "item": "mage_slayer",
+            "support": 2,
+            "predicted": 2,
+            "f1": 1.0
+          },
+          {
+            "item": "manta",
+            "support": 1,
+            "predicted": 8,
+            "f1": 0.2222222222222222
+          },
+          {
+            "item": "mask_of_madness",
+            "support": 0,
+            "predicted": 1,
+            "f1": 0.0
+          },
+          {
+            "item": "radiance",
+            "support": 2,
+            "predicted": 1,
+            "f1": 0.6666666666666666
+          },
+          {
+            "item": "witch_blade",
+            "support": 2,
+            "predicted": 2,
+            "f1": 1.0
+          }
+        ],
+        "confidence_threshold": 0.6,
+        "confident_coverage": 0.15,
+        "confident_accuracy": 1.0
+      }
+    },
+    {
+      "recipe": {
+        "name": "legacy_softmax",
+        "kind": "softmax"
+      },
+      "validation": {
+        "matches": 40,
+        "correct": 16,
+        "accuracy": 0.4,
+        "accuracy_wilson_95": [
+          0.2634832568429192,
+          0.5540410633965381
+        ],
+        "macro_f1": 0.26289779515585965,
+        "top3_accuracy": 0.625,
+        "log_loss": 6.137951718090923,
+        "brier": 0.7738728050149943,
+        "ece_5_bins": 0.10860196583168331,
+        "unseen_labels": 7,
+        "unseen_hero_matches": 12,
+        "unseen_hero_errors": 12,
+        "confidence_bins": [
+          {
+            "lower": 0.2,
+            "upper": 0.4,
+            "count": 21,
+            "confidence": 0.290333418350665,
+            "accuracy": 0.3333333333333333
+          },
+          {
+            "lower": 0.4,
+            "upper": 0.6,
+            "count": 10,
+            "confidence": 0.48854529658639717,
+            "accuracy": 0.4
+          },
+          {
+            "lower": 0.6,
+            "upper": 0.8,
+            "count": 6,
+            "confidence": 0.6659177132599856,
+            "accuracy": 0.3333333333333333
+          },
+          {
+            "lower": 0.8,
+            "upper": 1.0,
+            "count": 3,
+            "confidence": 0.8132929422641958,
+            "accuracy": 1.0
+          }
+        ],
+        "per_item": [
+          {
+            "item": "aghanims_shard",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "bfury",
+            "support": 6,
+            "predicted": 25,
+            "f1": 0.3870967741935484
+          },
+          {
+            "item": "diffusal_blade",
+            "support": 7,
+            "predicted": 4,
+            "f1": 0.5454545454545454
+          },
+          {
+            "item": "maelstrom",
+            "support": 4,
+            "predicted": 2,
+            "f1": 0.6666666666666666
+          },
+          {
+            "item": "mage_slayer",
+            "support": 6,
+            "predicted": 3,
+            "f1": 0.4444444444444444
+          },
+          {
+            "item": "manta",
+            "support": 6,
+            "predicted": 3,
+            "f1": 0.4444444444444444
+          },
+          {
+            "item": "mask_of_madness",
+            "support": 1,
+            "predicted": 2,
+            "f1": 0.6666666666666666
+          },
+          {
+            "item": "power_treads",
+            "support": 1,
+            "predicted": 1,
+            "f1": 0.0
+          },
+          {
+            "item": "radiance",
+            "support": 3,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "sphere",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "travel_boots",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "witch_blade",
+            "support": 3,
+            "predicted": 0,
+            "f1": 0.0
+          }
+        ],
+        "confidence_threshold": 0.6,
+        "confident_coverage": 0.225,
+        "confident_accuracy": 0.5555555555555556
+      },
+      "folds": [
+        {
+          "matches": 20,
+          "correct": 6,
+          "accuracy": 0.3,
+          "accuracy_wilson_95": [
+            0.1454772448676043,
+            0.5189728183535235
+          ],
+          "macro_f1": 0.17878787878787877,
+          "top3_accuracy": 0.6,
+          "log_loss": 9.410512977926004,
+          "brier": 0.8940802615961518,
+          "ece_5_bins": 0.21608178262902467,
+          "unseen_labels": 6,
+          "unseen_hero_matches": 8,
+          "unseen_hero_errors": 8,
+          "confidence_bins": [
+            {
+              "lower": 0.2,
+              "upper": 0.4,
+              "count": 6,
+              "confidence": 0.3359508546884493,
+              "accuracy": 0.3333333333333333
+            },
+            {
+              "lower": 0.4,
+              "upper": 0.6,
+              "count": 8,
+              "confidence": 0.47041841209220925,
+              "accuracy": 0.25
+            },
+            {
+              "lower": 0.6,
+              "upper": 0.8,
+              "count": 5,
+              "confidence": 0.6709934444327649,
+              "accuracy": 0.2
+            },
+            {
+              "lower": 0.8,
+              "upper": 1.0,
+              "count": 1,
+              "confidence": 0.8123839944517011,
+              "accuracy": 1.0
+            }
+          ],
+          "per_item": [
+            {
+              "item": "aghanims_shard",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "bfury",
+              "support": 3,
+              "predicted": 17,
+              "f1": 0.3
+            },
+            {
+              "item": "diffusal_blade",
+              "support": 3,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "maelstrom",
+              "support": 4,
+              "predicted": 2,
+              "f1": 0.6666666666666666
+            },
+            {
+              "item": "mage_slayer",
+              "support": 3,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "manta",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "mask_of_madness",
+              "support": 1,
+              "predicted": 1,
+              "f1": 1.0
+            },
+            {
+              "item": "power_treads",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "radiance",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "travel_boots",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "witch_blade",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            }
+          ],
+          "confidence_threshold": 0.6,
+          "confident_coverage": 0.3,
+          "confident_accuracy": 0.3333333333333333
+        },
+        {
+          "matches": 20,
+          "correct": 10,
+          "accuracy": 0.5,
+          "accuracy_wilson_95": [
+            0.2992980081982123,
+            0.7007019918017877
+          ],
+          "macro_f1": 0.2735690235690236,
+          "top3_accuracy": 0.65,
+          "log_loss": 2.8653904582558427,
+          "brier": 0.6536653484338368,
+          "ece_5_bins": 0.1264281891951728,
+          "unseen_labels": 1,
+          "unseen_hero_matches": 4,
+          "unseen_hero_errors": 4,
+          "confidence_bins": [
+            {
+              "lower": 0.2,
+              "upper": 0.4,
+              "count": 15,
+              "confidence": 0.2720864438155513,
+              "accuracy": 0.3333333333333333
+            },
+            {
+              "lower": 0.4,
+              "upper": 0.6,
+              "count": 2,
+              "confidence": 0.5610528345631489,
+              "accuracy": 1.0
+            },
+            {
+              "lower": 0.6,
+              "upper": 0.8,
+              "count": 1,
+              "confidence": 0.6405390573960896,
+              "accuracy": 1.0
+            },
+            {
+              "lower": 0.8,
+              "upper": 1.0,
+              "count": 2,
+              "confidence": 0.8137474161704432,
+              "accuracy": 1.0
+            }
+          ],
+          "per_item": [
+            {
+              "item": "bfury",
+              "support": 3,
+              "predicted": 8,
+              "f1": 0.5454545454545454
+            },
+            {
+              "item": "diffusal_blade",
+              "support": 4,
+              "predicted": 4,
+              "f1": 0.75
+            },
+            {
+              "item": "mage_slayer",
+              "support": 3,
+              "predicted": 3,
+              "f1": 0.6666666666666666
+            },
+            {
+              "item": "manta",
+              "support": 5,
+              "predicted": 3,
+              "f1": 0.5
+            },
+            {
+              "item": "mask_of_madness",
+              "support": 0,
+              "predicted": 1,
+              "f1": 0.0
+            },
+            {
+              "item": "power_treads",
+              "support": 0,
+              "predicted": 1,
+              "f1": 0.0
+            },
+            {
+              "item": "radiance",
+              "support": 2,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "sphere",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "witch_blade",
+              "support": 2,
+              "predicted": 0,
+              "f1": 0.0
+            }
+          ],
+          "confidence_threshold": 0.6,
+          "confident_coverage": 0.15,
+          "confident_accuracy": 1.0
+        }
+      ],
+      "legacy_test": {
+        "matches": 20,
+        "correct": 12,
+        "accuracy": 0.6,
+        "accuracy_wilson_95": [
+          0.3865815007622531,
+          0.781193467627183
+        ],
+        "macro_f1": 0.5045454545454545,
+        "top3_accuracy": 0.65,
+        "log_loss": 1.7792046013439577,
+        "brier": 0.5986324404241851,
+        "ece_5_bins": 0.1536013882007636,
+        "unseen_labels": 0,
+        "unseen_hero_matches": 5,
+        "unseen_hero_errors": 5,
+        "confidence_bins": [
+          {
+            "lower": 0.0,
+            "upper": 0.2,
+            "count": 1,
+            "confidence": 0.17515502209494374,
+            "accuracy": 0.0
+          },
+          {
+            "lower": 0.2,
+            "upper": 0.4,
+            "count": 8,
+            "confidence": 0.2886969638257856,
+            "accuracy": 0.375
+          },
+          {
+            "lower": 0.4,
+            "upper": 0.6,
+            "count": 4,
+            "confidence": 0.511802733665364,
+            "accuracy": 0.5
+          },
+          {
+            "lower": 0.6,
+            "upper": 0.8,
+            "count": 6,
+            "confidence": 0.6655243238908333,
+            "accuracy": 1.0
+          },
+          {
+            "lower": 0.8,
+            "upper": 1.0,
+            "count": 1,
+            "confidence": 0.8476165387898432,
+            "accuracy": 1.0
+          }
+        ],
+        "per_item": [
+          {
+            "item": "aghanims_shard",
+            "support": 4,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "bfury",
+            "support": 3,
+            "predicted": 5,
+            "f1": 0.75
+          },
+          {
+            "item": "diffusal_blade",
+            "support": 1,
+            "predicted": 1,
+            "f1": 1.0
+          },
+          {
+            "item": "dragon_lance",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "echo_sabre",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "maelstrom",
+            "support": 3,
+            "predicted": 2,
+            "f1": 0.8
+          },
+          {
+            "item": "mage_slayer",
+            "support": 2,
+            "predicted": 2,
+            "f1": 1.0
+          },
+          {
+            "item": "manta",
+            "support": 1,
+            "predicted": 5,
+            "f1": 0.3333333333333333
+          },
+          {
+            "item": "mask_of_madness",
+            "support": 0,
+            "predicted": 2,
+            "f1": 0.0
+          },
+          {
+            "item": "radiance",
+            "support": 2,
+            "predicted": 1,
+            "f1": 0.6666666666666666
+          },
+          {
+            "item": "witch_blade",
+            "support": 2,
+            "predicted": 2,
+            "f1": 1.0
+          }
+        ],
+        "confidence_threshold": 0.6,
+        "confident_coverage": 0.35,
+        "confident_accuracy": 1.0
+      }
+    },
+    {
+      "recipe": {
+        "name": "logistic_c01",
+        "kind": "logistic",
+        "C": 0.1
+      },
+      "validation": {
+        "matches": 40,
+        "correct": 9,
+        "accuracy": 0.225,
+        "accuracy_wilson_95": [
+          0.12316091323540743,
+          0.37503096742310027
+        ],
+        "macro_f1": 0.08582621082621082,
+        "top3_accuracy": 0.5,
+        "log_loss": 6.615007111787217,
+        "brier": 0.9272950222684608,
+        "ece_5_bins": 0.053702733098293334,
+        "unseen_labels": 7,
+        "unseen_hero_matches": 12,
+        "unseen_hero_errors": 11,
+        "confidence_bins": [
+          {
+            "lower": 0.0,
+            "upper": 0.2,
+            "count": 12,
+            "confidence": 0.17794442078843872,
+            "accuracy": 0.16666666666666666
+          },
+          {
+            "lower": 0.2,
+            "upper": 0.4,
+            "count": 24,
+            "confidence": 0.30210174748186414,
+            "accuracy": 0.2916666666666667
+          },
+          {
+            "lower": 0.4,
+            "upper": 0.6,
+            "count": 4,
+            "confidence": 0.4405835837264324,
+            "accuracy": 0.0
+          }
+        ],
+        "per_item": [
+          {
+            "item": "aghanims_shard",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "bfury",
+            "support": 6,
+            "predicted": 3,
+            "f1": 0.2222222222222222
+          },
+          {
+            "item": "diffusal_blade",
+            "support": 7,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "maelstrom",
+            "support": 4,
+            "predicted": 2,
+            "f1": 0.0
+          },
+          {
+            "item": "mage_slayer",
+            "support": 6,
+            "predicted": 2,
+            "f1": 0.5
+          },
+          {
+            "item": "manta",
+            "support": 6,
+            "predicted": 33,
+            "f1": 0.3076923076923077
+          },
+          {
+            "item": "mask_of_madness",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "power_treads",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "radiance",
+            "support": 3,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "sphere",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "travel_boots",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "witch_blade",
+            "support": 3,
+            "predicted": 0,
+            "f1": 0.0
+          }
+        ],
+        "confidence_threshold": 0.6,
+        "confident_coverage": 0.0,
+        "confident_accuracy": null
+      },
+      "folds": [
+        {
+          "matches": 20,
+          "correct": 1,
+          "accuracy": 0.05,
+          "accuracy_wilson_95": [
+            0.008881448800795402,
+            0.23613119344674205
+          ],
+          "macro_f1": 0.008658008658008658,
+          "top3_accuracy": 0.45,
+          "log_loss": 9.755068989574536,
+          "brier": 0.9951097661597575,
+          "ece_5_bins": 0.31196105704269983,
+          "unseen_labels": 6,
+          "unseen_hero_matches": 8,
+          "unseen_hero_errors": 8,
+          "confidence_bins": [
+            {
+              "lower": 0.2,
+              "upper": 0.4,
+              "count": 16,
+              "confidence": 0.34230542537176667,
+              "accuracy": 0.0625
+            },
+            {
+              "lower": 0.4,
+              "upper": 0.6,
+              "count": 4,
+              "confidence": 0.4405835837264324,
+              "accuracy": 0.0
+            }
+          ],
+          "per_item": [
+            {
+              "item": "aghanims_shard",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "bfury",
+              "support": 3,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "diffusal_blade",
+              "support": 3,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "maelstrom",
+              "support": 4,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "mage_slayer",
+              "support": 3,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "manta",
+              "support": 1,
+              "predicted": 20,
+              "f1": 0.09523809523809523
+            },
+            {
+              "item": "mask_of_madness",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "power_treads",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "radiance",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "travel_boots",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "witch_blade",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            }
+          ],
+          "confidence_threshold": 0.6,
+          "confident_coverage": 0.0,
+          "confident_accuracy": null
+        },
+        {
+          "matches": 20,
+          "correct": 8,
+          "accuracy": 0.4,
+          "accuracy_wilson_95": [
+            0.21880653237281705,
+            0.6134184992377469
+          ],
+          "macro_f1": 0.2111111111111111,
+          "top3_accuracy": 0.55,
+          "log_loss": 3.474945233999899,
+          "brier": 0.8594802783771641,
+          "ece_5_bins": 0.2180888957922396,
+          "unseen_labels": 1,
+          "unseen_hero_matches": 4,
+          "unseen_hero_errors": 3,
+          "confidence_bins": [
+            {
+              "lower": 0.0,
+              "upper": 0.2,
+              "count": 12,
+              "confidence": 0.17794442078843872,
+              "accuracy": 0.16666666666666666
+            },
+            {
+              "lower": 0.2,
+              "upper": 0.4,
+              "count": 8,
+              "confidence": 0.22169439170205907,
+              "accuracy": 0.75
+            }
+          ],
+          "per_item": [
+            {
+              "item": "bfury",
+              "support": 3,
+              "predicted": 3,
+              "f1": 0.3333333333333333
+            },
+            {
+              "item": "diffusal_blade",
+              "support": 4,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "maelstrom",
+              "support": 0,
+              "predicted": 2,
+              "f1": 0.0
+            },
+            {
+              "item": "mage_slayer",
+              "support": 3,
+              "predicted": 2,
+              "f1": 0.8
+            },
+            {
+              "item": "manta",
+              "support": 5,
+              "predicted": 13,
+              "f1": 0.5555555555555556
+            },
+            {
+              "item": "radiance",
+              "support": 2,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "sphere",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "witch_blade",
+              "support": 2,
+              "predicted": 0,
+              "f1": 0.0
+            }
+          ],
+          "confidence_threshold": 0.6,
+          "confident_coverage": 0.0,
+          "confident_accuracy": null
+        }
+      ],
+      "legacy_test": {
+        "matches": 20,
+        "correct": 5,
+        "accuracy": 0.25,
+        "accuracy_wilson_95": [
+          0.11186170140766569,
+          0.468700877618744
+        ],
+        "macro_f1": 0.26176470588235295,
+        "top3_accuracy": 0.45,
+        "log_loss": 2.477504081519885,
+        "brier": 0.8875137021961782,
+        "ece_5_bins": 0.05022834129748133,
+        "unseen_labels": 0,
+        "unseen_hero_matches": 5,
+        "unseen_hero_errors": 5,
+        "confidence_bins": [
+          {
+            "lower": 0.0,
+            "upper": 0.2,
+            "count": 2,
+            "confidence": 0.17153721022041896,
+            "accuracy": 0.0
+          },
+          {
+            "lower": 0.2,
+            "upper": 0.4,
+            "count": 18,
+            "confidence": 0.2410281996939562,
+            "accuracy": 0.2777777777777778
+          }
+        ],
+        "per_item": [
+          {
+            "item": "aghanims_shard",
+            "support": 4,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "bfury",
+            "support": 3,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "diffusal_blade",
+            "support": 1,
+            "predicted": 1,
+            "f1": 1.0
+          },
+          {
+            "item": "dragon_lance",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "echo_sabre",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "maelstrom",
+            "support": 3,
+            "predicted": 1,
+            "f1": 0.5
+          },
+          {
+            "item": "mage_slayer",
+            "support": 2,
+            "predicted": 2,
+            "f1": 1.0
+          },
+          {
+            "item": "manta",
+            "support": 1,
+            "predicted": 16,
+            "f1": 0.11764705882352941
+          },
+          {
+            "item": "radiance",
+            "support": 2,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "witch_blade",
+            "support": 2,
+            "predicted": 0,
+            "f1": 0.0
+          }
+        ],
+        "confidence_threshold": 0.6,
+        "confident_coverage": 0.0,
+        "confident_accuracy": null
+      }
+    },
+    {
+      "recipe": {
+        "name": "logistic_c1",
+        "kind": "logistic",
+        "C": 1.0
+      },
+      "validation": {
+        "matches": 40,
+        "correct": 18,
+        "accuracy": 0.45,
+        "accuracy_wilson_95": [
+          0.3070530781090492,
+          0.6017090820106794
+        ],
+        "macro_f1": 0.2836410077789388,
+        "top3_accuracy": 0.625,
+        "log_loss": 6.105212307784319,
+        "brier": 0.7611441490577782,
+        "ece_5_bins": 0.15080847318566531,
+        "unseen_labels": 7,
+        "unseen_hero_matches": 12,
+        "unseen_hero_errors": 12,
+        "confidence_bins": [
+          {
+            "lower": 0.0,
+            "upper": 0.2,
+            "count": 2,
+            "confidence": 0.1920896574664922,
+            "accuracy": 0.0
+          },
+          {
+            "lower": 0.2,
+            "upper": 0.4,
+            "count": 23,
+            "confidence": 0.3071971758644452,
+            "accuracy": 0.4782608695652174
+          },
+          {
+            "lower": 0.4,
+            "upper": 0.6,
+            "count": 11,
+            "confidence": 0.5055901915736345,
+            "accuracy": 0.36363636363636365
+          },
+          {
+            "lower": 0.6,
+            "upper": 0.8,
+            "count": 4,
+            "confidence": 0.711949362483528,
+            "accuracy": 0.75
+          }
+        ],
+        "per_item": [
+          {
+            "item": "aghanims_shard",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "bfury",
+            "support": 6,
+            "predicted": 23,
+            "f1": 0.41379310344827586
+          },
+          {
+            "item": "diffusal_blade",
+            "support": 7,
+            "predicted": 4,
+            "f1": 0.5454545454545454
+          },
+          {
+            "item": "maelstrom",
+            "support": 4,
+            "predicted": 2,
+            "f1": 0.6666666666666666
+          },
+          {
+            "item": "mage_slayer",
+            "support": 6,
+            "predicted": 3,
+            "f1": 0.4444444444444444
+          },
+          {
+            "item": "manta",
+            "support": 6,
+            "predicted": 6,
+            "f1": 0.6666666666666666
+          },
+          {
+            "item": "mask_of_madness",
+            "support": 1,
+            "predicted": 2,
+            "f1": 0.6666666666666666
+          },
+          {
+            "item": "power_treads",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "radiance",
+            "support": 3,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "sphere",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "travel_boots",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "witch_blade",
+            "support": 3,
+            "predicted": 0,
+            "f1": 0.0
+          }
+        ],
+        "confidence_threshold": 0.6,
+        "confident_coverage": 0.1,
+        "confident_accuracy": 0.75
+      },
+      "folds": [
+        {
+          "matches": 20,
+          "correct": 7,
+          "accuracy": 0.35,
+          "accuracy_wilson_95": [
+            0.18119182410108206,
+            0.5671457233147638
+          ],
+          "macro_f1": 0.2424242424242424,
+          "top3_accuracy": 0.6,
+          "log_loss": 9.359124499935604,
+          "brier": 0.869687958305269,
+          "ece_5_bins": 0.23993933482491342,
+          "unseen_labels": 6,
+          "unseen_hero_matches": 8,
+          "unseen_hero_errors": 8,
+          "confidence_bins": [
+            {
+              "lower": 0.2,
+              "upper": 0.4,
+              "count": 10,
+              "confidence": 0.36172284004994426,
+              "accuracy": 0.5
+            },
+            {
+              "lower": 0.4,
+              "upper": 0.6,
+              "count": 8,
+              "confidence": 0.49912153475435667,
+              "accuracy": 0.125
+            },
+            {
+              "lower": 0.6,
+              "upper": 0.8,
+              "count": 2,
+              "confidence": 0.7115214094814292,
+              "accuracy": 0.5
+            }
+          ],
+          "per_item": [
+            {
+              "item": "aghanims_shard",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "bfury",
+              "support": 3,
+              "predicted": 15,
+              "f1": 0.3333333333333333
+            },
+            {
+              "item": "diffusal_blade",
+              "support": 3,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "maelstrom",
+              "support": 4,
+              "predicted": 2,
+              "f1": 0.6666666666666666
+            },
+            {
+              "item": "mage_slayer",
+              "support": 3,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "manta",
+              "support": 1,
+              "predicted": 2,
+              "f1": 0.6666666666666666
+            },
+            {
+              "item": "mask_of_madness",
+              "support": 1,
+              "predicted": 1,
+              "f1": 1.0
+            },
+            {
+              "item": "power_treads",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "radiance",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "travel_boots",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "witch_blade",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            }
+          ],
+          "confidence_threshold": 0.6,
+          "confident_coverage": 0.1,
+          "confident_accuracy": 0.5
+        },
+        {
+          "matches": 20,
+          "correct": 11,
+          "accuracy": 0.55,
+          "accuracy_wilson_95": [
+            0.34208534245034233,
+            0.7418021417443759
+          ],
+          "macro_f1": 0.32859848484848486,
+          "top3_accuracy": 0.65,
+          "log_loss": 2.851300115633034,
+          "brier": 0.6526003398102874,
+          "ece_5_bins": 0.24712991051519043,
+          "unseen_labels": 1,
+          "unseen_hero_matches": 4,
+          "unseen_hero_errors": 4,
+          "confidence_bins": [
+            {
+              "lower": 0.0,
+              "upper": 0.2,
+              "count": 2,
+              "confidence": 0.1920896574664922,
+              "accuracy": 0.0
+            },
+            {
+              "lower": 0.2,
+              "upper": 0.4,
+              "count": 13,
+              "confidence": 0.2652543572602152,
+              "accuracy": 0.46153846153846156
+            },
+            {
+              "lower": 0.4,
+              "upper": 0.6,
+              "count": 3,
+              "confidence": 0.5228399430917084,
+              "accuracy": 1.0
+            },
+            {
+              "lower": 0.6,
+              "upper": 0.8,
+              "count": 2,
+              "confidence": 0.7123773154856268,
+              "accuracy": 1.0
+            }
+          ],
+          "per_item": [
+            {
+              "item": "bfury",
+              "support": 3,
+              "predicted": 8,
+              "f1": 0.5454545454545454
+            },
+            {
+              "item": "diffusal_blade",
+              "support": 4,
+              "predicted": 4,
+              "f1": 0.75
+            },
+            {
+              "item": "mage_slayer",
+              "support": 3,
+              "predicted": 3,
+              "f1": 0.6666666666666666
+            },
+            {
+              "item": "manta",
+              "support": 5,
+              "predicted": 4,
+              "f1": 0.6666666666666666
+            },
+            {
+              "item": "mask_of_madness",
+              "support": 0,
+              "predicted": 1,
+              "f1": 0.0
+            },
+            {
+              "item": "radiance",
+              "support": 2,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "sphere",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "witch_blade",
+              "support": 2,
+              "predicted": 0,
+              "f1": 0.0
+            }
+          ],
+          "confidence_threshold": 0.6,
+          "confident_coverage": 0.1,
+          "confident_accuracy": 1.0
+        }
+      ],
+      "legacy_test": {
+        "matches": 20,
+        "correct": 12,
+        "accuracy": 0.6,
+        "accuracy_wilson_95": [
+          0.3865815007622531,
+          0.781193467627183
+        ],
+        "macro_f1": 0.5196969696969697,
+        "top3_accuracy": 0.6,
+        "log_loss": 1.8310198315219512,
+        "brier": 0.6325587710370933,
+        "ece_5_bins": 0.20582314516352346,
+        "unseen_labels": 0,
+        "unseen_hero_matches": 5,
+        "unseen_hero_errors": 5,
+        "confidence_bins": [
+          {
+            "lower": 0.0,
+            "upper": 0.2,
+            "count": 1,
+            "confidence": 0.19187242470568422,
+            "accuracy": 0.0
+          },
+          {
+            "lower": 0.2,
+            "upper": 0.4,
+            "count": 10,
+            "confidence": 0.2949074929374471,
+            "accuracy": 0.4
+          },
+          {
+            "lower": 0.4,
+            "upper": 0.6,
+            "count": 6,
+            "confidence": 0.5208212219170453,
+            "accuracy": 0.8333333333333334
+          },
+          {
+            "lower": 0.6,
+            "upper": 0.8,
+            "count": 3,
+            "confidence": 0.6671357535194907,
+            "accuracy": 1.0
+          }
+        ],
+        "per_item": [
+          {
+            "item": "aghanims_shard",
+            "support": 4,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "bfury",
+            "support": 3,
+            "predicted": 3,
+            "f1": 1.0
+          },
+          {
+            "item": "diffusal_blade",
+            "support": 1,
+            "predicted": 1,
+            "f1": 1.0
+          },
+          {
+            "item": "dragon_lance",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "echo_sabre",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "maelstrom",
+            "support": 3,
+            "predicted": 2,
+            "f1": 0.8
+          },
+          {
+            "item": "mage_slayer",
+            "support": 2,
+            "predicted": 2,
+            "f1": 1.0
+          },
+          {
+            "item": "manta",
+            "support": 1,
+            "predicted": 7,
+            "f1": 0.25
+          },
+          {
+            "item": "mask_of_madness",
+            "support": 0,
+            "predicted": 2,
+            "f1": 0.0
+          },
+          {
+            "item": "radiance",
+            "support": 2,
+            "predicted": 1,
+            "f1": 0.6666666666666666
+          },
+          {
+            "item": "witch_blade",
+            "support": 2,
+            "predicted": 2,
+            "f1": 1.0
+          }
+        ],
+        "confidence_threshold": 0.6,
+        "confident_coverage": 0.15,
+        "confident_accuracy": 1.0
+      }
+    },
+    {
+      "recipe": {
+        "name": "logistic_history_c1",
+        "kind": "logistic",
+        "C": 1.0,
+        "history": true
+      },
+      "validation": {
+        "matches": 40,
+        "correct": 18,
+        "accuracy": 0.45,
+        "accuracy_wilson_95": [
+          0.3070530781090492,
+          0.6017090820106794
+        ],
+        "macro_f1": 0.27946127946127947,
+        "top3_accuracy": 0.625,
+        "log_loss": 6.104215971288836,
+        "brier": 0.7444332248344493,
+        "ece_5_bins": 0.04942795835386178,
+        "unseen_labels": 7,
+        "unseen_hero_matches": 12,
+        "unseen_hero_errors": 12,
+        "confidence_bins": [
+          {
+            "lower": 0.2,
+            "upper": 0.4,
+            "count": 21,
+            "confidence": 0.29936830211708393,
+            "accuracy": 0.3333333333333333
+          },
+          {
+            "lower": 0.4,
+            "upper": 0.6,
+            "count": 13,
+            "confidence": 0.46384162733222767,
+            "accuracy": 0.5384615384615384
+          },
+          {
+            "lower": 0.6,
+            "upper": 0.8,
+            "count": 6,
+            "confidence": 0.7156323056553656,
+            "accuracy": 0.6666666666666666
+          }
+        ],
+        "per_item": [
+          {
+            "item": "aghanims_shard",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "bfury",
+            "support": 6,
+            "predicted": 21,
+            "f1": 0.4444444444444444
+          },
+          {
+            "item": "diffusal_blade",
+            "support": 7,
+            "predicted": 4,
+            "f1": 0.36363636363636365
+          },
+          {
+            "item": "maelstrom",
+            "support": 4,
+            "predicted": 2,
+            "f1": 0.6666666666666666
+          },
+          {
+            "item": "mage_slayer",
+            "support": 6,
+            "predicted": 5,
+            "f1": 0.5454545454545454
+          },
+          {
+            "item": "manta",
+            "support": 6,
+            "predicted": 6,
+            "f1": 0.6666666666666666
+          },
+          {
+            "item": "mask_of_madness",
+            "support": 1,
+            "predicted": 2,
+            "f1": 0.6666666666666666
+          },
+          {
+            "item": "power_treads",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "radiance",
+            "support": 3,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "sphere",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "travel_boots",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "witch_blade",
+            "support": 3,
+            "predicted": 0,
+            "f1": 0.0
+          }
+        ],
+        "confidence_threshold": 0.6,
+        "confident_coverage": 0.15,
+        "confident_accuracy": 0.6666666666666666
+      },
+      "folds": [
+        {
+          "matches": 20,
+          "correct": 7,
+          "accuracy": 0.35,
+          "accuracy_wilson_95": [
+            0.18119182410108206,
+            0.5671457233147638
+          ],
+          "macro_f1": 0.2424242424242424,
+          "top3_accuracy": 0.6,
+          "log_loss": 9.350836361660212,
+          "brier": 0.8602640754679214,
+          "ece_5_bins": 0.13530357851555772,
+          "unseen_labels": 6,
+          "unseen_hero_matches": 8,
+          "unseen_hero_errors": 8,
+          "confidence_bins": [
+            {
+              "lower": 0.2,
+              "upper": 0.4,
+              "count": 8,
+              "confidence": 0.34588541809849094,
+              "accuracy": 0.375
+            },
+            {
+              "lower": 0.4,
+              "upper": 0.6,
+              "count": 8,
+              "confidence": 0.45693637132532994,
+              "accuracy": 0.25
+            },
+            {
+              "lower": 0.6,
+              "upper": 0.8,
+              "count": 4,
+              "confidence": 0.7044159861241106,
+              "accuracy": 0.5
+            }
+          ],
+          "per_item": [
+            {
+              "item": "aghanims_shard",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "bfury",
+              "support": 3,
+              "predicted": 15,
+              "f1": 0.3333333333333333
+            },
+            {
+              "item": "diffusal_blade",
+              "support": 3,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "maelstrom",
+              "support": 4,
+              "predicted": 2,
+              "f1": 0.6666666666666666
+            },
+            {
+              "item": "mage_slayer",
+              "support": 3,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "manta",
+              "support": 1,
+              "predicted": 2,
+              "f1": 0.6666666666666666
+            },
+            {
+              "item": "mask_of_madness",
+              "support": 1,
+              "predicted": 1,
+              "f1": 1.0
+            },
+            {
+              "item": "power_treads",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "radiance",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "travel_boots",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "witch_blade",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            }
+          ],
+          "confidence_threshold": 0.6,
+          "confident_coverage": 0.2,
+          "confident_accuracy": 0.5
+        },
+        {
+          "matches": 20,
+          "correct": 11,
+          "accuracy": 0.55,
+          "accuracy_wilson_95": [
+            0.34208534245034233,
+            0.7418021417443759
+          ],
+          "macro_f1": 0.32291666666666663,
+          "top3_accuracy": 0.65,
+          "log_loss": 2.8575955809174594,
+          "brier": 0.6286023742009771,
+          "ece_5_bins": 0.18148844630885477,
+          "unseen_labels": 1,
+          "unseen_hero_matches": 4,
+          "unseen_hero_errors": 4,
+          "confidence_bins": [
+            {
+              "lower": 0.2,
+              "upper": 0.4,
+              "count": 13,
+              "confidence": 0.27074238459006417,
+              "accuracy": 0.3076923076923077
+            },
+            {
+              "lower": 0.4,
+              "upper": 0.6,
+              "count": 5,
+              "confidence": 0.4748900369432639,
+              "accuracy": 1.0
+            },
+            {
+              "lower": 0.6,
+              "upper": 0.8,
+              "count": 2,
+              "confidence": 0.7380649447178756,
+              "accuracy": 1.0
+            }
+          ],
+          "per_item": [
+            {
+              "item": "bfury",
+              "support": 3,
+              "predicted": 6,
+              "f1": 0.6666666666666666
+            },
+            {
+              "item": "diffusal_blade",
+              "support": 4,
+              "predicted": 4,
+              "f1": 0.5
+            },
+            {
+              "item": "mage_slayer",
+              "support": 3,
+              "predicted": 5,
+              "f1": 0.75
+            },
+            {
+              "item": "manta",
+              "support": 5,
+              "predicted": 4,
+              "f1": 0.6666666666666666
+            },
+            {
+              "item": "mask_of_madness",
+              "support": 0,
+              "predicted": 1,
+              "f1": 0.0
+            },
+            {
+              "item": "radiance",
+              "support": 2,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "sphere",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "witch_blade",
+              "support": 2,
+              "predicted": 0,
+              "f1": 0.0
+            }
+          ],
+          "confidence_threshold": 0.6,
+          "confident_coverage": 0.1,
+          "confident_accuracy": 1.0
+        }
+      ],
+      "legacy_test": {
+        "matches": 20,
+        "correct": 12,
+        "accuracy": 0.6,
+        "accuracy_wilson_95": [
+          0.3865815007622531,
+          0.781193467627183
+        ],
+        "macro_f1": 0.47965367965367967,
+        "top3_accuracy": 0.6,
+        "log_loss": 1.7511130413120828,
+        "brier": 0.6110490347981032,
+        "ece_5_bins": 0.1526906248245719,
+        "unseen_labels": 0,
+        "unseen_hero_matches": 5,
+        "unseen_hero_errors": 5,
+        "confidence_bins": [
+          {
+            "lower": 0.2,
+            "upper": 0.4,
+            "count": 8,
+            "confidence": 0.28615998221028394,
+            "accuracy": 0.375
+          },
+          {
+            "lower": 0.4,
+            "upper": 0.6,
+            "count": 8,
+            "confidence": 0.4891092731905812,
+            "accuracy": 0.625
+          },
+          {
+            "lower": 0.6,
+            "upper": 0.8,
+            "count": 4,
+            "confidence": 0.6860083650754103,
+            "accuracy": 1.0
+          }
+        ],
+        "per_item": [
+          {
+            "item": "aghanims_shard",
+            "support": 4,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "bfury",
+            "support": 3,
+            "predicted": 4,
+            "f1": 0.8571428571428571
+          },
+          {
+            "item": "diffusal_blade",
+            "support": 1,
+            "predicted": 2,
+            "f1": 0.6666666666666666
+          },
+          {
+            "item": "dragon_lance",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "echo_sabre",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "maelstrom",
+            "support": 3,
+            "predicted": 2,
+            "f1": 0.8
+          },
+          {
+            "item": "mage_slayer",
+            "support": 2,
+            "predicted": 2,
+            "f1": 1.0
+          },
+          {
+            "item": "manta",
+            "support": 1,
+            "predicted": 6,
+            "f1": 0.2857142857142857
+          },
+          {
+            "item": "mask_of_madness",
+            "support": 0,
+            "predicted": 1,
+            "f1": 0.0
+          },
+          {
+            "item": "radiance",
+            "support": 2,
+            "predicted": 1,
+            "f1": 0.6666666666666666
+          },
+          {
+            "item": "witch_blade",
+            "support": 2,
+            "predicted": 2,
+            "f1": 1.0
+          }
+        ],
+        "confidence_threshold": 0.6,
+        "confident_coverage": 0.2,
+        "confident_accuracy": 1.0
+      }
+    },
+    {
+      "recipe": {
+        "name": "small_forest",
+        "kind": "forest",
+        "trees": 80,
+        "depth": 6,
+        "leaf": 3
+      },
+      "validation": {
+        "matches": 40,
+        "correct": 14,
+        "accuracy": 0.35,
+        "accuracy_wilson_95": [
+          0.2213452887317629,
+          0.5049411916274231
+        ],
+        "macro_f1": 0.19523358585858586,
+        "top3_accuracy": 0.575,
+        "log_loss": 6.395734171911136,
+        "brier": 0.873558391652405,
+        "ece_5_bins": 0.20063014252031125,
+        "unseen_labels": 7,
+        "unseen_hero_matches": 12,
+        "unseen_hero_errors": 12,
+        "confidence_bins": [
+          {
+            "lower": 0.0,
+            "upper": 0.2,
+            "count": 12,
+            "confidence": 0.1791634362264878,
+            "accuracy": 0.3333333333333333
+          },
+          {
+            "lower": 0.2,
+            "upper": 0.4,
+            "count": 22,
+            "confidence": 0.2955128337582789,
+            "accuracy": 0.45454545454545453
+          },
+          {
+            "lower": 0.4,
+            "upper": 0.6,
+            "count": 6,
+            "confidence": 0.4460748797020732,
+            "accuracy": 0.0
+          }
+        ],
+        "per_item": [
+          {
+            "item": "aghanims_shard",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "bfury",
+            "support": 6,
+            "predicted": 4,
+            "f1": 0.6
+          },
+          {
+            "item": "diffusal_blade",
+            "support": 7,
+            "predicted": 3,
+            "f1": 0.4
+          },
+          {
+            "item": "maelstrom",
+            "support": 4,
+            "predicted": 2,
+            "f1": 0.6666666666666666
+          },
+          {
+            "item": "mage_slayer",
+            "support": 6,
+            "predicted": 5,
+            "f1": 0.36363636363636365
+          },
+          {
+            "item": "manta",
+            "support": 6,
+            "predicted": 26,
+            "f1": 0.3125
+          },
+          {
+            "item": "mask_of_madness",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "power_treads",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "radiance",
+            "support": 3,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "sphere",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "travel_boots",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "witch_blade",
+            "support": 3,
+            "predicted": 0,
+            "f1": 0.0
+          }
+        ],
+        "confidence_threshold": 0.6,
+        "confident_coverage": 0.0,
+        "confident_accuracy": null
+      },
+      "folds": [
+        {
+          "matches": 20,
+          "correct": 3,
+          "accuracy": 0.15,
+          "accuracy_wilson_95": [
+            0.052368745896216595,
+            0.36041886474075696
+          ],
+          "macro_f1": 0.07017543859649122,
+          "top3_accuracy": 0.5,
+          "log_loss": 9.579239504516227,
+          "brier": 0.9490050839514572,
+          "ece_5_bins": 0.20296738919132867,
+          "unseen_labels": 6,
+          "unseen_hero_matches": 8,
+          "unseen_hero_errors": 8,
+          "confidence_bins": [
+            {
+              "lower": 0.2,
+              "upper": 0.4,
+              "count": 14,
+              "confidence": 0.31306417897243816,
+              "accuracy": 0.21428571428571427
+            },
+            {
+              "lower": 0.4,
+              "upper": 0.6,
+              "count": 6,
+              "confidence": 0.4460748797020732,
+              "accuracy": 0.0
+            }
+          ],
+          "per_item": [
+            {
+              "item": "aghanims_shard",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "bfury",
+              "support": 3,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "diffusal_blade",
+              "support": 3,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "maelstrom",
+              "support": 4,
+              "predicted": 2,
+              "f1": 0.6666666666666666
+            },
+            {
+              "item": "mage_slayer",
+              "support": 3,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "manta",
+              "support": 1,
+              "predicted": 18,
+              "f1": 0.10526315789473684
+            },
+            {
+              "item": "mask_of_madness",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "power_treads",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "radiance",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "travel_boots",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "witch_blade",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            }
+          ],
+          "confidence_threshold": 0.6,
+          "confident_coverage": 0.0,
+          "confident_accuracy": null
+        },
+        {
+          "matches": 20,
+          "correct": 11,
+          "accuracy": 0.55,
+          "accuracy_wilson_95": [
+            0.34208534245034233,
+            0.7418021417443759
+          ],
+          "macro_f1": 0.36342229199372056,
+          "top3_accuracy": 0.65,
+          "log_loss": 3.212228839306044,
+          "brier": 0.7981116993533528,
+          "ece_5_bins": 0.3365827464107073,
+          "unseen_labels": 1,
+          "unseen_hero_matches": 4,
+          "unseen_hero_errors": 4,
+          "confidence_bins": [
+            {
+              "lower": 0.0,
+              "upper": 0.2,
+              "count": 12,
+              "confidence": 0.1791634362264878,
+              "accuracy": 0.3333333333333333
+            },
+            {
+              "lower": 0.2,
+              "upper": 0.4,
+              "count": 8,
+              "confidence": 0.2647979796335001,
+              "accuracy": 0.875
+            }
+          ],
+          "per_item": [
+            {
+              "item": "bfury",
+              "support": 3,
+              "predicted": 4,
+              "f1": 0.8571428571428571
+            },
+            {
+              "item": "diffusal_blade",
+              "support": 4,
+              "predicted": 3,
+              "f1": 0.5714285714285714
+            },
+            {
+              "item": "mage_slayer",
+              "support": 3,
+              "predicted": 5,
+              "f1": 0.5
+            },
+            {
+              "item": "manta",
+              "support": 5,
+              "predicted": 8,
+              "f1": 0.6153846153846154
+            },
+            {
+              "item": "radiance",
+              "support": 2,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "sphere",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "witch_blade",
+              "support": 2,
+              "predicted": 0,
+              "f1": 0.0
+            }
+          ],
+          "confidence_threshold": 0.6,
+          "confident_coverage": 0.0,
+          "confident_accuracy": null
+        }
+      ],
+      "legacy_test": {
+        "matches": 20,
+        "correct": 8,
+        "accuracy": 0.4,
+        "accuracy_wilson_95": [
+          0.21880653237281705,
+          0.6134184992377469
+        ],
+        "macro_f1": 0.4109523809523809,
+        "top3_accuracy": 0.55,
+        "log_loss": 2.2486860942220033,
+        "brier": 0.8057782067404645,
+        "ece_5_bins": 0.11849989577763065,
+        "unseen_labels": 0,
+        "unseen_hero_matches": 5,
+        "unseen_hero_errors": 5,
+        "confidence_bins": [
+          {
+            "lower": 0.2,
+            "upper": 0.4,
+            "count": 20,
+            "confidence": 0.2815001042223694,
+            "accuracy": 0.4
+          }
+        ],
+        "per_item": [
+          {
+            "item": "aghanims_shard",
+            "support": 4,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "bfury",
+            "support": 3,
+            "predicted": 2,
+            "f1": 0.8
+          },
+          {
+            "item": "diffusal_blade",
+            "support": 1,
+            "predicted": 1,
+            "f1": 1.0
+          },
+          {
+            "item": "dragon_lance",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "echo_sabre",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "maelstrom",
+            "support": 3,
+            "predicted": 1,
+            "f1": 0.5
+          },
+          {
+            "item": "mage_slayer",
+            "support": 2,
+            "predicted": 2,
+            "f1": 1.0
+          },
+          {
+            "item": "manta",
+            "support": 1,
+            "predicted": 13,
+            "f1": 0.14285714285714285
+          },
+          {
+            "item": "radiance",
+            "support": 2,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "witch_blade",
+            "support": 2,
+            "predicted": 1,
+            "f1": 0.6666666666666666
+          }
+        ],
+        "confidence_threshold": 0.6,
+        "confident_coverage": 0.0,
+        "confident_accuracy": null
+      }
+    },
+    {
+      "recipe": {
+        "name": "legacy_hero_frequency",
+        "kind": "hero_frequency"
+      },
+      "validation": {
+        "matches": 40,
+        "correct": 24,
+        "accuracy": 0.6,
+        "accuracy_wilson_95": [
+          0.44595893660346186,
+          0.7365167431570808
+        ],
+        "macro_f1": 0.4318831168831169,
+        "top3_accuracy": 0.75,
+        "log_loss": 5.33502053986871,
+        "brier": 0.4529561294235277,
+        "ece_5_bins": 0.1237449392712551,
+        "unseen_labels": 7,
+        "unseen_hero_matches": 12,
+        "unseen_hero_errors": 11,
+        "confidence_bins": [
+          {
+            "lower": 0.2,
+            "upper": 0.4,
+            "count": 12,
+            "confidence": 0.2624831309041835,
+            "accuracy": 0.08333333333333333
+          },
+          {
+            "lower": 0.4,
+            "upper": 0.6,
+            "count": 2,
+            "confidence": 0.5,
+            "accuracy": 0.0
+          },
+          {
+            "lower": 0.6,
+            "upper": 0.8,
+            "count": 4,
+            "confidence": 0.75,
+            "accuracy": 0.75
+          },
+          {
+            "lower": 0.8,
+            "upper": 1.0,
+            "count": 22,
+            "confidence": 0.990909090909091,
+            "accuracy": 0.9090909090909091
+          }
+        ],
+        "per_item": [
+          {
+            "item": "aghanims_shard",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "bfury",
+            "support": 6,
+            "predicted": 6,
+            "f1": 1.0
+          },
+          {
+            "item": "diffusal_blade",
+            "support": 7,
+            "predicted": 4,
+            "f1": 0.5454545454545454
+          },
+          {
+            "item": "maelstrom",
+            "support": 4,
+            "predicted": 3,
+            "f1": 0.8571428571428571
+          },
+          {
+            "item": "mage_slayer",
+            "support": 6,
+            "predicted": 4,
+            "f1": 0.8
+          },
+          {
+            "item": "manta",
+            "support": 6,
+            "predicted": 19,
+            "f1": 0.48
+          },
+          {
+            "item": "mask_of_madness",
+            "support": 1,
+            "predicted": 1,
+            "f1": 1.0
+          },
+          {
+            "item": "power_treads",
+            "support": 1,
+            "predicted": 2,
+            "f1": 0.0
+          },
+          {
+            "item": "radiance",
+            "support": 3,
+            "predicted": 1,
+            "f1": 0.5
+          },
+          {
+            "item": "sphere",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "travel_boots",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "witch_blade",
+            "support": 3,
+            "predicted": 0,
+            "f1": 0.0
+          }
+        ],
+        "confidence_threshold": 0.6,
+        "confident_coverage": 0.65,
+        "confident_accuracy": 0.8846153846153846
+      },
+      "folds": [
+        {
+          "matches": 20,
+          "correct": 11,
+          "accuracy": 0.55,
+          "accuracy_wilson_95": [
+            0.34208534245034233,
+            0.7418021417443759
+          ],
+          "macro_f1": 0.4399055489964581,
+          "top3_accuracy": 0.7,
+          "log_loss": 8.587135199183942,
+          "brier": 0.49684023668639055,
+          "ece_5_bins": 0.15538461538461543,
+          "unseen_labels": 6,
+          "unseen_hero_matches": 8,
+          "unseen_hero_errors": 8,
+          "confidence_bins": [
+            {
+              "lower": 0.2,
+              "upper": 0.4,
+              "count": 8,
+              "confidence": 0.28846153846153844,
+              "accuracy": 0.0
+            },
+            {
+              "lower": 0.8,
+              "upper": 1.0,
+              "count": 12,
+              "confidence": 0.9833333333333334,
+              "accuracy": 0.9166666666666666
+            }
+          ],
+          "per_item": [
+            {
+              "item": "aghanims_shard",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "bfury",
+              "support": 3,
+              "predicted": 3,
+              "f1": 1.0
+            },
+            {
+              "item": "diffusal_blade",
+              "support": 3,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "maelstrom",
+              "support": 4,
+              "predicted": 3,
+              "f1": 0.8571428571428571
+            },
+            {
+              "item": "mage_slayer",
+              "support": 3,
+              "predicted": 2,
+              "f1": 0.8
+            },
+            {
+              "item": "manta",
+              "support": 1,
+              "predicted": 10,
+              "f1": 0.18181818181818182
+            },
+            {
+              "item": "mask_of_madness",
+              "support": 1,
+              "predicted": 1,
+              "f1": 1.0
+            },
+            {
+              "item": "power_treads",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "radiance",
+              "support": 1,
+              "predicted": 1,
+              "f1": 1.0
+            },
+            {
+              "item": "travel_boots",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "witch_blade",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            }
+          ],
+          "confidence_threshold": 0.6,
+          "confident_coverage": 0.6,
+          "confident_accuracy": 0.9166666666666666
+        },
+        {
+          "matches": 20,
+          "correct": 13,
+          "accuracy": 0.65,
+          "accuracy_wilson_95": [
+            0.43285427668523624,
+            0.818808175898918
+          ],
+          "macro_f1": 0.4080357142857143,
+          "top3_accuracy": 0.8,
+          "log_loss": 2.082905880553477,
+          "brier": 0.40907202216066485,
+          "ece_5_bins": 0.10789473684210527,
+          "unseen_labels": 1,
+          "unseen_hero_matches": 4,
+          "unseen_hero_errors": 3,
+          "confidence_bins": [
+            {
+              "lower": 0.2,
+              "upper": 0.4,
+              "count": 4,
+              "confidence": 0.21052631578947367,
+              "accuracy": 0.25
+            },
+            {
+              "lower": 0.4,
+              "upper": 0.6,
+              "count": 2,
+              "confidence": 0.5,
+              "accuracy": 0.0
+            },
+            {
+              "lower": 0.6,
+              "upper": 0.8,
+              "count": 4,
+              "confidence": 0.75,
+              "accuracy": 0.75
+            },
+            {
+              "lower": 0.8,
+              "upper": 1.0,
+              "count": 10,
+              "confidence": 1.0,
+              "accuracy": 0.9
+            }
+          ],
+          "per_item": [
+            {
+              "item": "bfury",
+              "support": 3,
+              "predicted": 3,
+              "f1": 1.0
+            },
+            {
+              "item": "diffusal_blade",
+              "support": 4,
+              "predicted": 4,
+              "f1": 0.75
+            },
+            {
+              "item": "mage_slayer",
+              "support": 3,
+              "predicted": 2,
+              "f1": 0.8
+            },
+            {
+              "item": "manta",
+              "support": 5,
+              "predicted": 9,
+              "f1": 0.7142857142857143
+            },
+            {
+              "item": "power_treads",
+              "support": 0,
+              "predicted": 2,
+              "f1": 0.0
+            },
+            {
+              "item": "radiance",
+              "support": 2,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "sphere",
+              "support": 1,
+              "predicted": 0,
+              "f1": 0.0
+            },
+            {
+              "item": "witch_blade",
+              "support": 2,
+              "predicted": 0,
+              "f1": 0.0
+            }
+          ],
+          "confidence_threshold": 0.6,
+          "confident_coverage": 0.7,
+          "confident_accuracy": 0.8571428571428571
+        }
+      ],
+      "legacy_test": {
+        "matches": 20,
+        "correct": 12,
+        "accuracy": 0.6,
+        "accuracy_wilson_95": [
+          0.3865815007622531,
+          0.781193467627183
+        ],
+        "macro_f1": 0.5171717171717172,
+        "top3_accuracy": 0.7,
+        "log_loss": 4.957208642481357,
+        "brier": 0.5492613455202466,
+        "ece_5_bins": 0.15412371134020617,
+        "unseen_labels": 0,
+        "unseen_hero_matches": 5,
+        "unseen_hero_errors": 5,
+        "confidence_bins": [
+          {
+            "lower": 0.2,
+            "upper": 0.4,
+            "count": 5,
+            "confidence": 0.21649484536082478,
+            "accuracy": 0.0
+          },
+          {
+            "lower": 0.6,
+            "upper": 0.8,
+            "count": 4,
+            "confidence": 0.75,
+            "accuracy": 0.75
+          },
+          {
+            "lower": 0.8,
+            "upper": 1.0,
+            "count": 11,
+            "confidence": 1.0,
+            "accuracy": 0.8181818181818182
+          }
+        ],
+        "per_item": [
+          {
+            "item": "aghanims_shard",
+            "support": 4,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "bfury",
+            "support": 3,
+            "predicted": 3,
+            "f1": 1.0
+          },
+          {
+            "item": "diffusal_blade",
+            "support": 1,
+            "predicted": 1,
+            "f1": 1.0
+          },
+          {
+            "item": "dragon_lance",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "echo_sabre",
+            "support": 1,
+            "predicted": 0,
+            "f1": 0.0
+          },
+          {
+            "item": "maelstrom",
+            "support": 3,
+            "predicted": 2,
+            "f1": 0.8
+          },
+          {
+            "item": "mage_slayer",
+            "support": 2,
+            "predicted": 2,
+            "f1": 1.0
+          },
+          {
+            "item": "manta",
+            "support": 1,
+            "predicted": 8,
+            "f1": 0.2222222222222222
+          },
+          {
+            "item": "mask_of_madness",
+            "support": 0,
+            "predicted": 1,
+            "f1": 0.0
+          },
+          {
+            "item": "radiance",
+            "support": 2,
+            "predicted": 1,
+            "f1": 0.6666666666666666
+          },
+          {
+            "item": "witch_blade",
+            "support": 2,
+            "predicted": 2,
+            "f1": 1.0
+          }
+        ],
+        "confidence_threshold": 0.6,
+        "confident_coverage": 0.75,
+        "confident_accuracy": 0.8
+      }
+    }
+  ],
+  "selected_legacy_test_predictions": [
+    {
+      "match_id": 9067019772,
+      "start_time": 1793279698,
+      "hero_id": 145,
+      "hero_name": "Kez",
+      "training_hero_examples": 8,
+      "unseen_hero": false,
+      "actual": "mage_slayer",
+      "predicted": "mage_slayer",
+      "confidence": 1.0,
+      "top3": [
+        "mage_slayer",
+        "aghanims_shard",
+        "bfury"
+      ],
+      "actual_probability": 1.0,
+      "unseen_label": false,
+      "brier": 0.0
+    },
+    {
+      "match_id": 9068183471,
+      "start_time": 1793354653,
+      "hero_id": 72,
+      "hero_name": "Gyrocopter",
+      "training_hero_examples": 3,
+      "unseen_hero": false,
+      "actual": "manta",
+      "predicted": "manta",
+      "confidence": 1.0,
+      "top3": [
+        "manta",
+        "aghanims_shard",
+        "bfury"
+      ],
+      "actual_probability": 1.0,
+      "unseen_label": false,
+      "brier": 0.0
+    },
+    {
+      "match_id": 9068257334,
+      "start_time": 1793359049,
+      "hero_id": 63,
+      "hero_name": "Weaver",
+      "training_hero_examples": 1,
+      "unseen_hero": false,
+      "actual": "dragon_lance",
+      "predicted": "manta",
+      "confidence": 1.0,
+      "top3": [
+        "manta",
+        "aghanims_shard",
+        "bfury"
+      ],
+      "actual_probability": 0.0,
+      "unseen_label": false,
+      "brier": 2.0
+    },
+    {
+      "match_id": 9068332041,
+      "start_time": 1793362995,
+      "hero_id": 4,
+      "hero_name": "Bloodseeker",
+      "training_hero_examples": 1,
+      "unseen_hero": false,
+      "actual": "maelstrom",
+      "predicted": "maelstrom",
+      "confidence": 1.0,
+      "top3": [
+        "maelstrom",
+        "aghanims_shard",
+        "bfury"
+      ],
+      "actual_probability": 1.0,
+      "unseen_label": false,
+      "brier": 0.0
+    },
+    {
+      "match_id": 9068795274,
+      "start_time": 1793381011,
+      "hero_id": 18,
+      "hero_name": "Sven",
+      "training_hero_examples": 2,
+      "unseen_hero": false,
+      "actual": "echo_sabre",
+      "predicted": "mask_of_madness",
+      "confidence": 1.0,
+      "top3": [
+        "mask_of_madness",
+        "aghanims_shard",
+        "bfury"
+      ],
+      "actual_probability": 0.0,
+      "unseen_label": false,
+      "brier": 2.0
+    },
+    {
+      "match_id": 9068910292,
+      "start_time": 1793385476,
+      "hero_id": 145,
+      "hero_name": "Kez",
+      "training_hero_examples": 8,
+      "unseen_hero": false,
+      "actual": "mage_slayer",
+      "predicted": "mage_slayer",
+      "confidence": 1.0,
+      "top3": [
+        "mage_slayer",
+        "aghanims_shard",
+        "bfury"
+      ],
+      "actual_probability": 1.0,
+      "unseen_label": false,
+      "brier": 0.0
+    },
+    {
+      "match_id": 9069021061,
+      "start_time": 1793390004,
+      "hero_id": 70,
+      "hero_name": "Ursa",
+      "training_hero_examples": 3,
+      "unseen_hero": false,
+      "actual": "bfury",
+      "predicted": "bfury",
+      "confidence": 1.0,
+      "top3": [
+        "bfury",
+        "aghanims_shard",
+        "desolator"
+      ],
+      "actual_probability": 1.0,
+      "unseen_label": false,
+      "brier": 0.0
+    },
+    {
+      "match_id": 9070392472,
+      "start_time": 1793467624,
+      "hero_id": 76,
+      "hero_name": "Outworld Destroyer",
+      "training_hero_examples": 4,
+      "unseen_hero": false,
+      "actual": "witch_blade",
+      "predicted": "witch_blade",
+      "confidence": 0.75,
+      "top3": [
+        "witch_blade",
+        "power_treads",
+        "aghanims_shard"
+      ],
+      "actual_probability": 0.75,
+      "unseen_label": false,
+      "brier": 0.125
+    },
+    {
+      "match_id": 9070527945,
+      "start_time": 1793472691,
+      "hero_id": 1,
+      "hero_name": "Anti-Mage",
+      "training_hero_examples": 5,
+      "unseen_hero": false,
+      "actual": "bfury",
+      "predicted": "bfury",
+      "confidence": 1.0,
+      "top3": [
+        "bfury",
+        "aghanims_shard",
+        "desolator"
+      ],
+      "actual_probability": 1.0,
+      "unseen_label": false,
+      "brier": 0.0
+    },
+    {
+      "match_id": 9071596005,
+      "start_time": 1793538043,
+      "hero_id": 1,
+      "hero_name": "Anti-Mage",
+      "training_hero_examples": 5,
+      "unseen_hero": false,
+      "actual": "bfury",
+      "predicted": "bfury",
+      "confidence": 1.0,
+      "top3": [
+        "bfury",
+        "aghanims_shard",
+        "desolator"
+      ],
+      "actual_probability": 1.0,
+      "unseen_label": false,
+      "brier": 0.0
+    },
+    {
+      "match_id": 9071689576,
+      "start_time": 1793541744,
+      "hero_id": 76,
+      "hero_name": "Outworld Destroyer",
+      "training_hero_examples": 4,
+      "unseen_hero": false,
+      "actual": "witch_blade",
+      "predicted": "witch_blade",
+      "confidence": 0.75,
+      "top3": [
+        "witch_blade",
+        "power_treads",
+        "aghanims_shard"
+      ],
+      "actual_probability": 0.75,
+      "unseen_label": false,
+      "brier": 0.125
+    },
+    {
+      "match_id": 9071885340,
+      "start_time": 1793548190,
+      "hero_id": 56,
+      "hero_name": "Clinkz",
+      "training_hero_examples": 0,
+      "unseen_hero": true,
+      "actual": "aghanims_shard",
+      "predicted": "manta",
+      "confidence": 0.21649484536082475,
+      "top3": [
+        "manta",
+        "maelstrom",
+        "mage_slayer"
+      ],
+      "actual_probability": 0.030927835051546393,
+      "unseen_label": false,
+      "brier": 1.0424062068232545
+    },
+    {
+      "match_id": 9087374444,
+      "start_time": 1794510069,
+      "hero_id": 49,
+      "hero_name": "Dragon Knight",
+      "training_hero_examples": 2,
+      "unseen_hero": false,
+      "actual": "radiance",
+      "predicted": "radiance",
+      "confidence": 1.0,
+      "top3": [
+        "radiance",
+        "aghanims_shard",
+        "bfury"
+      ],
+      "actual_probability": 1.0,
+      "unseen_label": false,
+      "brier": 0.0
+    },
+    {
+      "match_id": 9087439951,
+      "start_time": 1794513123,
+      "hero_id": 10,
+      "hero_name": "Morphling",
+      "training_hero_examples": 4,
+      "unseen_hero": false,
+      "actual": "aghanims_shard",
+      "predicted": "manta",
+      "confidence": 0.75,
+      "top3": [
+        "manta",
+        "sphere",
+        "aghanims_shard"
+      ],
+      "actual_probability": 0.0,
+      "unseen_label": false,
+      "brier": 1.625
+    },
+    {
+      "match_id": 9088831675,
+      "start_time": 1794600710,
+      "hero_id": 93,
+      "hero_name": "Slark",
+      "training_hero_examples": 8,
+      "unseen_hero": false,
+      "actual": "diffusal_blade",
+      "predicted": "diffusal_blade",
+      "confidence": 0.75,
+      "top3": [
+        "diffusal_blade",
+        "mage_slayer",
+        "aghanims_shard"
+      ],
+      "actual_probability": 0.75,
+      "unseen_label": false,
+      "brier": 0.125
+    },
+    {
+      "match_id": 9088923051,
+      "start_time": 1794604942,
+      "hero_id": 53,
+      "hero_name": "Nature's Prophet",
+      "training_hero_examples": 7,
+      "unseen_hero": false,
+      "actual": "maelstrom",
+      "predicted": "maelstrom",
+      "confidence": 1.0,
+      "top3": [
+        "maelstrom",
+        "aghanims_shard",
+        "bfury"
+      ],
+      "actual_probability": 1.0,
+      "unseen_label": false,
+      "brier": 0.0
+    },
+    {
+      "match_id": 9092063120,
+      "start_time": 1794774438,
+      "hero_id": 21,
+      "hero_name": "Windranger",
+      "training_hero_examples": 0,
+      "unseen_hero": true,
+      "actual": "maelstrom",
+      "predicted": "manta",
+      "confidence": 0.21649484536082475,
+      "top3": [
+        "manta",
+        "maelstrom",
+        "mage_slayer"
+      ],
+      "actual_probability": 0.1134020618556701,
+      "unseen_label": false,
+      "brier": 0.8774577532150069
+    },
+    {
+      "match_id": 9092124714,
+      "start_time": 1794778160,
+      "hero_id": 56,
+      "hero_name": "Clinkz",
+      "training_hero_examples": 0,
+      "unseen_hero": true,
+      "actual": "aghanims_shard",
+      "predicted": "manta",
+      "confidence": 0.21649484536082475,
+      "top3": [
+        "manta",
+        "maelstrom",
+        "mage_slayer"
+      ],
+      "actual_probability": 0.030927835051546393,
+      "unseen_label": false,
+      "brier": 1.0424062068232545
+    },
+    {
+      "match_id": 9093175023,
+      "start_time": 1794852186,
+      "hero_id": 56,
+      "hero_name": "Clinkz",
+      "training_hero_examples": 0,
+      "unseen_hero": true,
+      "actual": "aghanims_shard",
+      "predicted": "manta",
+      "confidence": 0.21649484536082475,
+      "top3": [
+        "manta",
+        "maelstrom",
+        "mage_slayer"
+      ],
+      "actual_probability": 0.030927835051546393,
+      "unseen_label": false,
+      "brier": 1.0424062068232545
+    },
+    {
+      "match_id": 9093259247,
+      "start_time": 1794855702,
+      "hero_id": 36,
+      "hero_name": "Necrophos",
+      "training_hero_examples": 0,
+      "unseen_hero": true,
+      "actual": "radiance",
+      "predicted": "manta",
+      "confidence": 0.21649484536082475,
+      "top3": [
+        "manta",
+        "maelstrom",
+        "mage_slayer"
+      ],
+      "actual_probability": 0.061855670103092786,
+      "unseen_label": false,
+      "brier": 0.9805505367201616
+    }
+  ],
+  "selected_vs_references": {
+    "hero_prior_1": {
+      "accuracy_delta": 0.0,
+      "paired_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "resamples": 2000,
+      "selected_only_correct": 0,
+      "reference_only_correct": 0
+    },
+    "legacy_softmax": {
+      "accuracy_delta": 0.0,
+      "paired_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "resamples": 2000,
+      "selected_only_correct": 0,
+      "reference_only_correct": 0
+    },
+    "legacy_hero_frequency": {
+      "accuracy_delta": 0.0,
+      "paired_bootstrap_95": [
+        0.0,
+        0.0
+      ],
+      "resamples": 2000,
+      "selected_only_correct": 0,
+      "reference_only_correct": 0
+    }
+  },
+  "error_analysis": {
+    "by_hero": [
+      {
+        "hero_id": "1",
+        "hero_name": "Anti-Mage",
+        "matches": 2,
+        "errors": 0,
+        "accuracy": 1.0
+      },
+      {
+        "hero_id": "10",
+        "hero_name": "Morphling",
+        "matches": 1,
+        "errors": 1,
+        "accuracy": 0.0
+      },
+      {
+        "hero_id": "145",
+        "hero_name": "Kez",
+        "matches": 2,
+        "errors": 0,
+        "accuracy": 1.0
+      },
+      {
+        "hero_id": "18",
+        "hero_name": "Sven",
+        "matches": 1,
+        "errors": 1,
+        "accuracy": 0.0
+      },
+      {
+        "hero_id": "21",
+        "hero_name": "Windranger",
+        "matches": 1,
+        "errors": 1,
+        "accuracy": 0.0
+      },
+      {
+        "hero_id": "36",
+        "hero_name": "Necrophos",
+        "matches": 1,
+        "errors": 1,
+        "accuracy": 0.0
+      },
+      {
+        "hero_id": "4",
+        "hero_name": "Bloodseeker",
+        "matches": 1,
+        "errors": 0,
+        "accuracy": 1.0
+      },
+      {
+        "hero_id": "49",
+        "hero_name": "Dragon Knight",
+        "matches": 1,
+        "errors": 0,
+        "accuracy": 1.0
+      },
+      {
+        "hero_id": "53",
+        "hero_name": "Nature's Prophet",
+        "matches": 1,
+        "errors": 0,
+        "accuracy": 1.0
+      },
+      {
+        "hero_id": "56",
+        "hero_name": "Clinkz",
+        "matches": 3,
+        "errors": 3,
+        "accuracy": 0.0
+      },
+      {
+        "hero_id": "63",
+        "hero_name": "Weaver",
+        "matches": 1,
+        "errors": 1,
+        "accuracy": 0.0
+      },
+      {
+        "hero_id": "70",
+        "hero_name": "Ursa",
+        "matches": 1,
+        "errors": 0,
+        "accuracy": 1.0
+      },
+      {
+        "hero_id": "72",
+        "hero_name": "Gyrocopter",
+        "matches": 1,
+        "errors": 0,
+        "accuracy": 1.0
+      },
+      {
+        "hero_id": "76",
+        "hero_name": "Outworld Destroyer",
+        "matches": 2,
+        "errors": 0,
+        "accuracy": 1.0
+      },
+      {
+        "hero_id": "93",
+        "hero_name": "Slark",
+        "matches": 1,
+        "errors": 0,
+        "accuracy": 1.0
+      }
+    ],
+    "confusions": [
+      {
+        "actual": "aghanims_shard",
+        "predicted": "manta",
+        "count": 4
+      },
+      {
+        "actual": "dragon_lance",
+        "predicted": "manta",
+        "count": 1
+      },
+      {
+        "actual": "echo_sabre",
+        "predicted": "mask_of_madness",
+        "count": 1
+      },
+      {
+        "actual": "maelstrom",
+        "predicted": "manta",
+        "count": 1
+      },
+      {
+        "actual": "radiance",
+        "predicted": "manta",
+        "count": 1
+      }
+    ],
+    "errors": [
+      {
+        "match_id": 9068257334,
+        "start_time": 1793359049,
+        "hero_id": 63,
+        "hero_name": "Weaver",
+        "training_hero_examples": 1,
+        "unseen_hero": false,
+        "actual": "dragon_lance",
+        "predicted": "manta",
+        "confidence": 1.0,
+        "top3": [
+          "manta",
+          "aghanims_shard",
+          "bfury"
+        ],
+        "actual_probability": 0.0,
+        "unseen_label": false,
+        "brier": 2.0,
+        "match_url": "https://www.opendota.com/matches/9068257334"
+      },
+      {
+        "match_id": 9068795274,
+        "start_time": 1793381011,
+        "hero_id": 18,
+        "hero_name": "Sven",
+        "training_hero_examples": 2,
+        "unseen_hero": false,
+        "actual": "echo_sabre",
+        "predicted": "mask_of_madness",
+        "confidence": 1.0,
+        "top3": [
+          "mask_of_madness",
+          "aghanims_shard",
+          "bfury"
+        ],
+        "actual_probability": 0.0,
+        "unseen_label": false,
+        "brier": 2.0,
+        "match_url": "https://www.opendota.com/matches/9068795274"
+      },
+      {
+        "match_id": 9087439951,
+        "start_time": 1794513123,
+        "hero_id": 10,
+        "hero_name": "Morphling",
+        "training_hero_examples": 4,
+        "unseen_hero": false,
+        "actual": "aghanims_shard",
+        "predicted": "manta",
+        "confidence": 0.75,
+        "top3": [
+          "manta",
+          "sphere",
+          "aghanims_shard"
+        ],
+        "actual_probability": 0.0,
+        "unseen_label": false,
+        "brier": 1.625,
+        "match_url": "https://www.opendota.com/matches/9087439951"
+      },
+      {
+        "match_id": 9071885340,
+        "start_time": 1793548190,
+        "hero_id": 56,
+        "hero_name": "Clinkz",
+        "training_hero_examples": 0,
+        "unseen_hero": true,
+        "actual": "aghanims_shard",
+        "predicted": "manta",
+        "confidence": 0.21649484536082475,
+        "top3": [
+          "manta",
+          "maelstrom",
+          "mage_slayer"
+        ],
+        "actual_probability": 0.030927835051546393,
+        "unseen_label": false,
+        "brier": 1.0424062068232545,
+        "match_url": "https://www.opendota.com/matches/9071885340"
+      },
+      {
+        "match_id": 9092063120,
+        "start_time": 1794774438,
+        "hero_id": 21,
+        "hero_name": "Windranger",
+        "training_hero_examples": 0,
+        "unseen_hero": true,
+        "actual": "maelstrom",
+        "predicted": "manta",
+        "confidence": 0.21649484536082475,
+        "top3": [
+          "manta",
+          "maelstrom",
+          "mage_slayer"
+        ],
+        "actual_probability": 0.1134020618556701,
+        "unseen_label": false,
+        "brier": 0.8774577532150069,
+        "match_url": "https://www.opendota.com/matches/9092063120"
+      },
+      {
+        "match_id": 9092124714,
+        "start_time": 1794778160,
+        "hero_id": 56,
+        "hero_name": "Clinkz",
+        "training_hero_examples": 0,
+        "unseen_hero": true,
+        "actual": "aghanims_shard",
+        "predicted": "manta",
+        "confidence": 0.21649484536082475,
+        "top3": [
+          "manta",
+          "maelstrom",
+          "mage_slayer"
+        ],
+        "actual_probability": 0.030927835051546393,
+        "unseen_label": false,
+        "brier": 1.0424062068232545,
+        "match_url": "https://www.opendota.com/matches/9092124714"
+      },
+      {
+        "match_id": 9093175023,
+        "start_time": 1794852186,
+        "hero_id": 56,
+        "hero_name": "Clinkz",
+        "training_hero_examples": 0,
+        "unseen_hero": true,
+        "actual": "aghanims_shard",
+        "predicted": "manta",
+        "confidence": 0.21649484536082475,
+        "top3": [
+          "manta",
+          "maelstrom",
+          "mage_slayer"
+        ],
+        "actual_probability": 0.030927835051546393,
+        "unseen_label": false,
+        "brier": 1.0424062068232545,
+        "match_url": "https://www.opendota.com/matches/9093175023"
+      },
+      {
+        "match_id": 9093259247,
+        "start_time": 1794855702,
+        "hero_id": 36,
+        "hero_name": "Necrophos",
+        "training_hero_examples": 0,
+        "unseen_hero": true,
+        "actual": "radiance",
+        "predicted": "manta",
+        "confidence": 0.21649484536082475,
+        "top3": [
+          "manta",
+          "maelstrom",
+          "mage_slayer"
+        ],
+        "actual_probability": 0.061855670103092786,
+        "unseen_label": false,
+        "brier": 0.9805505367201616,
+        "match_url": "https://www.opendota.com/matches/9093259247"
+      }
+    ]
+  },
+  "limitations": [
+    "The final 20% was reported before this experiment: it is not a sealed holdout.",
+    "A 100-match, single-player sample cannot establish performance for all five roles.",
+    "Macro F1 covers the union of observed and predicted labels in each scoring set.",
+    "Probability calibration estimates are descriptive on this small sample.",
+    "Prediction imitates a recorded purchase; no causal optimal-item label is available.",
+    "Matches without a target purchase in the window are excluded; coverage is conditional."
+  ],
+  "environment": {
+    "python": "3.14.3",
+    "scikit_learn": "1.9.1",
+    "numpy": "2.5.5",
+    "scipy": "1.18.1",
+    "threads": 1
+  },
+  "dataset_path": "examples/item-training-snapshots.json.gz",
+  "reproducibility_notes": [
+    "The original Archive.rows() joins patch_version by release date. The first export omitted this join, making original-softmax accuracy 50%. The export was corrected with the unchanged original release table; original-softmax now reproduces the saved 60% exactly. Candidate recipes were unchanged."
+  ]
+}

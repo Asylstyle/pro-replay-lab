@@ -89,6 +89,13 @@ def parser():
     p = argparse.ArgumentParser(description="Поиск действий про-игрока в матчах Dota 2")
     p.add_argument("--db", default="data/archive.sqlite", help="SQLite-кэш матчей")
     sub = p.add_subparsers(dest="cmd", required=True)
+    experiment = sub.add_parser("benchmark-coach", help="Сравнить модели на фиксированных временных выборках")
+    experiment.add_argument("--stage", choices=("select", "evaluate", "ranked-select", "ranked-evaluate"), required=True,
+                            help="Сначала выбрать модель на обучении, затем открыть отложенную проверку")
+    experiment.add_argument("--out", type=Path, default=Path("data/ml"))
+    item_experiment = sub.add_parser("benchmark-items", help="Сравнить прогнозы следующего записанного предмета")
+    item_experiment.add_argument("--input", type=Path, default=Path("examples/item-training-snapshots.json.gz"))
+    item_experiment.add_argument("--out", type=Path, default=Path("data/item-comparison.json"))
     school = sub.add_parser("school", help="Открыть локального тренера в браузере")
     school.add_argument("--port", type=int, choices=range(65536), metavar="PORT", default=0)
     school.add_argument("--no-browser", action="store_true")
@@ -235,6 +242,32 @@ def review_one(archive, args):
 def main(argv=None):
     args = parser().parse_args(argv)
     try:
+        if args.cmd == "benchmark-coach":
+            from .ml_benchmark import run_evaluation, run_selection, run_ranked_selection, run_ranked_evaluation
+            if args.stage == "select":
+                result = run_selection(args.out, progress=lambda e: print(
+                    f'{e["stage"]}: {e.get("fold", "")} {e["candidate"]}', flush=True))
+                print_json(result)
+            elif args.stage == "evaluate":
+                result = run_evaluation(args.out)
+                print_json(result["release_gate"])
+            elif args.stage == "ranked-select":
+                print_json(run_ranked_selection(args.out))
+            else:
+                result = run_ranked_evaluation(args.out)
+                print_json(result["release_gate"])
+            return 0
+        if args.cmd == "benchmark-items":
+            from .item_experiments import run_item_experiment
+            try:
+                from threadpoolctl import threadpool_limits
+            except ImportError as exc:
+                raise ValueError("Для сравнения установи requirements-ml.txt.") from exc
+            with threadpool_limits(limits=1):
+                result = run_item_experiment(json_file(args.input)["rows"])
+            save_coach_model({"status": "trained", **result}, args.out)
+            print_json({"selected_recipe": result["report"]["selected_recipe"], "report": str(args.out)})
+            return 0
         if args.cmd == "school":
             from .coach_app import serve
             serve(args.db, port=args.port, open_browser=not args.no_browser,

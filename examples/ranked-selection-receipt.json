@@ -1,0 +1,8 @@
+{
+  "frozen_at_utc": "2026-11-17T17:52:15.033900+00:00",
+  "selection_sha256": "f76a0c64a8b1a7d32db82316db245d475874a4efdc85835266807e03e7f83339",
+  "winner": "ridge_rich_100",
+  "release_gate": "At least 50 unseen ranked matches and lower MAE than legacy ridge on all three targets; no recipe switching after evaluation.",
+  "test_kind": "independent_retrospective",
+  "future_evaluation": "pending: no completed matches after the registered boundary were yet available"
+}

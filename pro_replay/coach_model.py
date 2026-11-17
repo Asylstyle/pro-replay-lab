@@ -12,7 +12,8 @@ from .analysis import _int
 from .impact import SLOTS
 
 
-MODEL_PATH = Path(__file__).resolve().parent.parent / "examples" / "pro-coach-model.json"
+LEGACY_MODEL_PATH = Path(__file__).resolve().parent.parent / "examples" / "pro-coach-model.json"
+MODEL_PATH = LEGACY_MODEL_PATH.with_name("ranked-client-model.json")
 TARGETS = {"lh": ("lh_t", "Добивания", "крипов"), "gold": ("gold_t", "Полученное золото", "золота"),
            "xp": ("xp_t", "Полученный опыт", "опыта")}
 RIDGE_PENALTY = 10.0
@@ -151,6 +152,11 @@ def _fit(rows):
 
 
 def _forecast(fit, row):
+    if fit.get("format") == "economy-predictor-1":
+        from .ml_experiments import predict_bundle
+        prediction = predict_bundle(fit, row)
+        baseline = fit["baseline"].get(str(row["rank"]), fit["baseline"]["all"])
+        return {key: (prediction[key], row["at10"][key] + baseline[i]) for i, key in enumerate(TARGETS)}
     baseline = fit["baseline"].get(str(row["rank"]), fit["baseline"]["all"])
     vector = _vector(row, fit["preprocessing"])
     outputs = {}
@@ -226,11 +232,17 @@ def evaluate_ranked(model, raw_matches):
     games = {}
     excluded = Counter()
     for raw in raw_matches:
-        game, reason = _game(raw, ranked=True)
+        if model.get("format") == "pro-replay-coach-2":
+            from .coach_features import game_features
+            game, reason = game_features(raw, ranked=True)
+        else:
+            game, reason = _game(raw, ranked=True)
         if reason:
             excluded[reason] += 1
         elif game["match_id"] in known_ids:
             excluded["overlap_with_pro_train_or_test"] += 1
+        elif game["match_id"] in model.get("fresh_test_match_ids", []) or game["match_id"] in model.get("ranked_development_match_ids", []):
+            excluded["overlap_with_previous_evaluation"] += 1
         elif game["match_id"] in games:
             excluded["duplicate_ranked_match"] += 1
         else:
@@ -239,7 +251,7 @@ def evaluate_ranked(model, raw_matches):
     groups = {"all_ranked": ordered, "after_train": [g for g in ordered if g["start"] > cutoff]}
     result = {"train_last_end": cutoff, "excluded": dict(excluded)}
     for name, group in groups.items():
-        metrics, by_position = _prediction_errors(model["fit"], group)
+        metrics, by_position = _prediction_errors(model.get("ranked_fit", model["fit"]), group)
         result[name] = {"games": len(group), "players": len(group)*10,
                         "first_start": group[0]["start"] if group else None,
                         "last_end": max((g["end"] for g in group), default=None),
@@ -251,7 +263,7 @@ def evaluate_ranked(model, raw_matches):
 def load_coach_model(path=None):
     with Path(path or MODEL_PATH).open(encoding="utf-8") as src:
         bundle = json.load(src)
-    if not isinstance(bundle, dict) or bundle.get("format") != "pro-replay-coach-1":
+    if not isinstance(bundle, dict) or bundle.get("format") not in ("pro-replay-coach-1", "pro-replay-coach-2"):
         raise ValueError("Файл не содержит поддерживаемую модель тренера.")
     return bundle
 
@@ -277,7 +289,11 @@ def save_coach_model(model, path):
 def assess_player(model, raw_match, slot):
     """Compare independently predicted minute-20 amounts with recorded values."""
     slot = _int(slot)
-    row = _player_rows(raw_match).get(slot)
+    if model.get("format") == "pro-replay-coach-2":
+        from .coach_features import row_features
+        row = row_features(raw_match).get(slot)
+    else:
+        row = _player_rows(raw_match).get(slot)
     if not row or len(row["at10"]) != len(TARGETS):
         return {"status": "unavailable", "reason": "Нет полного снимка выбранного игрока на 10:00.", "metrics": []}
     if row["rank"] is None:
@@ -286,18 +302,38 @@ def assess_player(model, raw_match, slot):
     mid = _int(raw_match.get("match_id"))
     coverage = model["coverage"]
     cohort = ("train" if mid in coverage["train_match_ids"] else
-              "holdout" if mid in coverage["test_match_ids"] else "external")
+              "holdout" if mid in coverage["test_match_ids"] or mid in model.get("fresh_test_match_ids", []) else
+              "development" if mid in model.get("ranked_development_match_ids", []) else "external")
     metrics = []
-    for key, (expected, baseline) in _forecast(model["fit"], row).items():
+    is_ranked = raw_match.get("lobby_type") == 7 and raw_match.get("leagueid") == 0 and raw_match.get("game_mode") == 22
+    fit = model.get("ranked_fit", model["fit"]) if is_ranked else model["fit"]
+    rich = fit.get("format") == "economy-predictor-1" and fit.get("recipe", {}).get("features") == "rich"
+    uncertainty_block = fit.get("uncertainty", {})
+    if not uncertainty_block and ("ranked_fit" not in model or is_ranked):
+        uncertainty_block = model.get("uncertainty", {})
+    for key, (expected, baseline) in _forecast(fit, row).items():
         _, label, unit = TARGETS[key]
         actual = row["at20"].get(key)
         if actual is not None and actual < row["at10"][key]:
             actual = None
-        err = model["metrics"][key]
+        error_source = model.get("ranked_metrics") if is_ranked else None
+        err = (error_source or model["metrics"])[key]
+        if err.get("mae") is None:
+            err = model["metrics"][key]
         metrics.append({"key": key, "label": label, "unit": unit, "expected": round(expected, 2),
                         "actual": actual, "baseline": round(baseline, 2),
                         "gap": round(actual - expected, 2) if actual is not None else None,
-                        "mae": round(err["mae"], 2), "baseline_mae": round(err["baseline_mae"], 2), "method": "ridge"})
+                        "mae": round(err["mae"], 2), "baseline_mae": round(err["baseline_mae"], 2),
+                        "method": fit.get("recipe", {}).get("name", "ridge_legacy")})
+        uncertainty = uncertainty_block.get("absolute_error_p90", {}).get(key)
+        if uncertainty is not None:
+            metrics[-1]["interval"] = [round(max(row["at10"][key], expected - uncertainty), 2),
+                                       round(expected + uncertainty, 2)]
     return {"status": "ok", "role": row["rank"], "farm_rank_10": row["rank"], "cohort": cohort,
-            "hero_id": row["hero"], "hero_train_n": model["fit"]["hero_counts"].get(str(row["hero"]), 0),
-            "at10": row["at10"], "at20": row["at20"], "metrics": metrics}
+            "hero_id": row["hero"], "hero_train_n": fit["hero_counts"].get(str(row["hero"]), 0),
+            "at10": row["at10"], "at20": row["at20"], "metrics": metrics,
+            "feature_version": 2 if rich else 1,
+            "uncertainty_method": uncertainty_block.get("method"),
+            "uncertainty_limitation": uncertainty_block.get("limitation"),
+            "error_population": "ranked" if is_ranked and model.get("ranked_metrics") else "professional",
+            "missing_feature_count": sum(v is None for v in row.get("features", {}).values()) if rich else 0}

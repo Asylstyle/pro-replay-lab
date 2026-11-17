@@ -65,18 +65,33 @@ def pro_section(data):
     metrics = data.get("metrics", [])
     if not metrics:
         return f'<p>{h(data.get("reason", "Для ориентира недостаточно данных на 10:00."))}</p>'
-    details = table(("К 20:00", "Факт", "Ориентир модели", "Типичная ошибка¹"),
-                    [(m["label"], number(m["actual"]), number(m["expected"]), number(m["mae"])) for m in metrics])
+    bands = all(m.get("interval") for m in metrics)
+    headings = ("К 20:00", "Факт", "Ориентир модели", "Типичная ошибка¹")
+    rows = [(m["label"], number(m["actual"]), number(m["expected"]), number(m["mae"])) for m in metrics]
+    if bands:
+        headings += ("Диапазон ориентира²",)
+        rows = [r + ("–".join(number(v) for v in m["interval"]),) for r, m in zip(rows, metrics)]
+    details = table(headings, rows)
     origin = {"train": "Эта карта входила в обучение.", "holdout": "Эта карта входила в отложенную проверку.",
+              "development": "Эта карта использовалась при выборе модели для рейтинговых игр.",
               "external": "Эта карта находится за пределами обучающей и проверочной выборок."}.get(data.get("cohort"), "")
     seen = data["hero_train_n"]
     hero_note = (f'Выступлений на этом герое в обучении — {seen}.' if seen else
                  'Герой впервые встретился модели. Ориентир построен по экономике и месту в команде.')
+    if seen and seen < 20:
+        hero_note += ' Примеров мало: сравнение на этом герое менее надёжно.'
+    features = ('темп фарма к 5-й и 10-й минутам, героя и экономику обеих команд' if data.get("feature_version") == 2
+                else 'героя, порядок по золоту и экономику на 10:00')
+    missing = (' Часть ранних наблюдений отсутствует; использованы типичные значения из обучения.'
+               if data.get("missing_feature_count") else '')
+    population = 'на независимой выборке рейтинговых матчей' if data.get("error_population") == "ranked" else 'на более поздних турнирных матчах'
+    interval_note = ('<p class="meta">² Ширина диапазона рассчитана по ошибкам проверочной истории, использованной при выборе модели. '
+                     'Она показывает неопределённость; попадание конкретного результата в диапазон не гарантировано.</p>' if bands else '')
     return (f'<p>По золоту на 10:00 игрок занимал место {h(data["farm_rank_10"])} из пяти в своей команде. '
-            f'Модель учитывает этот порядок и экономику на 10:00. {hero_note} {origin}</p>{details}'
-            '<p class="meta">¹ Средняя абсолютная ошибка на более поздних турнирных матчах, в единицах строки. '
+            f'Модель учитывает {features}. {hero_note} {origin}{missing}</p>{details}'
+            f'<p class="meta">¹ Средняя абсолютная ошибка {population}, в единицах строки. '
             'Турнирный ориентир помогает выбрать эпизод. Для объяснения разрыва нужно проверить маршрут, '
-            'распределение фарма и действия соперника.</p>')
+            f'распределение фарма и действия соперника.</p>{interval_note}')
 
 
 def lessons_view(lessons):
