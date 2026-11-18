@@ -1,275 +1,87 @@
 # Pro Replay Lab
 
-Локальный тренер по Dota 2. Введи ID матча и нажми на своего героя. Тренер скачает повтор Valve, проверит перезарядку, ману, состояние героя, командный обзор и дистанцию. В отчёте появятся до трёх моментов с секундой, целью, конкретной кнопкой и объяснением.
+A local Dota 2 replay coach built with **Python, Java and SQLite**. Enter a match ID and pick a hero to review up to three decisions. For each replay-verified suggestion, the report names the game second, target and action and shows which conditions were met. A separate CPU-trained model estimates the player's economy at minute 20 from the first ten minutes.
 
-## Разобрать свою игру
+[Руководство на русском](README.ru.md) · [Replay decoder](replay-decoder/README.md) · [Model comparison](docs/RANKED_93_COMPARISON.md)
 
-В отчёте есть учебные паузы по разборам Accept, хронология объектов и смоки, а также разбор линии по позиции героя. Готовые примеры — [Pudge и командный смок](examples/coach-macro-smoke.html), [матчап Huskar против Necrophos](examples/coach-mid-matchup.html) и [отвод Snapfire](examples/coach-support-waves.html). [Как тренер проверяет решения](docs/ACCEPT_AND_MACRO.md)
+## What a replay can tell you
 
-Для мидера раздел **«Мид по секундам»** показывает первые десять минут. В игре **9088199723** у Rubick на 0:49 уже был второй уровень против первого у Sand King. На 3:12 Fade Bolt второго ранга доставал до дальнего крипа с 155 HP, расчётный урон составлял 165. На 3:56 журнал записал фактическое добивание этим навыком. У Shadow Fiend тренер дополнительно проверяет, куда герой смотрел и какой из трёх койлов накрывал цель. [Разбор Rubick](examples/coach-mid-nukes.html#mid-windows) · [Разбор Shadow Fiend](examples/coach-mid-shadow-fiend.html#mid-windows) · [Как считаются окна на линии](docs/MID_MATCHUPS.md)
+At **04:07** in match **9093297478**, Rubick could cast Telekinesis on Venomancer. The replay puts the target **368 units** away, within the **550-unit** cast range. The spell was ready, Rubick had **302 mana** for a **110-mana** cast, and Radiant had vision of the target. The report gives the player a specific moment to revisit. Whether the cast would have won the fight remains an open coaching question. [Rubick's saved report](examples/coach-decisions.html) · [Match on OpenDota](https://www.opendota.com/matches/9093297478)
 
-В **«Размен или дальний крип»** тренер сравнивает доступное действие мидера с ответом соперника на той же секунде. Он показывает подходящую кнопку, возможный контроль или оставшуюся перезарядку, а у крипа — HP и расчётный урон. Для Invoker проверяются вызванный спелл и уровни сфер, для Sniper — остаток зарядов Shrapnel. Рядом можно раскрыть фактический урон двух мидеров в коротких эпизодах. [Tinker выбирает цель для Laser](examples/coach-mid-tinker.html#mid-exchanges) · [Invoker против Puck](examples/coach-mid-invoker.html#mid-exchanges) · [Проверка на девяти повторах](examples/mid-exchange-check.json)
+An earlier journal-based suggestion asked Pudge to interrupt Black Hole. Decoding the replay placed him **over 5,000 units** from the target, so the coach discarded the suggestion. The same replay contained a feasible Dismember at **08:48**, from **96 units** away. [Replay evidence and sources](examples/SOURCES.md)
 
-При выходе союзного саппорта в мид тренер проверяет его подход к конкретному врагу и дальность, ману и перезарядку контроля. В игре **9094508560** Lion добрался до дистанции Hex на **3:54**. В эту секунду Tinker уже был оглушён. Тренер показывает оба факта, а также зарегистрированное применение Hex. [Pangolier и Lion против Tinker](examples/coach-mid-rotation.html#mid-exchanges)
+<details>
+<summary>See a player report from a professional match</summary>
 
-Для полного разбора нужны **Python 3.10+ и Java 21+**. На Windows открой [start-coach.cmd](start-coach.cmd). На других системах запусти `python -m pro_replay school` из папки проекта. При первом разборе программа автоматически загрузит закреплённые библиотеки Clarity и проверит их SHA-256. Для повторов со сжатием Zstandard в Python 3.10–3.13 установи `py -m pip install backports.zstd`. Python 3.14 уже содержит этот модуль. [Java Temurin](https://adoptium.net/temurin/releases/?version=21)
+![Yatoro's Ursa match report, showing teamfight participation, building damage and comparisons with earlier carry performances](examples/yatoro-ursa.png)
 
-1. Введи ID, например **9088199723**, и нажми **«Открыть состав»**.
-2. Нажми на героя, например **Rubick**. Тренер загрузит и разберёт повтор. Первый раз это занимает несколько минут. Следующий выбор героя использует сохранённые данные.
+Yatoro bought Blink Dagger at **16:30** and killed Razor nine seconds later. He dealt **17,716 of his team's 21,749 building damage**. The report puts his numbers alongside earlier games on the same hero and role. To explore the tables, open the HTML file from a downloaded copy of the repository. [Full offline report](examples/yatoro-ursa.html)
 
-Карточка появляется, когда все условия совпали в одном кадре. Указаны остаток перезарядки, доступная мана и стоимость, активность способности или слот предмета, состояние контроля, видимость врага для команды и расстояние до цели. Для прерывания дополнительно проверяется, что враг ещё поддерживал канал. Записанные нажатия на ту же цель учитываются, чтобы тренер искал альтернативное действие.
+</details>
 
-Проверка идёт раз в игровую секунду. Точные события и игровые доли секунды из combat log позволяют отсечь посмертные и слишком поздние нажатия. Видимость означает обзор команды. Положение камеры и внимание игрока требуют отдельного анализа. Для направленных заклинаний, дерева, траектории, неизвестной дальности или неподдержанного патча карточка уходит в раздел объяснений. Допустимое действие оценивается с учётом записанного исхода драки.
+## How the system works
 
-**Проверенный пример.** Rubick на **04:07** мог начать Telekinesis по Venomancer. Перезарядка — **0**, маны **302** при стоимости **110**, цель видна Radiant, расстояние **368** при базовой дальности **550**. В той же карте у Snapfire на **26:56** был готов Glimmer Cape, союзный Rubick находился в **523** единицах при дальности **600**, маны было **690** при стоимости **125**. Тренер предлагает прикрыть Rubick перед его гибелью. [Разбор Rubick](examples/coach-decisions.html) · [Разбор Snapfire](examples/coach-replay-support.html) · [Матч](https://www.opendota.com/matches/9093297478)
+| Stage | Engineering work |
+| --- | --- |
+| Match collection | Python joins OpenDota postgame records to Valve's patch calendar. For ranked data, the collector captures each lobby's average MMR while the game is live and checks its heroes and teams against the final record. Saved snapshots and manifests let an experiment run again offline. [Eligibility rules](pro_replay/reference_policy.py) |
+| Replay decoding | A Java 21 reader built on Clarity parses Valve Source 2 replay files. It checks the embedded match ID, samples ten heroes once per game second and extracts casts and deaths with fractional timestamps. Python downloads the pinned decoder dependencies, verifies their SHA-256 hashes and indexes compressed frames in SQLite. Multiple hero reviews reuse the same decoded game. [Decoder and schema](replay-decoder/README.md) · [Frame index](pro_replay/replay_files.py) |
+| Decision checks | Python tests whether the actor is alive and able to act, the ability or active inventory item is ready, mana is sufficient, the team sees the target and it is in range. Interrupts also require an active channel. The report distinguishes recorded actions, feasible alternatives and hypotheses based on the match journal. [Verification logic](pro_replay/replay_verification.py) |
+| Storage and delivery | A local browser interface and a CLI share the coaching pipeline. SQLite stores the player archive, match reviews and role references. Reports export as standalone HTML. When a replay has expired, the available journal evidence can still support a partial review. [Browser app](pro_replay/coach_app.py) · [Archive](pro_replay/archive.py) |
+| Model training and inference | Training and inference share the economy feature builder. The model uses hero, early last hits, gold, XP and team context. Training runs on CPU with NumPy and scikit-learn. The coach reads the fitted JSON weights using the Python standard library. [Features](pro_replay/coach_features.py) · [Training and selection](pro_replay/patch_reference.py) |
 
-**Что изменил полный повтор.** Предыдущий совет Pudge прервать Rubick на 16-й минуте не прошёл проверку. Во время Black Hole оба героя были живы, Dismember был готов и Rubick был виден Dire, но между ними было более пяти тысяч единиц. Зато на **08:48** Dismember по Gyrocopter прошёл проверки с дистанцией **96**, маной **161** при стоимости **100** и нулевой перезарядкой. [Матч Pudge](https://www.opendota.com/matches/9088199723)
+## What the coach analyses
 
-Полный путь проверен на двух реальных повторах, содержащих **5 708 секундных кадров** с десятью героями. Дополнительно работают тесты скрытого врага, активного контроля, перезарядки, маны, рюкзака, несовпадающего ID, времени каста и неполных данных. Дальности направленных на героя кнопок сверены с данными Valve для **7.41f**. При новой версии требуется обновить справочник. [Декодер и схема данных](replay-decoder/README.md)
+- **Fights and builds.** Connects item purchase times to incoming threats, item activations, damage, control, deaths and subsequent objectives. Player contribution is a weighted share of six team measures. Its weights are explicit, and the index describes contribution within one team. The project has no measured causal estimate of how a decision changes win probability. [Fight and build review](pro_replay/build_review.py) · [Contribution calculation](pro_replay/impact.py)
+- **Mid matchups.** During the first ten minutes, compares a trade with securing the ranged creep. It checks spell rank and damage, the opponent's available response and a rotating support's distance and disable. In match 9088199723, Rubick's Fade Bolt could deal **165 damage** to a **155-HP** ranged creep at **03:12**. [Mid-lane calculations and coverage](docs/MID_MATCHUPS.md) · [Rubick's lane report](examples/coach-mid-nukes.html)
+- **Support and map decisions.** Tracks lane and neutral creep movement to flag potential pulls and wave drags. Smoke reviews bring together nearby allies, item readiness, visible enemies and the next objective. The report identifies the evidence and leaves route choice to the reviewer. [Creep tracking](docs/SUPPORT_WAVES.md) · [Smokes and objectives](docs/ACCEPT_AND_MACRO.md)
+- **Learning across five positions.** A local TF-IDF index retrieves timestamped lessons by role, hero, item and topic. It contains **73 fragments from 17 sources**, including **31 caption-checked fragments from seven videos**. Match timestamps and video timestamps are shown separately. [Lesson sources](examples/coach-lessons-sources.json) · [Retrieval implementation](pro_replay/coach_lessons.py)
 
-Предварительный отбор по журналу OpenDota проверен на 120 рейтинговых матчах. Для 808 из 1 200 выступлений он предлагал три эпизода, для 59 — два, для 58 — один. Проверка полного повтора может исключить эти предложения. [Выборка](examples/coach-ranked-evaluation.json)
+## Forecasting economy at 20:00
 
-Если интересует конкретная драка, раскрой **«Настроить разбор вручную»** перед выбором героя и укажи игровое время. В готовом отчёте можно раскрывать другие бои или взять задание на следующую игру. Для открытого аккаунта тренер напомнит о задании в более позднем матче той же позиции и режима. История остаётся на этом компьютере в `data/archive.sqlite`.
+Ranked All Pick and professional games have separate reference populations. On patch **7.41f**, the professional reference uses **307 matches**. For ranked play, the published default uses **53 matches**, and the candidate was refitted on **all 93 qualifying matches** (930 player performances). Five recipes competed across three expanding time splits, including a median baseline and Ridge regressions. All ten players stay in the same split, and games still running at the test boundary are excluded from that split's training data. The 93-game candidate selected Ridge with richer inputs and regularization strength 10. [Cohort design](docs/PATCH_REFERENCE.md) · [Frozen candidate](examples/ranked-93-candidate/model.json)
 
-**Пример драки.** Mars третьей позиции погиб на **37:24**. В интервале 36:51–37:39 Rubick применил Telekinesis, Mars дважды использовал God’s Rebuke. Покупка BKB записана на **26:27**, её активации за эту драку в журнале нет. В повторе можно проверить, была ли BKB готова до выхода в радиус Rubick и успевала ли команда продолжить вход Mars. Точная цель и очерёдность этих двух нажатий требуют просмотра повтора. [Офлайн-разбор Mars](examples/coach-fight.html) · [Журнал матча](https://www.opendota.com/matches/9085649152/teamfights)
+Both versions predicted the same **80 players in eight unseen games**, with lobby averages of **7,389–8,164 MMR**. The table reports mean absolute error per player. Lower values indicate closer predictions.
 
-**Пример выбора предмета.** Rubick пятой позиции погиб на **40:07**. В драке 39:47–40:35 Lina применила Dragon Slave. Glimmer Cape появился у Rubick на **42:37**. Игрок может проверить, позволяли ли фарм и доставка получить Glimmer на 2:30 раньше и заранее дать магический барьер себе или союзнику. [Офлайн-разбор Rubick](examples/coach-rubick.html) · [Журнал матча](https://www.opendota.com/matches/9093297478/teamfights)
+| Target at 20:00 | 53-game model | 93-game model | Error reduction | Games with lower error |
+| --- | ---: | ---: | ---: | ---: |
+| Cumulative gold | 743.4 | **710.3** | 4.45% | 5 of 8 |
+| Cumulative XP | 1,169.3 | **1,129.7** | 3.38% | 4 of 8 |
 
-**Пример экономики.** Kez в рейтинговой игре поднялся с **31 до 111 добиваний** между 10:00 и 20:00. При его старте модель по пабам прогнозировала **98**, со средней ошибкой около **16 крипов** на проверке. Разница в 13 крипов укладывается в эту ошибку. [Тренировка на Kez](examples/coach-kez.html#economy) · [Матч в OpenDota](https://www.opendota.com/matches/9086497898)
+All eight games started after the final training match ended and before the weights were frozen. Their final records arrived later. Paired 95% intervals from resampling whole matches include zero for both targets, so the 53-game version remains the default. [Per-match results and reproduction](docs/RANKED_93_COMPARISON.md) · [Machine-readable evaluation](examples/ranked-93-candidate/late/evaluation.json)
 
-Для загрузки нужен состав матча и ссылка Valve из OpenDota. Если журнала командных драк ещё нет, тренер может найти кандидатов по смертям и состоянию героев в самом повторе. Истёкший файл Valve или отсутствие Java отображаются в отчёте. В таком случае доступны явно обозначенные гипотезы по журналу OpenDota. Повторы и индекс кадров сохраняются рядом с базой в `data/replay-evidence/`. HTML работает офлайн.
+Two earlier experiments record where added complexity failed. In a **12-recipe** comparison, the predictor selected on professional games increased all three errors on the first 100 unseen ranked games. In a separate item-purchase task on 100 Yatoro games, softmax regression and the per-hero frequency baseline both predicted **12 of 20** items correctly. [Economy error analysis](docs/ML_ERROR_ANALYSIS.md) · [Item classifier and baselines](docs/item-model-card.md)
 
-```powershell
-py -m pro_replay coach slot:2 9093297478 --out data/rubick.html
-py -m pro_replay coach slot:4 9093297478 --out data/snapfire.html
-py -m pro_replay coach slot:131 9088199723 --journal-only --out data/journal.html
-py -m pro_replay coach slot:128 9086497898 --focus lane --out data/kez.html
-py -m pro_replay coach slot:0 9085649152 --at 37:24 --position 3 --out data/mars.html
-py -m pro_replay coach slot:128 9086497898 --from-json data/9086497898.json.gz
+## Try it
+
+**Offline demo.** From the repository root, use Python 3.10+ to create a report from the bundled matches and find towers Yatoro finished before buying Manta Style. On Windows, `py` also works in place of `python`.
+
+```sh
+python -m pro_replay demo
+python -m pro_replay find demo tower item:manta
 ```
 
-### Чему обучена модель
+Open the generated `yatoro.html` in your browser. The event query returns the hero, both timestamps and a match link. On a synced player archive you can also search for a sequence within a time limit, such as a kill within 120 seconds of buying Blink Dagger. The output counts incomplete logs separately. [Query examples](README.ru.md#свои-запросы-к-архиву)
 
-**Ориентиры для пяти позиций.** Для рейтингового All Pick тренер сравнивает героя с пабами, где OpenDota Live зафиксировал средний MMR лобби от 7 300. Для подтверждённого про-матча используются турнирные игры. Обе группы собраны на патче **7.41f**. По каждой отдельно рассчитаны средние и обучен прогноз ресурсов к 20:00 по состоянию на 10:00.
+**Review a match.** Install Java 21+ for full replay decoding. Start the local app, enter the match ID and select a hero. The first live review needs internet access to fetch the match and decoder dependencies. On Python 3.10–3.13, install `backports.zstd` for Zstandard-compressed replays. Windows users can also open [start-coach.cmd](start-coach.cmd).
 
-Рейтинговый ориентир содержит **53 матча**, турнирный — **307**. На первой позиции к 20:00 игроки в рейтинговой выборке в среднем добили **184 крипа** (106 выступлений). При проверке на 11 более поздних пабах средняя ошибка модели составила 16 добиваний, 857 золота и 1 176 опыта. [Готовый отчёт Anti-Mage](examples/patch-reference-example.html#economy) · [Отбор и метрики для обеих групп](docs/PATCH_REFERENCE.md)
-
-**Новая партия для обучения.** К 53 пабам добавлены 40 проверенных игр со средним MMR лобби **7 501–8 269**. Всего собраны 93 карты патча 7.41f. В новых данных есть экономика 400 игроков и 394 интервала командных драк с записями применений и покупок. Шесть итоговых карточек обработал публичный парсер OpenDota. [Состав партии](examples/ranked-collection-2026-11-18/collection.json) · [Подтверждения рейтинга и состава](examples/ranked-collection-2026-11-18/manifest.json) · [Драки и покупки](examples/ranked-collection-2026-11-18/fight-purchases.json.gz)
-
-На 40 добавленных картах модель, обученная на первых 53 пабах, предсказала ресурсы к 20:00 со средней абсолютной ошибкой **705 золота, 1 183 опыта и 17,4 добивания**. У медианного прогноза на тех же игроках ошибки составили 781 золота, 1 326 опыта и 21,9 добивания. Все 40 матчей начались до публикации весов и впоследствии вошли в обучение версии на 93 пабах. [Результаты и интервалы неопределённости](examples/ranked-collection-2026-11-18/evaluation.json) · [Офлайн-обучение на накопленных матчах](docs/PATCH_REFERENCE.md#обновление-и-воспроизведение)
-
-**Сравнение моделей на 53 и 93 пабах.** На восьми следующих по времени рейтинговых матчах 7.41f (80 игроков, средний MMR лобби 7 389–8 164) ошибка прогноза золота к 20:00 снизилась с 743,4 до 710,3, опыта — с 1 169,3 до 1 129,7. Для обоих показателей 95%-й интервал изменения включает ноль. Все восемь игр начались до фиксации весов, а итоговые карточки получили позже. [Результаты по каждому матчу и запуск тренера](docs/RANKED_93_COMPARISON.md) · [Модель на 93 пабах](examples/ranked-93-candidate/model.json)
-
-У предыдущей модели было отдельное сравнение на 23 новых на тот момент пабах. Эти игры вошли в выборку из 53. [Историческая проверка по пяти позициям](docs/FRESH_RANKED_EVALUATION.md)
-
-Чтобы собрать новые игры и переобучить планки, выполни из корня проекта в окружении с установленными `requirements-ml.txt`:
-
-```powershell
-.\.venv\Scripts\python scripts/refresh_patch_reference.py
+```sh
+python -m pro_replay school
 ```
 
-При каждом запуске сборщик запоминает доступные лобби, проверяет завершённые игры и выбирает текущий патч. Тренер автоматически открывает обновлённую модель из `data/patch-reference.json`. В свежей копии проекта сразу доступны опубликованные планки.
+**Reproduce the ML result.** The first command scores the two published models using the bundled data, without downloading matches. To retrain the candidate from scratch, run the last two commands in a Python 3.14 virtual environment.
 
-### Ранние эксперименты с прогнозом экономики
-
-В раннем эксперименте модель училась прогнозировать ресурсы к 20:00 на **400 профессиональных матчах**. Выбор варианта Ridge для рейтинга проверял, насколько такое обучение переносится на пабы. Нынешний рейтинговый прогноз тренера обучается непосредственно на проверенных пабах. [Модель эксперимента](examples/ranked-client-model.json) · [Карточка модели и воспроизведение](docs/ML_MODEL_CARD.md)
-
-Сравнили **12 вариантов**: простые прогнозы, несколько линейных моделей, Random Forest, Extra Trees и два вида бустинга. Три временные проверки сохраняют всех десять игроков одной карты в одной выборке. Лучший вариант на про-играх оказался хуже в пабах; этот отрицательный результат сохранён. Затем среди тех же моделей выбрали вариант для клиентов по 219 уже изученным рейтинговым матчам и проверили на **100 других матчах / 1 000 игроках**, не использованных при выборе. [Полное сравнение](examples/ranked-comparison.html) · [Первый эксперимент](examples/economy-comparison.html) · [Разбор ошибок](docs/ML_ERROR_ANALYSIS.md)
-
-| Средняя абсолютная ошибка к 20:00 | Прежняя модель | Новая модель для рейтинга | Снижение |
-| --- | ---: | ---: | ---: |
-| Добивания | 18,72 | 17,83 | 4,8% |
-| Полученное золото | 760,90 | 740,39 | 2,7% |
-| Опыт | 1 156,38 | 1 132,14 | 2,1% |
-
-Это **независимая историческая проверка**: новые для эксперимента матчи за 16 ноября, а не будущая проверка после подбора модели. Выборка охватывает около десяти минут одного патча. 95% интервал разницы ошибок подтверждает улучшение добиваний; по золоту и опыту он включает ноль, поэтому выигрыша пока недостаточно для уверенного вывода. Политика будущей проверки сохранена, но подходящие завершённые матчи ещё не появились к моменту сбора. [Метрики, интервалы и ID](examples/ranked-model-comparison.json) · [Происхождение и ограничения данных](docs/ML_DATA.md)
-
-В историческом отчёте показаны диапазон ориентира, число примеров героя и пропуски входных данных. На независимой выборке в диапазоны попало 90–91% значений, но это не гарантия для следующей игры. [Отчёт Ursa в этом эксперименте](examples/coach-ml-example.html). В отдельном прогнозе предметов сравнили девять вариантов: результат остался **12/20 (60%)**, на уровне старой модели. Пять из восьми ошибок пришлись на героев без обучающих примеров. [Эксперимент с предметами](docs/item-model-card.md)
-
-Для повторения сравнения на CPU установи необязательные зависимости в отдельное окружение Python 3.14 и выполни команды из [карточки модели](docs/ML_MODEL_CARD.md#reproduction). Обычный тренер читает готовые JSON-веса и работает без scikit-learn. Ни прогноз ресурсов, ни прогноз покупки пока не измеряют причинный вклад игрока или прирост MMR от советов.
-
-**Действия и покупки в драке.** Для пабов 7 300+ собраны 479 интервалов на 53 картах. Для турниров есть отдельная база из 2 447 интервалов на 400 картах. Тренер проверяет роль игрока, время покупки и зарегистрированные применения предмета против конкретной угрозы. Счётчик за интервал и точное время применения отображаются раздельно.
-
-В статистику боя входят завершившиеся до начала матча карты той же группы и патча. Частота покупки требует пяти выступлений на позиции против конкретного героя, длительности игры до выбранной минуты и записи покупки строго до начала боя. Для сравнения активаций нужны пять эпизодов хотя бы в трёх матчах, тот же каст соперника, заранее записанная покупка и разница до пяти минут по началу боя. Если таких наблюдений мало, тренер оставляет факты собственного повтора. [База пабов 7 300+](examples/ranked-7300-fight-purchases.json.gz) · [База про-драк](examples/pro-fight-purchases.json.gz) · [Сборка рейтинговой базы из полных журналов](scripts/build_ranked_fight_reference.py)
-
-```powershell
-py -m pro_replay train-coach --replays examples/coach-pro-snapshots.json.gz --out data/my-model.json
-py -m pro_replay train-fight-items --model data/my-model.json --replays examples/coach-pro-snapshots.json.gz --out data/my-fights.json.gz
-py -m pro_replay school --model data/my-model.json --fight-model data/my-fights.json.gz
-py -m pro_replay evaluate-coach --match-list examples/coach-ranked-evaluation.json --model data/my-model.json
+```sh
+python scripts/compare_ranked_93.py --capture examples/ranked-93-candidate/late --late-roster examples/ranked-93-candidate/late/roster.json --out data/ranked-93-evaluation.json
+python -m pip install -r requirements-ml.txt
+python -m pro_replay train-reference --frozen-policy examples/ranked-collection-2026-11-18/manifest.json --out data/rebuilt-93.json
 ```
 
-Вместо компактного архива можно указать `--replays data/replays` для каталога локальных ответов OpenDota или `--match-list examples/coach-pro-match-ids.txt` для загрузки исходных про-матчей. Уже загруженные по ID матчи читаются из кэша.
+## Verification
 
-### Как тренер подбирает урок
+The 287-test regression suite covers cohort eligibility, leakage at time boundaries, replay identity and state checks, missing data, the contribution index and HTML report generation. GitHub Actions runs it on Ubuntu with the pinned ML dependencies. Two end-to-end checks decoded **5,708 one-second frames** from real replays. A separate nine-replay audit examined mid-lane exchanges. [Tests](tests/) · [CI workflow](.github/workflows/tests.yml) · [Replay sources](examples/SOURCES.md) · [Mid-lane audit](examples/mid-exchange-check.json)
 
-Поисковая модель TF-IDF сопоставляет тему эпизода, героя, предметы и способности с **73 фрагментами из 17 источников**. У 31 фрагмента из семи видео проверены субтитры. Остальные привязаны к главам, авторским разборам или открытому учебнику. Роль и тема учитываются при подборе, ссылка ведёт к источнику, время урока подписано отдельно от времени матча. [Учебный корпус и лицензии](examples/coach-lessons-sources.json)
+Replay sampling gives team vision at each recorded second. A player's camera, attention and the outcome of an unplayed alternative remain unknown. The published ability and item calculations target **7.41f**.
 
-| Позиция | Фрагментов с этой позицией | Пример материала |
-| --- | ---: | --- |
-| 1 · Керри | 19 | [Satanic о решении дождаться BKB на Templar Assassin, 24:20](https://www.youtube.com/watch?v=Xqapp58b9_Q&t=1460s) |
-| 2 · Мид | 13 | [No[o]ne о Blink на Sand King и движении с командой, 11:59](https://www.youtube.com/watch?v=kadbPUE6AYs&t=719s) |
-| 3 · Офлейн | 13 | [KheZu о выборе момента для Blink после Charge, 19:19](https://www.youtube.com/watch?v=Ulzg8-8xsYI&t=1159s) |
-| 4 · Поддержка | 11 | [9Class о выборе активных предметов, 2:11](https://www.youtube.com/watch?v=xyJjOd2NeX4&t=131s) |
-| 5 · Полная поддержка | 14 | [ZQuixotix о выборе Glimmer Cape и Force Staff, 38:12](https://www.youtube.com/watch?v=aUwBY5FBRcs&t=2292s) |
-
-Чтобы добавить свои уроки, скопируй манифест `examples/coach-lessons-sources.json` в папку `data`. Положи рядом файл SRT, VTT или TXT и добавь запись в массив `sources`. В TXT поддерживаются строки вида `15:07 текст эпизода`. В поле `roles` можно перечислить позиции от 1 до 5 или оставить пустой массив для всех. Пример записи для локальной дорожки:
-
-```json
-{"title": "Satanic · Игра керри", "url": "https://www.youtube.com/watch?v=Xqapp58b9_Q", "roles": [1], "file": "carry.vtt"}
+```sh
+python -m unittest discover -s tests -v
 ```
-
-```powershell
-py -m pro_replay train-lessons data/coach-lessons-sources.json --out data/my-lessons.json
-py -m pro_replay school --model data/my-model.json --lessons data/my-lessons.json
-```
-
-Для видео, которое ты можешь редактировать, есть команда `py -m pro_replay youtube-captions VIDEO_ID --language ru --out data/carry.vtt`. Она использует OAuth-токен из переменной окружения `YOUTUBE_OAUTH_TOKEN`. Локальный импорт готовых субтитров работает без токена. [Условия доступа YouTube Data API](https://developers.google.com/youtube/data/reference/rest/v3/captions/download)
-
-## Вклад игрока за одну карту
-
-В [выборке из 120 рейтинговых матчей](examples/ranked-impact.html) самый высокий индекс получил Lion — 45,4% в проигранной карте. Все 144 единицы командного урона строениям принадлежали ему. Самый высокий индекс у победителей составил 43,1%, самый низкий — 7,8%. В отчёте можно раскрыть все десять индексов каждой карты.
-
-**Герой и позиция.** У этого Lion пятой позиции получилось 5,22 урона строениям в минуту. Медиана восьми более ранних игр Lion на той же позиции — 11,08. Для сравнения доступны и 70 выступлений других героев пятой позиции. В карточке рядом видны контроль, лечение, установка и снятие Observer Ward, участие в убийствах и урон героям. [Разбор Lion против Legion Commander, Zeus и Rubick](examples/ranked-lion.html)
-
-Тот же Lion купил Blink на 20:40. В драке 21:12–21:59 журнал зафиксировал у него одно применение Blink и одно применение Hex. Интервал показывает, что предмет вошёл в игру, хотя цель Hex и порядок двух нажатий в этих данных неизвестны.
-
-**Драки.** В каждом размеченном интервале показаны способности, предметы, убийства, смерти и выкупы. Урон и лечение игрока сопоставляются с итогами обеих команд. Рядом перечислены объекты, потерянные в ближайшие 60 секунд после драки. Например, после эпизода на 36:38–37:35 Ursa добил две нижние казармы Dire на 37:43 и 38:03. В заключительной драке с 40:00 до 40:41 Yatoro нанёс 3 602 из 12 953 командного урона героям, убил Rubick на 40:15 и Dragon Knight на 40:25. Цели способностей и время событий берутся из соответствующих журналов.
-
-**Билд против драфта.** Разбор показывает обе пятёрки, записанные покупки и применения предметов в драках. Проверяются конкретные взаимодействия, например направленный контроль, мобильность противника и доступность обнаружения невидимости. После покупки Linken’s Sphere на 24:22 соперники Ursa в интервале 24:26–25:29 применили Dragon Tail трижды и Telekinesis дважды. Это подтверждает актуальность защиты от направленных заклинаний. Для проверки цели каста и фактического срабатывания Spellblock нужен повтор. Вывод о качестве покупки ограничен указанной угрозой, временем и доступностью других ответов у команды.
-
-Открой готовый [разбор Yatoro на Ursa](examples/yatoro-ursa.html) из скачанного проекта в браузере. В игре против Team Yandex Yatoro нанёс **17 716 из 21 749 единиц урона строениям (81,5%)**. Его индекс вклада в команде составил **30,3%**. Blink Dagger появился на **16:30**, а на **16:39** Yatoro убил Razor. [Журнал карты](https://www.opendota.com/matches/9040114168)
-
-![Сравнение Ursa с другими игроками первой позиции на карте против Team Yandex](examples/yatoro-ursa.png)
-
-Для новой карты укажи игрока и ID матча. Первая команда загружает официальный календарь версий игры, вторая берёт карточку из локального архива или запрашивает её у OpenDota.
-
-```powershell
-py -m pro_replay patches
-py -m pro_replay match 321580662 9040114168 --out ursa.html
-Start-Process .\ursa.html
-```
-
-Для обычного рейтингового матча подойдёт account ID или слот конкретного игрока. Слоты Radiant — от 0 до 4, Dire — от 128 до 132. Слот привязан к одной карте и позволяет открыть анонимного игрока.
-
-```powershell
-py -m pro_replay match slot:130 9088199530 --out lion.html
-```
-
-**База сравнения.** Вместе с проектом поставляется компактная выборка из 2 200 выступлений в 100 турнирных и 120 рейтинговых матчах. В ней хранятся герой, оценка позиции OpenDota и показатели обеих пятёрок. Каждая новая разобранная карта пополняет локальную базу. Эталон для конкретного игрока строится по завершившимся до его карты матчам того же типа, режима и версии игры. Если календарь Valve недоступен, используется числовой патч OpenDota. Размер выборки указан для каждого показателя. Роль берётся из оценки OpenDota. [Данные сравнительной выборки](examples/hero-reference.json.gz)
-
-Старый кэш обновляется для выбранной игры командой `match` при доступе к OpenDota. Чтобы обновить целую старую выборку перед `report --details`, используй `sync` с ключом `--refresh`.
-
-**Вклад в команду.** В отчёте есть исходные значения игрока и пяти союзников в сумме, доли и веса шести показателей. Вес убийств и ассистов — 25, урона героям — 25, урона строениям — 20, контроля — 15, установки и снятия Observer Ward — 10, лечения героев — 5. Индекс — взвешенное среднее долей. Нулевой командный итог или пропуск у любого союзника исключает показатель для всех пяти. При трёх доступных показателях и более сумма индексов команды до округления равна 100%. Веса выбраны вручную. Для причинной оценки влияния на победу данных этого индекса недостаточно.
-
-**Чем выделился игрок.** Для найденных последовательностей отчёт проверяет действия остальных четырёх союзников. Утверждение «единственный из пяти» требует сведений обо всех четырёх. Частота эпизода и медианы таймингов предметов берутся из более ранних карт этого игрока на том же герое и патче. Рядом указан размер выборки. На свежей установке история для сравнения появится после `sync`.
-
-**Ход карты.** Доступны экономика по десятиминутным отметкам, убийства, смерти, лечение, урон и изменение золота в командных драках. Таймлайн фильтруется по покупкам, боевым действиям, объектам и вардам. Убийство Roshan отмечается как командное событие. Подбор Aegis привязывается к конкретному игроку.
-
-## Проверка на 100 турнирных картах Yatoro
-
-Выборка от 10 июля до 16 ноября 2026 года (UTC). Карточки и журналы получены из OpenDota. Версия определена по времени начала карты и календарю публикаций Valve. Получилось 8 карт на 7.41d, 29 на 7.41e и 63 на 7.41f. Ссылки на Dotabuff в отчётах открывают карту для ручной сверки. [Календарь Valve](https://www.dota2.com/patches)
-
-[Скачать 100 готовых разборов и базу для обучения](examples/yatoro-100-reports.zip). Распакуй ZIP целиком и открой `yatoro-100.html`. Поиск находит карту по герою, турниру или ID. Чтобы повторить обучение офлайн, из папки с исходниками выполни `py -m pro_replay --db "путь/к/yatoro-100.sqlite" train 321580662`.
-
-На 29 картах журнал содержит покупку Blink Dagger. В 10 из этих 29 карт Yatoro сделал убийство в следующие 120 секунд. Модель прогнозировала первый отслеживаемый предмет после 10:00 и до 30:00 включительно. Для обучения использованы 80 ранних карт и 17 классов предметов. Все три прогноза проверены на одних и тех же 20 более поздних картах.
-
-| Прогноз | Верно на 20 картах | Точность |
-| --- | ---: | ---: |
-| Логистическая регрессия с версией Valve | 12 | 60% |
-| Самый частый предмет Yatoro на выбранном герое | 12 | 60% |
-| Самый частый предмет Yatoro на всех героях (Manta Style) | 1 | 5% |
-
-Модель с одним числовым ID патча OpenDota вместо дополнительной версии Valve дала 10 из 20. Такой размер проверки позволяет сравнить эти прогнозы на выбранных картах. Результат по другим игрокам и будущим патчам потребует отдельной проверки.
-
-Для воспроизведения используй отдельный архив и [точный список ID](examples/yatoro-100-ids.txt). Итоговая страница даст доступ к полному отчёту каждой из ста карт.
-
-```powershell
-$matchIds = Get-Content .\examples\yatoro-100-ids.txt
-py -m pro_replay --db data/yatoro-100.sqlite patches
-py -m pro_replay --db data/yatoro-100.sqlite sync 321580662 --match @matchIds
-py -m pro_replay --db data/yatoro-100.sqlite report 321580662 --details --out yatoro-100.html
-py -m pro_replay --db data/yatoro-100.sqlite find 321580662 item:blink kill --within 120
-py -m pro_replay --db data/yatoro-100.sqlite train 321580662 --out data/yatoro-model.json
-```
-
-## Первый запуск
-
-Требуется Python 3.10 или новее. Зависимости входят в стандартную библиотеку. В Windows открой PowerShell в папке проекта. В macOS и Linux замени `py` на `python3`.
-
-```powershell
-py -m pro_replay demo
-py -m pro_replay find demo tower item:manta
-```
-
-Открой созданный файл `yatoro.html`. Готовый отчёт также лежит в папке `examples`. Демо работает без интернета. В него входят 11 подтверждённых событий двух карт Team Spirit против TEAM VISION. В каждой карте герою Yatoro засчитали башню до Manta Style. Таблица показывает самое раннее такое совпадение среди выбранных событий.
-
-| Герой | Башня | Manta Style | Интервал |
-| --- | --- | --- | --- |
-| Shadow Fiend | 11:51 | 15:59 | 4:08 |
-| Terrorblade | 09:12 | 14:32 | 5:20 |
-
-Если задать `--within 200`, на Terrorblade найдётся другая пара. Башня на 11:17 и Manta на 14:32 укладываются в 195 секунд. Двух карт достаточно для проверки запроса. Чтобы оценить привычку игрока, собери более широкую выборку и задай фильтры по герою и патчу. Ссылки и происхождение полей приведены в [источниках](examples/SOURCES.md).
-
-## Свои запросы к архиву
-
-```powershell
-py -m pro_replay sync 321580662 --limit 20
-py -m pro_replay report 321580662 --out yatoro-live.html
-py -m pro_replay find 321580662 item:blink kill --within 120
-py -m pro_replay find 321580662 observer kill --within 90
-py -m pro_replay find 321580662 tower item:manta --hero 109
-```
-
-Последние три команды находят убийство в течение двух минут после покупки Blink Dagger, убийство в течение 90 секунд после установки Observer Ward и башню до Manta на Terrorblade. Совпадение по времени показывает порядок событий. Например, второй запрос сам по себе не доказывает, что поставленный вард раскрыл жертву.
-
-Поддерживаются `kill`, `tower`, `observer`, `sentry` и `item:<внутренний ключ>`. Примеры ключей — `blink`, `black_king_bar`, `manta`. В полном журнале можно искать любой записанный предмет. Отчёт и модель используют ограниченный список в `pro_replay/analysis.py`. Событие `tower` означает последний удар именно героя игрока по башне и может включать денай. В демо обе показанные башни принадлежали противнику. При отсутствии атрибуции журнал башен помечается неполным. Команды `find`, `report` и `train` принимают `--patch` с числовым ID OpenDota и `--hero` с ID героя.
-
-`find` выводит по одной паре на матч. Выбирается самое раннее начальное событие с подходящим продолжением. Действия в одну секунду не имеют определённого порядка. В отчёте три группы: совпадение подтверждено, журналы доступны и совпадения нет, данных недостаточно. Положительное совпадение можно найти даже в неполной выписке.
-
-## Загрузка данных
-
-```powershell
-py -m pro_replay sync Yatoro --all
-py -m pro_replay sync 321580662 --match 8960577698 8960762254
-```
-
-Первая команда ищет игрока в `/proPlayers`, затем читает все его доступные турнирные матчи из профессионального Data Explorer постранично. Фильтр по account ID работает и после смены команды. Ключ `--all` относится к записям, которые индексирует OpenDota для этого аккаунта. Публичность турнира, доступность карточки и наличие разобранного реплея влияют на покрытие. Вторая команда загружает конкретные ID без обращения к Explorer.
-
-В `data/archive.sqlite` сохраняются события и показатели после каждой успешной загрузки. Уже обработанные матчи пропускаются. Для обновления устаревших или неполных матчей используй `--refresh`. При необходимости ключ сервиса задаётся через переменную окружения `OPENDOTA_API_KEY`. Полный сбор может занять время. Для первого запуска удобно ограничиться 20 матчами.
-
-Есть и офлайн-импорт. Сохрани ответы OpenDota `GET /matches/{id}` в JSON. Для определения героя, добившего башню, дополнительно передай JSON ответа `GET /heroes` или используй ранее загруженный справочник. Этот режим полезен при недоступном Explorer.
-
-```powershell
-py -m pro_replay import 321580662 match1.json match2.json --heroes heroes.json
-py -m pro_replay report 321580662
-```
-
-Источники API — [OpenDota API](https://docs.opendota.com/) и [Data Explorer](https://www.opendota.com/explorer).
-
-## Локальное обучение
-
-**Вопрос модели** — какой предмет из отслеживаемого списка первым появится в журнале после 10:00 и до 30:00 включительно? Прогноз условный: он относится к матчам, в которых за этот интервал зафиксирована хотя бы одна подходящая покупка.
-
-- Вход на 10:00: герой, патч, число добитых крипов, золото и опыт по данным OpenDota. Победитель, итоговый K/D/A и последующие события используются только там, где нужны для отчёта или определения правильного ответа.
-- Алгоритм: многоклассовая логистическая регрессия с softmax и стохастическим градиентным спуском. Веса обучаются с нуля на CPU. Исходный код находится в `pro_replay/learning.py`.
-- Матчи сортируются по времени. Первые ~80% используются для обучения, последние ~20% — для единственной хронологической проверки. Нормализация, категории героев и патчей определяются только по обучающей части.
-- Сравниваются top-1 accuracy модели, прогноз самого частого предмета игрока и прогноз самого частого предмета на этом герое. Оба базовых прогноза построены по обучающей части. Отдельно выводятся размер каждой выборки, число неизвестных в обучении классов в тестовых примерах и доля исключённых матчей, которую можно рассчитать из `coverage`.
-- Минимум для запуска — 30 различных подходящих матчей и два класса в обучении. Для строки в CV указывай фактическое число тестовых игр и результат относительно обоих базовых прогнозов. [Веса и метрики эксперимента на 100 картах](examples/yatoro-model.json)
-- Если в журнале записан только рецепт или компонент, время сборки полного предмета не восстанавливается. Случаи с неоднозначным первым предметом, пропущенными признаками и неполным журналом исключаются. Список причин сохраняется в отчёте обучения.
-
-```powershell
-py -m pro_replay sync 321580662 --limit 200
-py -m pro_replay train 321580662 --out data/yatoro-model.json
-py -m pro_replay predict examples/yatoro-model.json --hero 109 --patch 60 --version 7.41f --lh 65 --gold 4200 --xp 3500
-```
-
-Значения в последней команде иллюстрируют формат входа. Результат обучения содержит веса, преобразования признаков и метрики. Короткие демонстрационные выписки исключаются из обучения. Полная карточка того же матча из OpenDota может использоваться при наличии снимка на 10:00 и журнала покупок.
-
-## Проверка
-
-```powershell
-py -m unittest discover -s tests -v
-```
-
-Проверки охватывают поиск и повторную синхронизацию, хронологическое разделение, отсутствие поздних признаков, доли пяти союзников, пропуски в данных, определение уникальности эпизода, обновление старого кэша и генерацию офлайн-страниц. Две демонстрационные карты проверяются отдельным запросом.
