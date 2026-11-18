@@ -1,0 +1,36 @@
+{
+  "enrolled_utc": "2026-11-18T06:29:20.257106+00:00",
+  "training_end": 1794954864,
+  "upstream_snapshot_sha256": "ea155f69828d4aa1b30b0c2725f077f3d94ac4a5df95a44c62a36ae842995d7d",
+  "upstream_manifest_file_sha256": "07fec0deeb5be6c5583b5236fb96466a7a2757ac27a5d8727a17198c05cee346",
+  "upstream_last_round": "2026-11-17T23:22:10.099139+00:00",
+  "original_window_deadline": 1794958199,
+  "match_ids": [
+    9094500154,
+    9094751121,
+    9094762324,
+    9094766644,
+    9094769677,
+    9094771371,
+    9094773086,
+    9094774400,
+    9094776628,
+    9094778492,
+    9094780987,
+    9094781795,
+    9094783118
+  ],
+  "preliminary_8": [
+    9094771371,
+    9094773086,
+    9094774400,
+    9094776628,
+    9094778492,
+    9094780987,
+    9094781795,
+    9094783118
+  ],
+  "method": "All 13 uncompleted lobby claims from the latest complete round. No new Live observations. Fetch every ID. Determine primary eligibility by exact postgame start strictly greater than training end, minimum duration 1200s and validated 7300+ roster; score all accepted without selecting outcomes. One-time inclusion of all suitable outcomes; stop when every enrolled game has been looked up and all eight presumed nonoverlapping games resolve, or ten minutes after this enrolment or four bounded retrieval rounds, including public parse requests. No model inference is performed by this collector.",
+  "deadline_utc": "2026-11-18T06:39:20.257106+00:00",
+  "amendment_before_any_new_outcome_request": "Host resumed at 06:29 UTC, after the nominal 00:35 deadline written in the initial file. All 13 IDs were unchanged. This registration precedes the first late request."
+}

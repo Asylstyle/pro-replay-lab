@@ -1,0 +1,115 @@
+{
+  "round": 1,
+  "completion_utc": "2026-11-18T06:30:35.499289+00:00",
+  "strict_ids": [
+    9094771371,
+    9094773086,
+    9094774400,
+    9094776628,
+    9094778492,
+    9094780987,
+    9094781795,
+    9094783118
+  ],
+  "all_prelim_resolved": true,
+  "lookups": {
+    "9094500154": {
+      "status": "awaiting_postgame",
+      "lookup_utc": "2026-11-18T06:30:10.920101+00:00"
+    },
+    "9094751121": {
+      "status": "included",
+      "lookup_utc": "2026-11-18T06:30:13.913936+00:00",
+      "start": 1794953061,
+      "duration": 3185,
+      "version": 22
+    },
+    "9094762324": {
+      "status": "included",
+      "lookup_utc": "2026-11-18T06:30:16.993416+00:00",
+      "start": 1794954046,
+      "duration": 2098,
+      "version": 22
+    },
+    "9094766644": {
+      "status": "included",
+      "lookup_utc": "2026-11-18T06:30:18.903501+00:00",
+      "start": 1794954471,
+      "duration": 2447,
+      "version": 22
+    },
+    "9094769677": {
+      "status": "included",
+      "lookup_utc": "2026-11-18T06:30:20.633693+00:00",
+      "start": 1794954751,
+      "duration": 1410,
+      "version": 22
+    },
+    "9094771371": {
+      "status": "included",
+      "lookup_utc": "2026-11-18T06:30:21.991408+00:00",
+      "start": 1794954911,
+      "duration": 2059,
+      "version": 22
+    },
+    "9094773086": {
+      "status": "included",
+      "lookup_utc": "2026-11-18T06:30:25.575798+00:00",
+      "start": 1794955086,
+      "duration": 2958,
+      "version": 22
+    },
+    "9094774400": {
+      "status": "included",
+      "lookup_utc": "2026-11-18T06:30:27.607069+00:00",
+      "start": 1794955216,
+      "duration": 2076,
+      "version": 22
+    },
+    "9094776628": {
+      "status": "included",
+      "lookup_utc": "2026-11-18T06:30:28.972253+00:00",
+      "start": 1794955422,
+      "duration": 1511,
+      "version": 22
+    },
+    "9094778492": {
+      "status": "included",
+      "lookup_utc": "2026-11-18T06:30:30.238371+00:00",
+      "start": 1794955616,
+      "duration": 1277,
+      "version": 22
+    },
+    "9094780987": {
+      "status": "included",
+      "lookup_utc": "2026-11-18T06:30:31.974343+00:00",
+      "start": 1794955881,
+      "duration": 2016,
+      "version": 22
+    },
+    "9094781795": {
+      "status": "included",
+      "lookup_utc": "2026-11-18T06:30:34.070382+00:00",
+      "start": 1794955966,
+      "duration": 1669,
+      "version": 22
+    },
+    "9094783118": {
+      "status": "included",
+      "lookup_utc": "2026-11-18T06:30:35.308370+00:00",
+      "start": 1794956106,
+      "duration": 1712,
+      "version": 22
+    }
+  },
+  "job_receipts": {},
+  "snapshot_sha256": "6a178c6b14488097fd55ed14f538ce092e4f6a6df2e235e5ea73dd4c4ea484a7",
+  "policy": {
+    "format": "opendota-patch-references-v1",
+    "calendar_source": "https://www.dota2.com/datafeed/patchnoteslist?language=english",
+    "patch": "7.41f",
+    "patch_start": 1789455600,
+    "as_of": 1794983435,
+    "minimum_avg_mmr": 7300
+  }
+}

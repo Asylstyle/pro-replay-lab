@@ -110,3 +110,47 @@ class Ranked93ComparisonTests(unittest.TestCase):
         self.assertEqual(report["excluded"]["in_model_training"], 93)
         self.assertEqual(report["evaluation"]["primary"]["players"], 0)
         self.assertEqual(report["evaluation"]["overlap_diagnostic"]["match_ids"], [])
+
+    def test_late_check_uses_registered_observations_and_separate_outcome_cutoff(self):
+        folder = study.STUDY / "late"
+        cards, late = study.read_capture(folder / "matches.json.gz", folder / "manifest.json")
+        roster = study.read_json(folder / "roster.json")
+        first = study.read_json(study.STUDY / "test/manifest.json")
+        with self.assertRaisesRegex(ValueError, "capture time"):
+            self.evaluate(cards, receipt=late)
+        report = study.compare(cards, late, self.old, self.new, self.protocol, set(),
+                               late_roster=roster, original_receipt=first)
+        self.assertEqual(report["format"], "ranked-93-vs-53-late-outcomes-v1")
+        self.assertEqual(report["late_outcomes"]["original_observation_deadline"], self.deadline)
+        self.assertEqual(report["late_outcomes"]["outcome_capture_as_of"], late["policy"]["as_of"])
+        self.assertGreater(late["policy"]["as_of"], self.deadline)
+        self.assertEqual(report["late_outcomes"]["roster_match_count"], len(roster["match_ids"]))
+        primary = {c["match_id"] for c in cards if c["start_time"] > self.last}
+        self.assertEqual(set(report["evaluation"]["primary"]["match_ids"]), primary)
+        self.assertEqual(report["evaluation"]["primary"]["players"], 10 * len(primary))
+
+    def test_late_check_rejects_subsets_new_evidence_and_unregistered_results(self):
+        folder = study.STUDY / "late"
+        cards, late = study.read_capture(folder / "matches.json.gz", folder / "manifest.json")
+        roster = study.read_json(folder / "roster.json")
+        first = study.read_json(study.STUDY / "test/manifest.json")
+
+        def check(records=cards, ledger=late, registered=roster, source=first):
+            study.late_outcome_window(records, ledger, registered, source, self.protocol, set())
+
+        with self.assertRaisesRegex(ValueError, "registered digest"):
+            check(registered=dict(roster, match_ids=roster["match_ids"][:-1]))
+        with self.assertRaisesRegex(ValueError, "original protocol and capture"):
+            check(source=dict(first, snapshot_sha256="altered"))
+        with self.assertRaisesRegex(ValueError, "account for every enrolled"):
+            check(ledger=dict(late, observations=late["observations"][:-1]))
+        with self.assertRaisesRegex(ValueError, "outcome window"):
+            check(ledger=dict(late, policy=dict(late["policy"], as_of=roster["outcome_deadline"] + 1)))
+        changed = deepcopy(late)
+        changed["observations"][0]["evidence"]["average_mmr"] += 1
+        with self.assertRaisesRegex(ValueError, "changed the original"):
+            check(ledger=changed)
+        with self.assertRaisesRegex(ValueError, "unchanged evidence"):
+            check(records=[*cards, self.training[-1]])
+        with self.assertRaisesRegex(ValueError, "unchanged evidence"):
+            check(records=cards[:-1])

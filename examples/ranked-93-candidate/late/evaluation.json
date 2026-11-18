@@ -1,0 +1,432 @@
+{
+  "format": "ranked-93-vs-53-late-outcomes-v1",
+  "protocol_sha256": "bc31a03de5946ca354360cafd4ac086ec9e45edd98a1ae8e6abf76762199acb3",
+  "models": {
+    "old": {
+      "path": "examples/patch-cohort-model.json",
+      "canonical_sha256": "7affeba6620b3e5b051f69fe95583c319500397f69f095a7c5d10946e5417c49",
+      "file_sha256": "ee722ffdb5d81cabcaa8c71febe5bf1823952616a1467c140f1d0307d4d561e1",
+      "ranked_ids_sha256": "026dc801ab89fe183991f686fa4a34e2cdcb90be6f3dda5a9caa3d93fbc4c1d7",
+      "ranked_count": 53,
+      "ranked_recipe": "ridge_legacy"
+    },
+    "new": {
+      "path": "examples/ranked-93-candidate/model.json",
+      "canonical_sha256": "3245ecc27c9f10ac9d96234e8c4d6978886ff478fd373d9a1512979aa5cac593",
+      "file_sha256": "a9e86cfca899e88220a15f2aede73470b8ac6d885a0d39b77c5df6b9844cb37d",
+      "ranked_ids_sha256": "1613783dd24a4f9926d6eec57bfac863a08a7170c02d1ca143e46e66e64b5d8e",
+      "ranked_count": 93,
+      "ranked_recipe": "ridge_rich_10"
+    }
+  },
+  "policy": {
+    "format": "opendota-patch-references-v1",
+    "calendar_source": "https://www.dota2.com/datafeed/patchnoteslist?language=english",
+    "patch": "7.41f",
+    "patch_start": 1789455600,
+    "as_of": 1794983435,
+    "minimum_avg_mmr": 7300
+  },
+  "capture_snapshot_sha256": "ace685a042fdd572f2fc4c9654a43e869de822a4a11f5f6000e8b2d8bf6d4a7d",
+  "capture_manifest_sha256": "6144ddb911f7299eb2726f9335d2d5f6e2e4ce859574f53972b2b00bd7c9e60e",
+  "excluded": {},
+  "excluded_known_ids_sha256": "cac3079395b11e7c7376b5fb045477671d26a760d19e858caa1f730e56a67969",
+  "latest_training_end": 1794954864,
+  "frozen_at": 1794956300,
+  "primary_targets": [
+    "gold",
+    "xp"
+  ],
+  "secondary_targets": [
+    "lh"
+  ],
+  "evaluation": {
+    "primary": {
+      "matches": 8,
+      "players": 80,
+      "match_ids": [
+        9094771371,
+        9094773086,
+        9094774400,
+        9094776628,
+        9094778492,
+        9094780987,
+        9094781795,
+        9094783118
+      ],
+      "start_range": [
+        1794954911,
+        1794956106
+      ],
+      "mmr_range": [
+        7389,
+        8164
+      ],
+      "metrics": {
+        "old_53": {
+          "lh": {
+            "mae": 18.521527745334865,
+            "rmse": 24.799387817903693,
+            "bias": 0.6805065115662453,
+            "n": 80
+          },
+          "gold": {
+            "mae": 743.4354805842156,
+            "rmse": 947.1008479852817,
+            "bias": 39.73081850643764,
+            "n": 80
+          },
+          "xp": {
+            "mae": 1169.286048864122,
+            "rmse": 1507.8094985558384,
+            "bias": -145.09164520181486,
+            "n": 80
+          }
+        },
+        "new_93": {
+          "lh": {
+            "mae": 17.327324051037014,
+            "rmse": 23.792635336591697,
+            "bias": 0.6584238350592744,
+            "n": 80
+          },
+          "gold": {
+            "mae": 710.3351259533177,
+            "rmse": 901.587990894558,
+            "bias": 18.820924787441697,
+            "n": 80
+          },
+          "xp": {
+            "mae": 1129.7350382722461,
+            "rmse": 1456.5646245892756,
+            "bias": -126.65215797293267,
+            "n": 80
+          }
+        }
+      },
+      "new_minus_old": {
+        "unit": "whole match",
+        "games": 8,
+        "repetitions": 2000,
+        "confidence": 0.95,
+        "seed": 20261117,
+        "interpretation": "Negative delta means lower MAE than the reference.",
+        "targets": {
+          "lh": {
+            "mae_delta": -1.1942036942978513,
+            "ci95": [
+              -2.398804977115922,
+              -0.03609180666081196
+            ],
+            "percent_change_vs_old": -6.447652217018885
+          },
+          "gold": {
+            "mae_delta": -33.100354630897904,
+            "ci95": [
+              -79.01880210132015,
+              12.134083539973684
+            ],
+            "percent_change_vs_old": -4.452350674047272
+          },
+          "xp": {
+            "mae_delta": -39.55101059187592,
+            "ci95": [
+              -119.46322267411377,
+              38.76793200777108
+            ],
+            "percent_change_vs_old": -3.3824923020587567
+          }
+        }
+      },
+      "per_match": [
+        {
+          "match_id": 9094771371,
+          "start_time": 1794954911,
+          "avg_mmr": 7773,
+          "old_53": {
+            "gold": 638.3385083637038,
+            "xp": 1119.5316931279954
+          },
+          "new_93": {
+            "gold": 673.09420978003,
+            "xp": 1239.7313639596948
+          }
+        },
+        {
+          "match_id": 9094773086,
+          "start_time": 1794955086,
+          "avg_mmr": 7917,
+          "old_53": {
+            "gold": 596.763572275265,
+            "xp": 1157.6610714809963
+          },
+          "new_93": {
+            "gold": 649.4196927662754,
+            "xp": 1258.6790436865476
+          }
+        },
+        {
+          "match_id": 9094774400,
+          "start_time": 1794955216,
+          "avg_mmr": 7389,
+          "old_53": {
+            "gold": 655.6688887143794,
+            "xp": 1031.2344106285702
+          },
+          "new_93": {
+            "gold": 625.9887034743638,
+            "xp": 939.2030274101511
+          }
+        },
+        {
+          "match_id": 9094776628,
+          "start_time": 1794955422,
+          "avg_mmr": 7891,
+          "old_53": {
+            "gold": 931.0070532905905,
+            "xp": 1543.991860820196
+          },
+          "new_93": {
+            "gold": 874.8145201864019,
+            "xp": 1425.1513236913345
+          }
+        },
+        {
+          "match_id": 9094778492,
+          "start_time": 1794955616,
+          "avg_mmr": 8164,
+          "old_53": {
+            "gold": 976.8779461777435,
+            "xp": 1439.4491856443403
+          },
+          "new_93": {
+            "gold": 836.6121414054558,
+            "xp": 1204.632122038888
+          }
+        },
+        {
+          "match_id": 9094780987,
+          "start_time": 1794955881,
+          "avg_mmr": 8020,
+          "old_53": {
+            "gold": 537.0768963569598,
+            "xp": 643.7293468047999
+          },
+          "new_93": {
+            "gold": 576.5723662349424,
+            "xp": 676.0814787392201
+          }
+        },
+        {
+          "match_id": 9094781795,
+          "start_time": 1794955966,
+          "avg_mmr": 7871,
+          "old_53": {
+            "gold": 864.3292377632948,
+            "xp": 1361.639518072477
+          },
+          "new_93": {
+            "gold": 778.9039111793021,
+            "xp": 1232.9793702786928
+          }
+        },
+        {
+          "match_id": 9094783118,
+          "start_time": 1794956106,
+          "avg_mmr": 8015,
+          "old_53": {
+            "gold": 747.4217417317883,
+            "xp": 1057.0513043336011
+          },
+          "new_93": {
+            "gold": 667.2754625997705,
+            "xp": 1061.4225763734398
+          }
+        }
+      ]
+    },
+    "after_freeze": {
+      "matches": 0,
+      "players": 0,
+      "match_ids": [],
+      "start_range": null,
+      "mmr_range": null,
+      "metrics": {
+        "old_53": {
+          "lh": {
+            "mae": null,
+            "rmse": null,
+            "bias": null,
+            "n": 0
+          },
+          "gold": {
+            "mae": null,
+            "rmse": null,
+            "bias": null,
+            "n": 0
+          },
+          "xp": {
+            "mae": null,
+            "rmse": null,
+            "bias": null,
+            "n": 0
+          }
+        },
+        "new_93": {
+          "lh": {
+            "mae": null,
+            "rmse": null,
+            "bias": null,
+            "n": 0
+          },
+          "gold": {
+            "mae": null,
+            "rmse": null,
+            "bias": null,
+            "n": 0
+          },
+          "xp": {
+            "mae": null,
+            "rmse": null,
+            "bias": null,
+            "n": 0
+          }
+        }
+      },
+      "new_minus_old": {
+        "unit": "whole match",
+        "games": 0,
+        "repetitions": 2000,
+        "confidence": 0.95,
+        "seed": 20261117,
+        "interpretation": "Negative delta means lower MAE than the reference.",
+        "targets": {
+          "lh": {
+            "mae_delta": null,
+            "ci95": null,
+            "percent_change_vs_old": null
+          },
+          "gold": {
+            "mae_delta": null,
+            "ci95": null,
+            "percent_change_vs_old": null
+          },
+          "xp": {
+            "mae_delta": null,
+            "ci95": null,
+            "percent_change_vs_old": null
+          }
+        }
+      }
+    },
+    "overlap_diagnostic": {
+      "matches": 4,
+      "players": 40,
+      "match_ids": [
+        9094751121,
+        9094762324,
+        9094766644,
+        9094769677
+      ],
+      "start_range": [
+        1794953061,
+        1794954751
+      ],
+      "mmr_range": [
+        7558,
+        8197
+      ],
+      "metrics": {
+        "old_53": {
+          "lh": {
+            "mae": 15.794174322013806,
+            "rmse": 22.407189002347966,
+            "bias": -1.4505953938133527,
+            "n": 40
+          },
+          "gold": {
+            "mae": 858.0627364061713,
+            "rmse": 1192.6894256640899,
+            "bias": 16.885472482419335,
+            "n": 40
+          },
+          "xp": {
+            "mae": 1305.5393328455048,
+            "rmse": 1758.342677822346,
+            "bias": -46.12343888645796,
+            "n": 40
+          }
+        },
+        "new_93": {
+          "lh": {
+            "mae": 15.273550655919559,
+            "rmse": 21.945493754864227,
+            "bias": -0.7132622830178528,
+            "n": 40
+          },
+          "gold": {
+            "mae": 852.4851883121803,
+            "rmse": 1196.4390428718448,
+            "bias": 23.90374656262452,
+            "n": 40
+          },
+          "xp": {
+            "mae": 1301.1945087002302,
+            "rmse": 1765.0921196848642,
+            "bias": 33.86846871763578,
+            "n": 40
+          }
+        }
+      },
+      "new_minus_old": {
+        "unit": "whole match",
+        "games": 4,
+        "repetitions": 2000,
+        "confidence": 0.95,
+        "seed": 20261117,
+        "interpretation": "Negative delta means lower MAE than the reference.",
+        "targets": {
+          "lh": {
+            "mae_delta": -0.5206236660942478,
+            "ci95": [
+              -1.8218266784954973,
+              0.19849052206917836
+            ],
+            "percent_change_vs_old": -3.2963018862505926
+          },
+          "gold": {
+            "mae_delta": -5.57754809399104,
+            "ci95": [
+              -50.9199957604157,
+              57.11013730387076
+            ],
+            "percent_change_vs_old": -0.6500163516424818
+          },
+          "xp": {
+            "mae_delta": -4.344824145274472,
+            "ci95": [
+              -50.45842648458488,
+              56.130801388163164
+            ],
+            "percent_change_vs_old": -0.3327991762457784
+          }
+        }
+      }
+    }
+  },
+  "interpretation": "Separate delayed-outcome follow-up to the deadline evaluation. Only lobbies previously enrolled from the frozen original observation ledger can enter. Primary matches started strictly after the final training match ended. After-freeze matches are a subset of primary. Overlap diagnostics are disjoint from primary. Each prediction uses minute 10 to estimate the resource total at minute 20. Negative MAE deltas favor the 93-pub model. The paired 95% intervals resample whole matches and are unavailable with fewer than two matches. Small samples describe only the observed games.",
+  "late_outcomes": {
+    "roster_sha256": "3a724b8ba9e5d995646807e511545930722d69c8a76ea8c4e958bc6497959a0e",
+    "roster_match_count": 13,
+    "source_manifest_sha256": "c2b1346f7e3a67667eaafb5f71ce1032462fb8c6c80865cb2f7f0019824cb8b5",
+    "original_capture_as_of": 1794957729,
+    "original_observation_deadline": 1794958199,
+    "roster_enrolled_at": 1794983360,
+    "registered_outcome_deadline": 1794983960,
+    "outcome_capture_as_of": 1794983435,
+    "outcome_status_counts": {
+      "awaiting_postgame": 1,
+      "included": 12
+    }
+  }
+}
