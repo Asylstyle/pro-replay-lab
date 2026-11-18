@@ -1,0 +1,291 @@
+{
+  "format": "ranked-93-vs-53-evaluation-v1",
+  "protocol_sha256": "bc31a03de5946ca354360cafd4ac086ec9e45edd98a1ae8e6abf76762199acb3",
+  "models": {
+    "old": {
+      "path": "examples/patch-cohort-model.json",
+      "canonical_sha256": "7affeba6620b3e5b051f69fe95583c319500397f69f095a7c5d10946e5417c49",
+      "file_sha256": "ee722ffdb5d81cabcaa8c71febe5bf1823952616a1467c140f1d0307d4d561e1",
+      "ranked_ids_sha256": "026dc801ab89fe183991f686fa4a34e2cdcb90be6f3dda5a9caa3d93fbc4c1d7",
+      "ranked_count": 53,
+      "ranked_recipe": "ridge_legacy"
+    },
+    "new": {
+      "path": "examples/ranked-93-candidate/model.json",
+      "canonical_sha256": "3245ecc27c9f10ac9d96234e8c4d6978886ff478fd373d9a1512979aa5cac593",
+      "file_sha256": "a9e86cfca899e88220a15f2aede73470b8ac6d885a0d39b77c5df6b9844cb37d",
+      "ranked_ids_sha256": "1613783dd24a4f9926d6eec57bfac863a08a7170c02d1ca143e46e66e64b5d8e",
+      "ranked_count": 93,
+      "ranked_recipe": "ridge_rich_10"
+    }
+  },
+  "policy": {
+    "format": "opendota-patch-references-v1",
+    "calendar_source": "https://www.dota2.com/datafeed/patchnoteslist?language=english",
+    "patch": "7.41f",
+    "patch_start": 1789455600,
+    "as_of": 1794957729,
+    "minimum_avg_mmr": 7300
+  },
+  "capture_snapshot_sha256": "d100f103490d0d22b184c8901687b4cd7f8dcd4b305fe75709991ddb541dbbc0",
+  "capture_manifest_sha256": "c2b1346f7e3a67667eaafb5f71ce1032462fb8c6c80865cb2f7f0019824cb8b5",
+  "excluded": {},
+  "excluded_known_ids_sha256": "cac3079395b11e7c7376b5fb045477671d26a760d19e858caa1f730e56a67969",
+  "latest_training_end": 1794954864,
+  "frozen_at": 1794956300,
+  "primary_targets": [
+    "gold",
+    "xp"
+  ],
+  "secondary_targets": [
+    "lh"
+  ],
+  "evaluation": {
+    "primary": {
+      "matches": 0,
+      "players": 0,
+      "match_ids": [],
+      "start_range": null,
+      "mmr_range": null,
+      "metrics": {
+        "old_53": {
+          "lh": {
+            "mae": null,
+            "rmse": null,
+            "bias": null,
+            "n": 0
+          },
+          "gold": {
+            "mae": null,
+            "rmse": null,
+            "bias": null,
+            "n": 0
+          },
+          "xp": {
+            "mae": null,
+            "rmse": null,
+            "bias": null,
+            "n": 0
+          }
+        },
+        "new_93": {
+          "lh": {
+            "mae": null,
+            "rmse": null,
+            "bias": null,
+            "n": 0
+          },
+          "gold": {
+            "mae": null,
+            "rmse": null,
+            "bias": null,
+            "n": 0
+          },
+          "xp": {
+            "mae": null,
+            "rmse": null,
+            "bias": null,
+            "n": 0
+          }
+        }
+      },
+      "new_minus_old": {
+        "unit": "whole match",
+        "games": 0,
+        "repetitions": 2000,
+        "confidence": 0.95,
+        "seed": 20261117,
+        "interpretation": "Negative delta means lower MAE than the reference.",
+        "targets": {
+          "lh": {
+            "mae_delta": null,
+            "ci95": null,
+            "percent_change_vs_old": null
+          },
+          "gold": {
+            "mae_delta": null,
+            "ci95": null,
+            "percent_change_vs_old": null
+          },
+          "xp": {
+            "mae_delta": null,
+            "ci95": null,
+            "percent_change_vs_old": null
+          }
+        }
+      },
+      "per_match": []
+    },
+    "after_freeze": {
+      "matches": 0,
+      "players": 0,
+      "match_ids": [],
+      "start_range": null,
+      "mmr_range": null,
+      "metrics": {
+        "old_53": {
+          "lh": {
+            "mae": null,
+            "rmse": null,
+            "bias": null,
+            "n": 0
+          },
+          "gold": {
+            "mae": null,
+            "rmse": null,
+            "bias": null,
+            "n": 0
+          },
+          "xp": {
+            "mae": null,
+            "rmse": null,
+            "bias": null,
+            "n": 0
+          }
+        },
+        "new_93": {
+          "lh": {
+            "mae": null,
+            "rmse": null,
+            "bias": null,
+            "n": 0
+          },
+          "gold": {
+            "mae": null,
+            "rmse": null,
+            "bias": null,
+            "n": 0
+          },
+          "xp": {
+            "mae": null,
+            "rmse": null,
+            "bias": null,
+            "n": 0
+          }
+        }
+      },
+      "new_minus_old": {
+        "unit": "whole match",
+        "games": 0,
+        "repetitions": 2000,
+        "confidence": 0.95,
+        "seed": 20261117,
+        "interpretation": "Negative delta means lower MAE than the reference.",
+        "targets": {
+          "lh": {
+            "mae_delta": null,
+            "ci95": null,
+            "percent_change_vs_old": null
+          },
+          "gold": {
+            "mae_delta": null,
+            "ci95": null,
+            "percent_change_vs_old": null
+          },
+          "xp": {
+            "mae_delta": null,
+            "ci95": null,
+            "percent_change_vs_old": null
+          }
+        }
+      }
+    },
+    "overlap_diagnostic": {
+      "matches": 6,
+      "players": 60,
+      "match_ids": [
+        9094694174,
+        9094738104,
+        9094758223,
+        9094759786,
+        9094764739,
+        9094767145
+      ],
+      "start_range": [
+        1794948821,
+        1794954506
+      ],
+      "mmr_range": [
+        7704,
+        8343
+      ],
+      "metrics": {
+        "old_53": {
+          "lh": {
+            "mae": 20.14751152079855,
+            "rmse": 25.7786781329969,
+            "bias": -0.05003633896561509,
+            "n": 60
+          },
+          "gold": {
+            "mae": 1223.9297956936462,
+            "rmse": 1608.5084631992984,
+            "bias": -14.940039135357157,
+            "n": 60
+          },
+          "xp": {
+            "mae": 1632.2637313777618,
+            "rmse": 2057.8302628388974,
+            "bias": 143.8026957692856,
+            "n": 60
+          }
+        },
+        "new_93": {
+          "lh": {
+            "mae": 19.27702358618974,
+            "rmse": 25.387858832848607,
+            "bias": -0.7591384046963984,
+            "n": 60
+          },
+          "gold": {
+            "mae": 1188.1071792375567,
+            "rmse": 1584.2362572065795,
+            "bias": -14.667653649476035,
+            "n": 60
+          },
+          "xp": {
+            "mae": 1573.6451049797727,
+            "rmse": 1992.9232301455984,
+            "bias": 155.78543358096198,
+            "n": 60
+          }
+        }
+      },
+      "new_minus_old": {
+        "unit": "whole match",
+        "games": 6,
+        "repetitions": 2000,
+        "confidence": 0.95,
+        "seed": 20261117,
+        "interpretation": "Negative delta means lower MAE than the reference.",
+        "targets": {
+          "lh": {
+            "mae_delta": -0.8704879346088131,
+            "ci95": [
+              -1.8639483619454964,
+              -0.01266224392279583
+            ],
+            "percent_change_vs_old": -4.320572958651478
+          },
+          "gold": {
+            "mae_delta": -35.82261645608958,
+            "ci95": [
+              -94.45388017187113,
+              16.252469837714937
+            ],
+            "percent_change_vs_old": -2.9268522248686315
+          },
+          "xp": {
+            "mae_delta": -58.61862639798924,
+            "ci95": [
+              -192.9769090442442,
+              57.13007730204206
+            ],
+            "percent_change_vs_old": -3.591247251968921
+          }
+        }
+      }
+    }
+  },
+  "interpretation": "Primary matches started strictly after the final training match ended. After-freeze matches are a subset of primary. Overlap diagnostics are disjoint from primary. Each prediction uses minute 10 to estimate the resource total at minute 20. Negative MAE deltas favor the 93-pub model. The paired 95% intervals resample whole matches and are unavailable with fewer than two matches. Small samples describe only the observed games."
+}

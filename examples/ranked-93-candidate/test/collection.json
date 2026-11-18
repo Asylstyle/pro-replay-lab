@@ -1,0 +1,349 @@
+{
+  "source_commit": "3d0554cbf20985d819181855de5a800c0f8591fd",
+  "training_snapshot_sha256": "d70d0abfd38eda63f1cef81480d3c5edbeec03b7c8f6bd63c0e9fabe57e63642",
+  "combined_snapshot_sha256": "ea155f69828d4aa1b30b0c2725f077f3d94ac4a5df95a44c62a36ae842995d7d",
+  "test_snapshot_sha256": "d100f103490d0d22b184c8901687b4cd7f8dcd4b305fe75709991ddb541dbbc0",
+  "stop": {
+    "reason": "time_limit",
+    "closed_utc": "2026-11-18T00:22:42.074825+00:00",
+    "train_end": 1794954864,
+    "deadline": 1794958199,
+    "target": 12
+  },
+  "capture_started_utc": "2026-11-17T22:55:36.426083+00:00",
+  "last_complete_round_utc": "2026-11-17T23:22:10.099139+00:00",
+  "complete_new_cards": 6,
+  "primary_matches": 0,
+  "after_freeze_matches": 0,
+  "rounds": [
+    {
+      "observed_utc": "2026-11-17T22:57:02.239343+00:00",
+      "completed_at_utc": "2026-11-17T22:57:23.271096+00:00",
+      "cutoff": 1794956243,
+      "patch": "7.41f",
+      "latest_live_update": 1794956200,
+      "live_counts": {
+        "qualifying_observations": 44,
+        "below_7300": 39,
+        "missing_mmr_or_roster": 15,
+        "outside_ranked_all_pick": 2
+      },
+      "postgame_requests": {
+        "included": 3,
+        "incomplete_roster_or_snapshots": 3,
+        "awaiting_postgame": 12
+      },
+      "statuses": {
+        "included": 96,
+        "ended_before_minute_20": 6,
+        "awaiting_postgame": 12,
+        "incomplete_roster_or_snapshots": 3
+      },
+      "new_complete": 3,
+      "strict": 0,
+      "strict_ids": [],
+      "sha256": "4b5aac43c3ba9ecebe9324a61dd8cedf2d0d5833c4794523f672e0f5225c6e78"
+    },
+    {
+      "observed_utc": "2026-11-17T22:59:03.206125+00:00",
+      "completed_at_utc": "2026-11-17T22:59:21.935913+00:00",
+      "cutoff": 1794956361,
+      "patch": "7.41f",
+      "latest_live_update": 1794956300,
+      "live_counts": {
+        "qualifying_observations": 44,
+        "below_7300": 39,
+        "missing_mmr_or_roster": 15,
+        "outside_ranked_all_pick": 2
+      },
+      "postgame_requests": {
+        "incomplete_roster_or_snapshots": 2,
+        "included": 1,
+        "awaiting_postgame": 13
+      },
+      "statuses": {
+        "included": 97,
+        "ended_before_minute_20": 6,
+        "awaiting_postgame": 13,
+        "incomplete_roster_or_snapshots": 2
+      },
+      "new_complete": 4,
+      "strict": 0,
+      "strict_ids": [],
+      "sha256": "aea2ad32e7ba6b78c66533aee74ef7cfb135e11e1ca2fda1eb2e45fdf18e86ca"
+    },
+    {
+      "observed_utc": "2026-11-17T23:01:04.262250+00:00",
+      "completed_at_utc": "2026-11-17T23:01:21.902717+00:00",
+      "cutoff": 1794956481,
+      "patch": "7.41f",
+      "latest_live_update": 1794956400,
+      "live_counts": {
+        "below_7300": 40,
+        "missing_mmr_or_roster": 15,
+        "qualifying_observations": 43,
+        "outside_ranked_all_pick": 2
+      },
+      "postgame_requests": {
+        "included": 1,
+        "incomplete_roster_or_snapshots": 3,
+        "awaiting_postgame": 11
+      },
+      "statuses": {
+        "included": 98,
+        "ended_before_minute_20": 6,
+        "awaiting_postgame": 11,
+        "incomplete_roster_or_snapshots": 3
+      },
+      "new_complete": 5,
+      "strict": 0,
+      "strict_ids": [],
+      "sha256": "543deabdab5457ded07d2c6b8f3dc3455cb5c1f8190736bebaf7167ffaba179d"
+    },
+    {
+      "observed_utc": "2026-11-17T23:05:45.870095+00:00",
+      "completed_at_utc": "2026-11-17T23:06:02.575617+00:00",
+      "cutoff": 1794956762,
+      "patch": "7.41f",
+      "latest_live_update": 1794956500,
+      "live_counts": {
+        "below_7300": 39,
+        "missing_mmr_or_roster": 16,
+        "qualifying_observations": 43,
+        "outside_ranked_all_pick": 2
+      },
+      "postgame_requests": {
+        "included": 1,
+        "incomplete_roster_or_snapshots": 2,
+        "awaiting_postgame": 11
+      },
+      "statuses": {
+        "included": 99,
+        "ended_before_minute_20": 6,
+        "awaiting_postgame": 11,
+        "incomplete_roster_or_snapshots": 2
+      },
+      "new_complete": 6,
+      "strict": 0,
+      "strict_ids": [],
+      "sha256": "ea155f69828d4aa1b30b0c2725f077f3d94ac4a5df95a44c62a36ae842995d7d"
+    },
+    {
+      "observed_utc": "2026-11-17T23:07:49.632739+00:00",
+      "completed_at_utc": "2026-11-17T23:08:06.680691+00:00",
+      "cutoff": 1794956886,
+      "patch": "7.41f",
+      "latest_live_update": 1794956500,
+      "live_counts": {
+        "below_7300": 39,
+        "missing_mmr_or_roster": 16,
+        "qualifying_observations": 43,
+        "outside_ranked_all_pick": 2
+      },
+      "postgame_requests": {
+        "incomplete_roster_or_snapshots": 2,
+        "awaiting_postgame": 11
+      },
+      "statuses": {
+        "included": 99,
+        "ended_before_minute_20": 6,
+        "awaiting_postgame": 11,
+        "incomplete_roster_or_snapshots": 2
+      },
+      "new_complete": 6,
+      "strict": 0,
+      "strict_ids": [],
+      "sha256": "ea155f69828d4aa1b30b0c2725f077f3d94ac4a5df95a44c62a36ae842995d7d"
+    },
+    {
+      "observed_utc": "2026-11-17T23:09:48.586142+00:00",
+      "completed_at_utc": "2026-11-17T23:10:05.503182+00:00",
+      "cutoff": 1794957005,
+      "patch": "7.41f",
+      "latest_live_update": 1794956500,
+      "live_counts": {
+        "below_7300": 39,
+        "missing_mmr_or_roster": 16,
+        "qualifying_observations": 43,
+        "outside_ranked_all_pick": 2
+      },
+      "postgame_requests": {
+        "incomplete_roster_or_snapshots": 2,
+        "awaiting_postgame": 11
+      },
+      "statuses": {
+        "included": 99,
+        "ended_before_minute_20": 6,
+        "awaiting_postgame": 11,
+        "incomplete_roster_or_snapshots": 2
+      },
+      "new_complete": 6,
+      "strict": 0,
+      "strict_ids": [],
+      "sha256": "ea155f69828d4aa1b30b0c2725f077f3d94ac4a5df95a44c62a36ae842995d7d"
+    },
+    {
+      "observed_utc": "2026-11-17T23:11:49.596349+00:00",
+      "completed_at_utc": "2026-11-17T23:12:05.914804+00:00",
+      "cutoff": 1794957125,
+      "patch": "7.41f",
+      "latest_live_update": 1794956500,
+      "live_counts": {
+        "below_7300": 39,
+        "missing_mmr_or_roster": 16,
+        "qualifying_observations": 43,
+        "outside_ranked_all_pick": 2
+      },
+      "postgame_requests": {
+        "incomplete_roster_or_snapshots": 2,
+        "awaiting_postgame": 11
+      },
+      "statuses": {
+        "included": 99,
+        "ended_before_minute_20": 6,
+        "awaiting_postgame": 11,
+        "incomplete_roster_or_snapshots": 2
+      },
+      "new_complete": 6,
+      "strict": 0,
+      "strict_ids": [],
+      "sha256": "ea155f69828d4aa1b30b0c2725f077f3d94ac4a5df95a44c62a36ae842995d7d"
+    },
+    {
+      "observed_utc": "2026-11-17T23:13:50.999138+00:00",
+      "completed_at_utc": "2026-11-17T23:14:06.716733+00:00",
+      "cutoff": 1794957246,
+      "patch": "7.41f",
+      "latest_live_update": 1794956500,
+      "live_counts": {
+        "below_7300": 39,
+        "missing_mmr_or_roster": 16,
+        "qualifying_observations": 43,
+        "outside_ranked_all_pick": 2
+      },
+      "postgame_requests": {
+        "incomplete_roster_or_snapshots": 2,
+        "awaiting_postgame": 11
+      },
+      "statuses": {
+        "included": 99,
+        "ended_before_minute_20": 6,
+        "awaiting_postgame": 11,
+        "incomplete_roster_or_snapshots": 2
+      },
+      "new_complete": 6,
+      "strict": 0,
+      "strict_ids": [],
+      "sha256": "ea155f69828d4aa1b30b0c2725f077f3d94ac4a5df95a44c62a36ae842995d7d"
+    },
+    {
+      "observed_utc": "2026-11-17T23:15:51.598458+00:00",
+      "completed_at_utc": "2026-11-17T23:16:07.063638+00:00",
+      "cutoff": 1794957366,
+      "patch": "7.41f",
+      "latest_live_update": 1794957300,
+      "live_counts": {
+        "below_7300": 39,
+        "qualifying_observations": 43,
+        "missing_mmr_or_roster": 16,
+        "outside_ranked_all_pick": 2
+      },
+      "postgame_requests": {
+        "incomplete_roster_or_snapshots": 2,
+        "awaiting_postgame": 11
+      },
+      "statuses": {
+        "included": 99,
+        "ended_before_minute_20": 6,
+        "awaiting_postgame": 11,
+        "incomplete_roster_or_snapshots": 2
+      },
+      "new_complete": 6,
+      "strict": 0,
+      "strict_ids": [],
+      "sha256": "ea155f69828d4aa1b30b0c2725f077f3d94ac4a5df95a44c62a36ae842995d7d"
+    },
+    {
+      "observed_utc": "2026-11-17T23:17:52.779689+00:00",
+      "completed_at_utc": "2026-11-17T23:18:08.059310+00:00",
+      "cutoff": 1794957487,
+      "patch": "7.41f",
+      "latest_live_update": 1794957400,
+      "live_counts": {
+        "below_7300": 42,
+        "qualifying_observations": 39,
+        "missing_mmr_or_roster": 17,
+        "outside_ranked_all_pick": 2
+      },
+      "postgame_requests": {
+        "incomplete_roster_or_snapshots": 2,
+        "awaiting_postgame": 11
+      },
+      "statuses": {
+        "included": 99,
+        "ended_before_minute_20": 6,
+        "awaiting_postgame": 11,
+        "incomplete_roster_or_snapshots": 2
+      },
+      "new_complete": 6,
+      "strict": 0,
+      "strict_ids": [],
+      "sha256": "ea155f69828d4aa1b30b0c2725f077f3d94ac4a5df95a44c62a36ae842995d7d"
+    },
+    {
+      "observed_utc": "2026-11-17T23:19:53.599019+00:00",
+      "completed_at_utc": "2026-11-17T23:20:09.188106+00:00",
+      "cutoff": 1794957609,
+      "patch": "7.41f",
+      "latest_live_update": 1794957600,
+      "live_counts": {
+        "below_7300": 40,
+        "qualifying_observations": 30,
+        "missing_mmr_or_roster": 28,
+        "outside_ranked_all_pick": 2
+      },
+      "postgame_requests": {
+        "incomplete_roster_or_snapshots": 2,
+        "awaiting_postgame": 11
+      },
+      "statuses": {
+        "included": 99,
+        "ended_before_minute_20": 6,
+        "awaiting_postgame": 11,
+        "incomplete_roster_or_snapshots": 2
+      },
+      "new_complete": 6,
+      "strict": 0,
+      "strict_ids": [],
+      "sha256": "ea155f69828d4aa1b30b0c2725f077f3d94ac4a5df95a44c62a36ae842995d7d"
+    },
+    {
+      "observed_utc": "2026-11-17T23:21:54.767076+00:00",
+      "completed_at_utc": "2026-11-17T23:22:10.099139+00:00",
+      "cutoff": 1794957729,
+      "patch": "7.41f",
+      "latest_live_update": 1794957700,
+      "live_counts": {
+        "below_7300": 37,
+        "qualifying_observations": 32,
+        "missing_mmr_or_roster": 29,
+        "outside_ranked_all_pick": 2
+      },
+      "postgame_requests": {
+        "incomplete_roster_or_snapshots": 2,
+        "awaiting_postgame": 11
+      },
+      "statuses": {
+        "included": 99,
+        "ended_before_minute_20": 6,
+        "awaiting_postgame": 11,
+        "incomplete_roster_or_snapshots": 2
+      },
+      "new_complete": 6,
+      "strict": 0,
+      "strict_ids": [],
+      "sha256": "ea155f69828d4aa1b30b0c2725f077f3d94ac4a5df95a44c62a36ae842995d7d"
+    }
+  ],
+  "public_parse_requests": []
+}

@@ -1,0 +1,27 @@
+{
+  "format": "ranked-93-late-roster-v1",
+  "match_ids": [
+    9094500154,
+    9094751121,
+    9094762324,
+    9094766644,
+    9094769677,
+    9094771371,
+    9094773086,
+    9094774400,
+    9094776628,
+    9094778492,
+    9094780987,
+    9094781795,
+    9094783118
+  ],
+  "source_manifest_sha256": "c2b1346f7e3a67667eaafb5f71ce1032462fb8c6c80865cb2f7f0019824cb8b5",
+  "source_snapshot_sha256": "d100f103490d0d22b184c8901687b4cd7f8dcd4b305fe75709991ddb541dbbc0",
+  "original_deadline": 1794958199,
+  "enrolled_at": 1794983360,
+  "outcome_deadline": 1794983960,
+  "protocol_sha256": "bc31a03de5946ca354360cafd4ac086ec9e45edd98a1ae8e6abf76762199acb3",
+  "enrollment_source_sha256": "9a264d14579092576ab796f09c9ec7e7d567d4a509d66033b7253bc562b7bf13",
+  "rule": "All 13 uncompleted lobby claims from the latest complete round. No new Live observations. Fetch every ID. Determine primary eligibility by exact postgame start strictly greater than training end, minimum duration 1200s and validated 7300+ roster; score all accepted without selecting outcomes. One-time inclusion of all suitable outcomes; stop when every enrolled game has been looked up and all eight presumed nonoverlapping games resolve, or ten minutes after this enrolment or four bounded retrieval rounds, including public parse requests. No model inference is performed by this collector.",
+  "scope": "Supplement after the original window closed without any chronologically eligible completed cards. Roster fixed without looking at predictions. Live evidence is from the original window. Use later postgame labels only for these IDs."
+}

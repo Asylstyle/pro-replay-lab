@@ -1,0 +1,1439 @@
+{
+  "source": "https://api.opendota.com/api/live",
+  "postgame_source": "https://api.opendota.com/api/matches/{match_id}",
+  "capture_utc": "2026-11-17T23:21:54.767076+00:00",
+  "capture_counts": {
+    "below_7300": 37,
+    "qualifying_observations": 32,
+    "missing_mmr_or_roster": 29,
+    "outside_ranked_all_pick": 2
+  },
+  "policy": {
+    "format": "opendota-patch-references-v1",
+    "calendar_source": "https://www.dota2.com/datafeed/patchnoteslist?language=english",
+    "patch": "7.41f",
+    "patch_start": 1789455600,
+    "as_of": 1794957729,
+    "minimum_avg_mmr": 7300
+  },
+  "included": 6,
+  "matches": [
+    9094694174,
+    9094738104,
+    9094758223,
+    9094759786,
+    9094764739,
+    9094767145
+  ],
+  "candidate_status_counts": {
+    "ended_before_minute_20": 6,
+    "awaiting_postgame": 11,
+    "included": 6,
+    "incomplete_roster_or_snapshots": 2
+  },
+  "included_with_nonzero_or_unknown_leaver_status": 1,
+  "snapshot_sha256": "d100f103490d0d22b184c8901687b4cd7f8dcd4b305fe75709991ddb541dbbc0",
+  "observations": [
+    {
+      "match_id": 9094310495,
+      "status": "ended_before_minute_20",
+      "evidence": {
+        "source": "https://api.opendota.com/api/live",
+        "match_id": 9094310495,
+        "average_mmr": 8230,
+        "last_update_time": 1794931800,
+        "observed_at_utc": "2026-11-17T18:13:47.822158+00:00",
+        "lobby_type": 7,
+        "game_mode": 22,
+        "league_id": 0,
+        "roster": [
+          {
+            "player_slot": 0,
+            "hero_id": 30
+          },
+          {
+            "player_slot": 1,
+            "hero_id": 76
+          },
+          {
+            "player_slot": 2,
+            "hero_id": 5
+          },
+          {
+            "player_slot": 3,
+            "hero_id": 14
+          },
+          {
+            "player_slot": 4,
+            "hero_id": 8
+          },
+          {
+            "player_slot": 128,
+            "hero_id": 131
+          },
+          {
+            "player_slot": 129,
+            "hero_id": 16
+          },
+          {
+            "player_slot": 130,
+            "hero_id": 28
+          },
+          {
+            "player_slot": 131,
+            "hero_id": 93
+          },
+          {
+            "player_slot": 132,
+            "hero_id": 90
+          }
+        ]
+      }
+    },
+    {
+      "match_id": 9094343238,
+      "status": "ended_before_minute_20",
+      "evidence": {
+        "source": "https://api.opendota.com/api/live",
+        "match_id": 9094343238,
+        "average_mmr": 7975,
+        "last_update_time": 1794933400,
+        "observed_at_utc": "2026-11-17T18:13:47.822158+00:00",
+        "lobby_type": 7,
+        "game_mode": 22,
+        "league_id": 0,
+        "roster": [
+          {
+            "player_slot": 0,
+            "hero_id": 91
+          },
+          {
+            "player_slot": 1,
+            "hero_id": 75
+          },
+          {
+            "player_slot": 2,
+            "hero_id": 155
+          },
+          {
+            "player_slot": 3,
+            "hero_id": 90
+          },
+          {
+            "player_slot": 4,
+            "hero_id": 21
+          },
+          {
+            "player_slot": 128,
+            "hero_id": 48
+          },
+          {
+            "player_slot": 129,
+            "hero_id": 68
+          },
+          {
+            "player_slot": 130,
+            "hero_id": 112
+          },
+          {
+            "player_slot": 131,
+            "hero_id": 74
+          },
+          {
+            "player_slot": 132,
+            "hero_id": 123
+          }
+        ]
+      }
+    },
+    {
+      "match_id": 9094500154,
+      "status": "awaiting_postgame",
+      "evidence": {
+        "source": "https://api.opendota.com/api/live",
+        "match_id": 9094500154,
+        "average_mmr": 7862,
+        "last_update_time": 1794939100,
+        "observed_at_utc": "2026-11-17T18:13:47.822158+00:00",
+        "lobby_type": 7,
+        "game_mode": 22,
+        "league_id": 0,
+        "roster": [
+          {
+            "player_slot": 0,
+            "hero_id": 38
+          },
+          {
+            "player_slot": 1,
+            "hero_id": 105
+          },
+          {
+            "player_slot": 2,
+            "hero_id": 14
+          },
+          {
+            "player_slot": 3,
+            "hero_id": 64
+          },
+          {
+            "player_slot": 4,
+            "hero_id": 1
+          },
+          {
+            "player_slot": 128,
+            "hero_id": 3
+          },
+          {
+            "player_slot": 129,
+            "hero_id": 13
+          },
+          {
+            "player_slot": 130,
+            "hero_id": 15
+          },
+          {
+            "player_slot": 131,
+            "hero_id": 80
+          },
+          {
+            "player_slot": 132,
+            "hero_id": 88
+          }
+        ]
+      }
+    },
+    {
+      "match_id": 9094537057,
+      "status": "ended_before_minute_20",
+      "evidence": {
+        "source": "https://api.opendota.com/api/live",
+        "match_id": 9094537057,
+        "average_mmr": 8225,
+        "last_update_time": 1794940900,
+        "observed_at_utc": "2026-11-17T18:43:03.459714+00:00",
+        "lobby_type": 7,
+        "game_mode": 22,
+        "league_id": 0,
+        "roster": [
+          {
+            "player_slot": 0,
+            "hero_id": 7
+          },
+          {
+            "player_slot": 1,
+            "hero_id": 77
+          },
+          {
+            "player_slot": 2,
+            "hero_id": 21
+          },
+          {
+            "player_slot": 3,
+            "hero_id": 26
+          },
+          {
+            "player_slot": 4,
+            "hero_id": 19
+          },
+          {
+            "player_slot": 128,
+            "hero_id": 76
+          },
+          {
+            "player_slot": 129,
+            "hero_id": 55
+          },
+          {
+            "player_slot": 130,
+            "hero_id": 88
+          },
+          {
+            "player_slot": 131,
+            "hero_id": 53
+          },
+          {
+            "player_slot": 132,
+            "hero_id": 62
+          }
+        ]
+      }
+    },
+    {
+      "match_id": 9094578600,
+      "status": "ended_before_minute_20",
+      "evidence": {
+        "source": "https://api.opendota.com/api/live",
+        "match_id": 9094578600,
+        "average_mmr": 7836,
+        "last_update_time": 1794942700,
+        "observed_at_utc": "2026-11-17T19:12:42.000085+00:00",
+        "lobby_type": 7,
+        "game_mode": 22,
+        "league_id": 0,
+        "roster": [
+          {
+            "player_slot": 0,
+            "hero_id": 57
+          },
+          {
+            "player_slot": 1,
+            "hero_id": 104
+          },
+          {
+            "player_slot": 2,
+            "hero_id": 93
+          },
+          {
+            "player_slot": 3,
+            "hero_id": 49
+          },
+          {
+            "player_slot": 4,
+            "hero_id": 112
+          },
+          {
+            "player_slot": 128,
+            "hero_id": 107
+          },
+          {
+            "player_slot": 129,
+            "hero_id": 56
+          },
+          {
+            "player_slot": 130,
+            "hero_id": 37
+          },
+          {
+            "player_slot": 131,
+            "hero_id": 74
+          },
+          {
+            "player_slot": 132,
+            "hero_id": 90
+          }
+        ]
+      }
+    },
+    {
+      "match_id": 9094673032,
+      "status": "ended_before_minute_20",
+      "evidence": {
+        "source": "https://api.opendota.com/api/live",
+        "match_id": 9094673032,
+        "average_mmr": 8323,
+        "last_update_time": 1794948900,
+        "observed_at_utc": "2026-11-17T22:36:08.242660+00:00",
+        "lobby_type": 7,
+        "game_mode": 22,
+        "league_id": 0,
+        "roster": [
+          {
+            "player_slot": 0,
+            "hero_id": 54
+          },
+          {
+            "player_slot": 1,
+            "hero_id": 49
+          },
+          {
+            "player_slot": 2,
+            "hero_id": 9
+          },
+          {
+            "player_slot": 3,
+            "hero_id": 74
+          },
+          {
+            "player_slot": 4,
+            "hero_id": 66
+          },
+          {
+            "player_slot": 128,
+            "hero_id": 101
+          },
+          {
+            "player_slot": 129,
+            "hero_id": 13
+          },
+          {
+            "player_slot": 130,
+            "hero_id": 78
+          },
+          {
+            "player_slot": 131,
+            "hero_id": 48
+          },
+          {
+            "player_slot": 132,
+            "hero_id": 30
+          }
+        ]
+      }
+    },
+    {
+      "match_id": 9094693912,
+      "status": "ended_before_minute_20",
+      "evidence": {
+        "source": "https://api.opendota.com/api/live",
+        "match_id": 9094693912,
+        "average_mmr": 7671,
+        "last_update_time": 1794950100,
+        "observed_at_utc": "2026-11-17T22:36:08.242660+00:00",
+        "lobby_type": 7,
+        "game_mode": 22,
+        "league_id": 0,
+        "roster": [
+          {
+            "player_slot": 0,
+            "hero_id": 106
+          },
+          {
+            "player_slot": 1,
+            "hero_id": 21
+          },
+          {
+            "player_slot": 2,
+            "hero_id": 20
+          },
+          {
+            "player_slot": 3,
+            "hero_id": 88
+          },
+          {
+            "player_slot": 4,
+            "hero_id": 30
+          },
+          {
+            "player_slot": 128,
+            "hero_id": 7
+          },
+          {
+            "player_slot": 129,
+            "hero_id": 22
+          },
+          {
+            "player_slot": 130,
+            "hero_id": 63
+          },
+          {
+            "player_slot": 131,
+            "hero_id": 1
+          },
+          {
+            "player_slot": 132,
+            "hero_id": 86
+          }
+        ]
+      }
+    },
+    {
+      "match_id": 9094694174,
+      "status": "included",
+      "evidence": {
+        "source": "https://api.opendota.com/api/live",
+        "match_id": 9094694174,
+        "average_mmr": 8343,
+        "last_update_time": 1794951000,
+        "observed_at_utc": "2026-11-17T22:36:08.242660+00:00",
+        "lobby_type": 7,
+        "game_mode": 22,
+        "league_id": 0,
+        "roster": [
+          {
+            "player_slot": 0,
+            "hero_id": 105
+          },
+          {
+            "player_slot": 1,
+            "hero_id": 97
+          },
+          {
+            "player_slot": 2,
+            "hero_id": 119
+          },
+          {
+            "player_slot": 3,
+            "hero_id": 13
+          },
+          {
+            "player_slot": 4,
+            "hero_id": 93
+          },
+          {
+            "player_slot": 128,
+            "hero_id": 126
+          },
+          {
+            "player_slot": 129,
+            "hero_id": 50
+          },
+          {
+            "player_slot": 130,
+            "hero_id": 131
+          },
+          {
+            "player_slot": 131,
+            "hero_id": 28
+          },
+          {
+            "player_slot": 132,
+            "hero_id": 76
+          }
+        ]
+      }
+    },
+    {
+      "match_id": 9094738104,
+      "status": "included",
+      "evidence": {
+        "source": "https://api.opendota.com/api/live",
+        "match_id": 9094738104,
+        "average_mmr": 8210,
+        "last_update_time": 1794954900,
+        "observed_at_utc": "2026-11-17T22:36:08.242660+00:00",
+        "lobby_type": 7,
+        "game_mode": 22,
+        "league_id": 0,
+        "roster": [
+          {
+            "player_slot": 0,
+            "hero_id": 138
+          },
+          {
+            "player_slot": 1,
+            "hero_id": 107
+          },
+          {
+            "player_slot": 2,
+            "hero_id": 88
+          },
+          {
+            "player_slot": 3,
+            "hero_id": 91
+          },
+          {
+            "player_slot": 4,
+            "hero_id": 30
+          },
+          {
+            "player_slot": 128,
+            "hero_id": 131
+          },
+          {
+            "player_slot": 129,
+            "hero_id": 21
+          },
+          {
+            "player_slot": 130,
+            "hero_id": 7
+          },
+          {
+            "player_slot": 131,
+            "hero_id": 62
+          },
+          {
+            "player_slot": 132,
+            "hero_id": 70
+          }
+        ]
+      }
+    },
+    {
+      "match_id": 9094751121,
+      "status": "awaiting_postgame",
+      "evidence": {
+        "source": "https://api.opendota.com/api/live",
+        "match_id": 9094751121,
+        "average_mmr": 7800,
+        "last_update_time": 1794954900,
+        "observed_at_utc": "2026-11-17T22:36:08.242660+00:00",
+        "lobby_type": 7,
+        "game_mode": 22,
+        "league_id": 0,
+        "roster": [
+          {
+            "player_slot": 0,
+            "hero_id": 26
+          },
+          {
+            "player_slot": 1,
+            "hero_id": 7
+          },
+          {
+            "player_slot": 2,
+            "hero_id": 69
+          },
+          {
+            "player_slot": 3,
+            "hero_id": 14
+          },
+          {
+            "player_slot": 4,
+            "hero_id": 12
+          },
+          {
+            "player_slot": 128,
+            "hero_id": 49
+          },
+          {
+            "player_slot": 129,
+            "hero_id": 67
+          },
+          {
+            "player_slot": 130,
+            "hero_id": 30
+          },
+          {
+            "player_slot": 131,
+            "hero_id": 113
+          },
+          {
+            "player_slot": 132,
+            "hero_id": 101
+          }
+        ]
+      }
+    },
+    {
+      "match_id": 9094758223,
+      "status": "included",
+      "evidence": {
+        "source": "https://api.opendota.com/api/live",
+        "match_id": 9094758223,
+        "average_mmr": 7704,
+        "last_update_time": 1794954900,
+        "observed_at_utc": "2026-11-17T22:36:08.242660+00:00",
+        "lobby_type": 7,
+        "game_mode": 22,
+        "league_id": 0,
+        "roster": [
+          {
+            "player_slot": 0,
+            "hero_id": 55
+          },
+          {
+            "player_slot": 1,
+            "hero_id": 37
+          },
+          {
+            "player_slot": 2,
+            "hero_id": 17
+          },
+          {
+            "player_slot": 3,
+            "hero_id": 113
+          },
+          {
+            "player_slot": 4,
+            "hero_id": 53
+          },
+          {
+            "player_slot": 128,
+            "hero_id": 9
+          },
+          {
+            "player_slot": 129,
+            "hero_id": 64
+          },
+          {
+            "player_slot": 130,
+            "hero_id": 93
+          },
+          {
+            "player_slot": 131,
+            "hero_id": 80
+          },
+          {
+            "player_slot": 132,
+            "hero_id": 67
+          }
+        ]
+      }
+    },
+    {
+      "match_id": 9094759786,
+      "status": "included",
+      "evidence": {
+        "source": "https://api.opendota.com/api/live",
+        "match_id": 9094759786,
+        "average_mmr": 8154,
+        "last_update_time": 1794954900,
+        "observed_at_utc": "2026-11-17T22:36:08.242660+00:00",
+        "lobby_type": 7,
+        "game_mode": 22,
+        "league_id": 0,
+        "roster": [
+          {
+            "player_slot": 0,
+            "hero_id": 155
+          },
+          {
+            "player_slot": 1,
+            "hero_id": 100
+          },
+          {
+            "player_slot": 2,
+            "hero_id": 120
+          },
+          {
+            "player_slot": 3,
+            "hero_id": 21
+          },
+          {
+            "player_slot": 4,
+            "hero_id": 105
+          },
+          {
+            "player_slot": 128,
+            "hero_id": 76
+          },
+          {
+            "player_slot": 129,
+            "hero_id": 123
+          },
+          {
+            "player_slot": 130,
+            "hero_id": 73
+          },
+          {
+            "player_slot": 131,
+            "hero_id": 69
+          },
+          {
+            "player_slot": 132,
+            "hero_id": 119
+          }
+        ]
+      }
+    },
+    {
+      "match_id": 9094762324,
+      "status": "incomplete_roster_or_snapshots",
+      "evidence": {
+        "source": "https://api.opendota.com/api/live",
+        "match_id": 9094762324,
+        "average_mmr": 7813,
+        "last_update_time": 1794954900,
+        "observed_at_utc": "2026-11-17T22:36:08.242660+00:00",
+        "lobby_type": 7,
+        "game_mode": 22,
+        "league_id": 0,
+        "roster": [
+          {
+            "player_slot": 0,
+            "hero_id": 155
+          },
+          {
+            "player_slot": 1,
+            "hero_id": 106
+          },
+          {
+            "player_slot": 2,
+            "hero_id": 53
+          },
+          {
+            "player_slot": 3,
+            "hero_id": 79
+          },
+          {
+            "player_slot": 4,
+            "hero_id": 123
+          },
+          {
+            "player_slot": 128,
+            "hero_id": 135
+          },
+          {
+            "player_slot": 129,
+            "hero_id": 30
+          },
+          {
+            "player_slot": 130,
+            "hero_id": 98
+          },
+          {
+            "player_slot": 131,
+            "hero_id": 1
+          },
+          {
+            "player_slot": 132,
+            "hero_id": 71
+          }
+        ]
+      }
+    },
+    {
+      "match_id": 9094764739,
+      "status": "included",
+      "evidence": {
+        "source": "https://api.opendota.com/api/live",
+        "match_id": 9094764739,
+        "average_mmr": 7830,
+        "last_update_time": 1794954900,
+        "observed_at_utc": "2026-11-17T22:36:08.242660+00:00",
+        "lobby_type": 7,
+        "game_mode": 22,
+        "league_id": 0,
+        "roster": [
+          {
+            "player_slot": 0,
+            "hero_id": 49
+          },
+          {
+            "player_slot": 1,
+            "hero_id": 105
+          },
+          {
+            "player_slot": 2,
+            "hero_id": 90
+          },
+          {
+            "player_slot": 3,
+            "hero_id": 55
+          },
+          {
+            "player_slot": 4,
+            "hero_id": 119
+          },
+          {
+            "player_slot": 128,
+            "hero_id": 21
+          },
+          {
+            "player_slot": 129,
+            "hero_id": 60
+          },
+          {
+            "player_slot": 130,
+            "hero_id": 54
+          },
+          {
+            "player_slot": 131,
+            "hero_id": 74
+          },
+          {
+            "player_slot": 132,
+            "hero_id": 50
+          }
+        ]
+      }
+    },
+    {
+      "match_id": 9094766644,
+      "status": "awaiting_postgame",
+      "evidence": {
+        "source": "https://api.opendota.com/api/live",
+        "match_id": 9094766644,
+        "average_mmr": 7558,
+        "last_update_time": 1794954900,
+        "observed_at_utc": "2026-11-17T22:36:08.242660+00:00",
+        "lobby_type": 7,
+        "game_mode": 22,
+        "league_id": 0,
+        "roster": [
+          {
+            "player_slot": 0,
+            "hero_id": 68
+          },
+          {
+            "player_slot": 1,
+            "hero_id": 21
+          },
+          {
+            "player_slot": 2,
+            "hero_id": 105
+          },
+          {
+            "player_slot": 3,
+            "hero_id": 8
+          },
+          {
+            "player_slot": 4,
+            "hero_id": 76
+          },
+          {
+            "player_slot": 128,
+            "hero_id": 85
+          },
+          {
+            "player_slot": 129,
+            "hero_id": 55
+          },
+          {
+            "player_slot": 130,
+            "hero_id": 1
+          },
+          {
+            "player_slot": 131,
+            "hero_id": 7
+          },
+          {
+            "player_slot": 132,
+            "hero_id": 86
+          }
+        ]
+      }
+    },
+    {
+      "match_id": 9094767145,
+      "status": "included",
+      "evidence": {
+        "source": "https://api.opendota.com/api/live",
+        "match_id": 9094767145,
+        "average_mmr": 8276,
+        "last_update_time": 1794954900,
+        "observed_at_utc": "2026-11-17T22:36:08.242660+00:00",
+        "lobby_type": 7,
+        "game_mode": 22,
+        "league_id": 0,
+        "roster": [
+          {
+            "player_slot": 0,
+            "hero_id": 55
+          },
+          {
+            "player_slot": 1,
+            "hero_id": 74
+          },
+          {
+            "player_slot": 2,
+            "hero_id": 105
+          },
+          {
+            "player_slot": 3,
+            "hero_id": 44
+          },
+          {
+            "player_slot": 4,
+            "hero_id": 56
+          },
+          {
+            "player_slot": 128,
+            "hero_id": 49
+          },
+          {
+            "player_slot": 129,
+            "hero_id": 123
+          },
+          {
+            "player_slot": 130,
+            "hero_id": 43
+          },
+          {
+            "player_slot": 131,
+            "hero_id": 18
+          },
+          {
+            "player_slot": 132,
+            "hero_id": 38
+          }
+        ]
+      }
+    },
+    {
+      "match_id": 9094769677,
+      "status": "incomplete_roster_or_snapshots",
+      "evidence": {
+        "source": "https://api.opendota.com/api/live",
+        "match_id": 9094769677,
+        "average_mmr": 8197,
+        "last_update_time": 1794955400,
+        "observed_at_utc": "2026-11-17T22:43:44.999401+00:00",
+        "lobby_type": 7,
+        "game_mode": 22,
+        "league_id": 0,
+        "roster": [
+          {
+            "player_slot": 0,
+            "hero_id": 81
+          },
+          {
+            "player_slot": 1,
+            "hero_id": 49
+          },
+          {
+            "player_slot": 2,
+            "hero_id": 21
+          },
+          {
+            "player_slot": 3,
+            "hero_id": 85
+          },
+          {
+            "player_slot": 4,
+            "hero_id": 98
+          },
+          {
+            "player_slot": 128,
+            "hero_id": 36
+          },
+          {
+            "player_slot": 129,
+            "hero_id": 48
+          },
+          {
+            "player_slot": 130,
+            "hero_id": 14
+          },
+          {
+            "player_slot": 131,
+            "hero_id": 86
+          },
+          {
+            "player_slot": 132,
+            "hero_id": 92
+          }
+        ]
+      }
+    },
+    {
+      "match_id": 9094771371,
+      "status": "awaiting_postgame",
+      "evidence": {
+        "source": "https://api.opendota.com/api/live",
+        "match_id": 9094771371,
+        "average_mmr": 7773,
+        "last_update_time": 1794955400,
+        "observed_at_utc": "2026-11-17T22:43:44.999401+00:00",
+        "lobby_type": 7,
+        "game_mode": 22,
+        "league_id": 0,
+        "roster": [
+          {
+            "player_slot": 0,
+            "hero_id": 26
+          },
+          {
+            "player_slot": 1,
+            "hero_id": 5
+          },
+          {
+            "player_slot": 2,
+            "hero_id": 33
+          },
+          {
+            "player_slot": 3,
+            "hero_id": 1
+          },
+          {
+            "player_slot": 4,
+            "hero_id": 74
+          },
+          {
+            "player_slot": 128,
+            "hero_id": 54
+          },
+          {
+            "player_slot": 129,
+            "hero_id": 31
+          },
+          {
+            "player_slot": 130,
+            "hero_id": 96
+          },
+          {
+            "player_slot": 131,
+            "hero_id": 105
+          },
+          {
+            "player_slot": 132,
+            "hero_id": 7
+          }
+        ]
+      }
+    },
+    {
+      "match_id": 9094773086,
+      "status": "awaiting_postgame",
+      "evidence": {
+        "source": "https://api.opendota.com/api/live",
+        "match_id": 9094773086,
+        "average_mmr": 7917,
+        "last_update_time": 1794955400,
+        "observed_at_utc": "2026-11-17T22:43:44.999401+00:00",
+        "lobby_type": 7,
+        "game_mode": 22,
+        "league_id": 0,
+        "roster": [
+          {
+            "player_slot": 0,
+            "hero_id": 112
+          },
+          {
+            "player_slot": 1,
+            "hero_id": 18
+          },
+          {
+            "player_slot": 2,
+            "hero_id": 11
+          },
+          {
+            "player_slot": 3,
+            "hero_id": 69
+          },
+          {
+            "player_slot": 4,
+            "hero_id": 110
+          },
+          {
+            "player_slot": 128,
+            "hero_id": 76
+          },
+          {
+            "player_slot": 129,
+            "hero_id": 135
+          },
+          {
+            "player_slot": 130,
+            "hero_id": 1
+          },
+          {
+            "player_slot": 131,
+            "hero_id": 123
+          },
+          {
+            "player_slot": 132,
+            "hero_id": 84
+          }
+        ]
+      }
+    },
+    {
+      "match_id": 9094774400,
+      "status": "awaiting_postgame",
+      "evidence": {
+        "source": "https://api.opendota.com/api/live",
+        "match_id": 9094774400,
+        "average_mmr": 7389,
+        "last_update_time": 1794955900,
+        "observed_at_utc": "2026-11-17T22:55:36.426083+00:00",
+        "lobby_type": 7,
+        "game_mode": 22,
+        "league_id": 0,
+        "roster": [
+          {
+            "player_slot": 0,
+            "hero_id": 2
+          },
+          {
+            "player_slot": 1,
+            "hero_id": 25
+          },
+          {
+            "player_slot": 2,
+            "hero_id": 53
+          },
+          {
+            "player_slot": 3,
+            "hero_id": 51
+          },
+          {
+            "player_slot": 4,
+            "hero_id": 110
+          },
+          {
+            "player_slot": 128,
+            "hero_id": 10
+          },
+          {
+            "player_slot": 129,
+            "hero_id": 59
+          },
+          {
+            "player_slot": 130,
+            "hero_id": 135
+          },
+          {
+            "player_slot": 131,
+            "hero_id": 119
+          },
+          {
+            "player_slot": 132,
+            "hero_id": 113
+          }
+        ]
+      }
+    },
+    {
+      "match_id": 9094776628,
+      "status": "awaiting_postgame",
+      "evidence": {
+        "source": "https://api.opendota.com/api/live",
+        "match_id": 9094776628,
+        "average_mmr": 7891,
+        "last_update_time": 1794956000,
+        "observed_at_utc": "2026-11-17T22:55:36.426083+00:00",
+        "lobby_type": 7,
+        "game_mode": 22,
+        "league_id": 0,
+        "roster": [
+          {
+            "player_slot": 0,
+            "hero_id": 21
+          },
+          {
+            "player_slot": 1,
+            "hero_id": 69
+          },
+          {
+            "player_slot": 2,
+            "hero_id": 8
+          },
+          {
+            "player_slot": 3,
+            "hero_id": 50
+          },
+          {
+            "player_slot": 4,
+            "hero_id": 119
+          },
+          {
+            "player_slot": 128,
+            "hero_id": 7
+          },
+          {
+            "player_slot": 129,
+            "hero_id": 105
+          },
+          {
+            "player_slot": 130,
+            "hero_id": 52
+          },
+          {
+            "player_slot": 131,
+            "hero_id": 9
+          },
+          {
+            "player_slot": 132,
+            "hero_id": 49
+          }
+        ]
+      }
+    },
+    {
+      "match_id": 9094778492,
+      "status": "awaiting_postgame",
+      "evidence": {
+        "source": "https://api.opendota.com/api/live",
+        "match_id": 9094778492,
+        "average_mmr": 8164,
+        "last_update_time": 1794956200,
+        "observed_at_utc": "2026-11-17T22:57:02.239343+00:00",
+        "lobby_type": 7,
+        "game_mode": 22,
+        "league_id": 0,
+        "roster": [
+          {
+            "player_slot": 0,
+            "hero_id": 49
+          },
+          {
+            "player_slot": 1,
+            "hero_id": 93
+          },
+          {
+            "player_slot": 2,
+            "hero_id": 62
+          },
+          {
+            "player_slot": 3,
+            "hero_id": 123
+          },
+          {
+            "player_slot": 4,
+            "hero_id": 77
+          },
+          {
+            "player_slot": 128,
+            "hero_id": 106
+          },
+          {
+            "player_slot": 129,
+            "hero_id": 50
+          },
+          {
+            "player_slot": 130,
+            "hero_id": 48
+          },
+          {
+            "player_slot": 131,
+            "hero_id": 31
+          },
+          {
+            "player_slot": 132,
+            "hero_id": 60
+          }
+        ]
+      }
+    },
+    {
+      "match_id": 9094780987,
+      "status": "awaiting_postgame",
+      "evidence": {
+        "source": "https://api.opendota.com/api/live",
+        "match_id": 9094780987,
+        "average_mmr": 8020,
+        "last_update_time": 1794956200,
+        "observed_at_utc": "2026-11-17T22:57:02.239343+00:00",
+        "lobby_type": 7,
+        "game_mode": 22,
+        "league_id": 0,
+        "roster": [
+          {
+            "player_slot": 0,
+            "hero_id": 33
+          },
+          {
+            "player_slot": 1,
+            "hero_id": 71
+          },
+          {
+            "player_slot": 2,
+            "hero_id": 7
+          },
+          {
+            "player_slot": 3,
+            "hero_id": 16
+          },
+          {
+            "player_slot": 4,
+            "hero_id": 76
+          },
+          {
+            "player_slot": 128,
+            "hero_id": 105
+          },
+          {
+            "player_slot": 129,
+            "hero_id": 84
+          },
+          {
+            "player_slot": 130,
+            "hero_id": 86
+          },
+          {
+            "player_slot": 131,
+            "hero_id": 93
+          },
+          {
+            "player_slot": 132,
+            "hero_id": 121
+          }
+        ]
+      }
+    },
+    {
+      "match_id": 9094781795,
+      "status": "awaiting_postgame",
+      "evidence": {
+        "source": "https://api.opendota.com/api/live",
+        "match_id": 9094781795,
+        "average_mmr": 7871,
+        "last_update_time": 1794956200,
+        "observed_at_utc": "2026-11-17T22:57:02.239343+00:00",
+        "lobby_type": 7,
+        "game_mode": 22,
+        "league_id": 0,
+        "roster": [
+          {
+            "player_slot": 0,
+            "hero_id": 48
+          },
+          {
+            "player_slot": 1,
+            "hero_id": 55
+          },
+          {
+            "player_slot": 2,
+            "hero_id": 102
+          },
+          {
+            "player_slot": 3,
+            "hero_id": 71
+          },
+          {
+            "player_slot": 4,
+            "hero_id": 88
+          },
+          {
+            "player_slot": 128,
+            "hero_id": 62
+          },
+          {
+            "player_slot": 129,
+            "hero_id": 93
+          },
+          {
+            "player_slot": 130,
+            "hero_id": 76
+          },
+          {
+            "player_slot": 131,
+            "hero_id": 112
+          },
+          {
+            "player_slot": 132,
+            "hero_id": 74
+          }
+        ]
+      }
+    },
+    {
+      "match_id": 9094783118,
+      "status": "awaiting_postgame",
+      "evidence": {
+        "source": "https://api.opendota.com/api/live",
+        "match_id": 9094783118,
+        "average_mmr": 8015,
+        "last_update_time": 1794956300,
+        "observed_at_utc": "2026-11-17T22:59:03.206125+00:00",
+        "lobby_type": 7,
+        "game_mode": 22,
+        "league_id": 0,
+        "roster": [
+          {
+            "player_slot": 0,
+            "hero_id": 36
+          },
+          {
+            "player_slot": 1,
+            "hero_id": 9
+          },
+          {
+            "player_slot": 2,
+            "hero_id": 87
+          },
+          {
+            "player_slot": 3,
+            "hero_id": 120
+          },
+          {
+            "player_slot": 4,
+            "hero_id": 1
+          },
+          {
+            "player_slot": 128,
+            "hero_id": 49
+          },
+          {
+            "player_slot": 129,
+            "hero_id": 12
+          },
+          {
+            "player_slot": 130,
+            "hero_id": 21
+          },
+          {
+            "player_slot": 131,
+            "hero_id": 13
+          },
+          {
+            "player_slot": 132,
+            "hero_id": 88
+          }
+        ]
+      }
+    }
+  ],
+  "scope": "Featured live games captured by OpenDota; coverage depends on observation times and completed parsed cards. average_mmr is the reported numeric lobby average; individual MMRs and its denominator are not published. This export removes the 93 frozen training IDs; it includes every other accepted card before application of the comparison time boundary."
+}
